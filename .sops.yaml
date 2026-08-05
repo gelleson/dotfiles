@@ -1,0 +1,6 @@
+# sops encryption policy for this repo.
+# The matching private key lives ONLY at ~/.config/sops/age/keys.txt and is
+# never committed — it is the root of trust for everything in secrets/.
+creation_rules:
+  - path_regex: secrets/.*\.(json|yaml|env)$
+    age: age1uz9v0vh6jxk6skw205p3ykwlu97rhrmmyq7vclkyqhf770tda99sc8qjzt

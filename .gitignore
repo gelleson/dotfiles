@@ -1,0 +1,12 @@
+# Never commit the age private key, wherever it lands.
+keys.txt
+*.age
+*.key
+
+# Plaintext secrets — only the sops-encrypted versions belong in git.
+secrets/*.dec.*
+secrets/*.plain.*
+.env
+.env.*
+
+.DS_Store

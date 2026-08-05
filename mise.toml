@@ -1,0 +1,76 @@
+# Repo-local mise config: tasks for managing the dotfiles themselves.
+# This is NOT the global config — that lives at home/.config/mise/config.toml
+# and gets symlinked to ~/.config/mise/config.toml by `mise run link`.
+
+[tools]
+age = "latest"
+sops = "latest"
+
+[tasks.link]
+description = "Symlink everything under home/ into $HOME"
+run = '''
+set -euo pipefail
+src="$MISE_PROJECT_ROOT/home"
+cd "$src"
+find . -type f | sed 's|^\./||' | while read -r rel; do
+  target="$HOME/$rel"
+  mkdir -p "$(dirname "$target")"
+  if [ -L "$target" ]; then
+    rm "$target"
+  elif [ -e "$target" ]; then
+    if cmp -s "$target" "$src/$rel"; then
+      rm "$target"
+    else
+      mv "$target" "$target.bak"
+      echo "  backed up existing $rel -> $rel.bak"
+    fi
+  fi
+  ln -s "$src/$rel" "$target"
+  echo "  linked ~/$rel"
+done
+'''
+
+[tasks.unlink]
+description = "Replace symlinks in $HOME with real copies (undo link)"
+run = '''
+set -euo pipefail
+src="$MISE_PROJECT_ROOT/home"
+cd "$src"
+find . -type f | sed 's|^\./||' | while read -r rel; do
+  target="$HOME/$rel"
+  if [ -L "$target" ]; then
+    rm "$target"
+    cp "$src/$rel" "$target"
+    echo "  restored ~/$rel as a real file"
+  fi
+done
+'''
+
+[tasks.status]
+description = "Show which home/ files are correctly linked"
+run = '''
+src="$MISE_PROJECT_ROOT/home"
+cd "$src"
+find . -type f | sed 's|^\./||' | while read -r rel; do
+  target="$HOME/$rel"
+  if [ -L "$target" ] && [ "$(readlink "$target")" = "$src/$rel" ]; then
+    echo "  ok       ~/$rel"
+  elif [ -e "$target" ]; then
+    echo "  UNLINKED ~/$rel (real file, differs from repo)"
+  else
+    echo "  MISSING  ~/$rel"
+  fi
+done
+'''
+
+[tasks."secrets:edit"]
+description = "Open the encrypted secrets file in $EDITOR (sops decrypts in memory)"
+run = 'sops "$MISE_PROJECT_ROOT/secrets/env.json"'
+
+[tasks."secrets:show"]
+description = "Print decrypted secrets to stdout (careful: plaintext on screen)"
+run = 'sops -d "$MISE_PROJECT_ROOT/secrets/env.json"'
+
+[tasks."secrets:rotate"]
+description = "Re-encrypt secrets against the current .sops.yaml recipients"
+run = 'sops updatekeys -y "$MISE_PROJECT_ROOT/secrets/env.json"'
