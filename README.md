@@ -7,8 +7,42 @@ No dotfile manager — `mise run link` does the linking.
 
 ```
 home/            mirrors $HOME; every file here gets symlinked into place
+  .zshrc         sources the modules below
+  .zprofile      login-only PATH setup
+  .config/zsh/   options, history, completion, keybindings, aliases, prompt
+  .config/mise/  global tool versions
+  .local/bin/    small wrapper scripts
 mise.toml        tasks for managing this repo (link/unlink/status)
 ```
+
+## zsh
+
+No framework — no oh-my-zsh, no zinit. Everything is plain zsh, which keeps
+startup at roughly **40 ms warm** (165 ms on the first shell after a config
+change, when `compinit` rebuilds its dump).
+
+`.zshrc` sources six modules from `.config/zsh/`, each independent and safe to
+comment out:
+
+| Module | Contains |
+|---|---|
+| `options.zsh` | `AUTO_CD`, pushd stack, extended globbing, `NO_CLOBBER` |
+| `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
+| `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
+| `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
+| `aliases.zsh` | git/ls/mise shortcuts, `take`, `cdf` |
+| `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
+
+Two things worth knowing:
+
+- **Prefix history search** is bound to ↑/↓. Type `git c` then press ↑ and you
+  cycle only through commands starting with `git c`. This replaces the
+  `zsh-history-substring-search` plugin with a built-in.
+- **A leading space keeps a command out of history** (`HIST_IGNORE_SPACE`). Use
+  it when a command carries a token.
+
+Swapping the prompt for starship: `mise use -g starship`, then replace
+`prompt.zsh` with `eval "$(starship init zsh)"`.
 
 ## Bootstrap a new machine
 
