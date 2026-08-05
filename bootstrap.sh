@@ -16,6 +16,7 @@ NVIM_DIR="${NVIM_DIR:-$HOME/.config/nvim}"
 MISE="$HOME/.local/bin/mise"
 NVIM="${NVIM:-1}"   # 0 to skip the neovim config
 TOOLS="${TOOLS:-1}" # 0 to skip `mise install` (just link the dotfiles)
+AUTH="${AUTH:-1}"   # 0 to skip the gh auth prompt
 
 say()  { printf '\033[1;34m==>\033[0m %s\n' "$1"; }
 warn() { printf '\033[1;33m warn\033[0m %s\n' "$1"; }
@@ -76,6 +77,23 @@ if [ "$TOOLS" = "1" ]; then
   fi
 else
   say "skipping tool install (TOOLS=0)"
+fi
+
+# --- github cli -------------------------------------------------------------
+# gh is declared in the mise config, so it exists by now unless TOOLS=0.
+# Auth is interactive and can't be automated: with `curl | sh`, stdin is the
+# script itself, so there's no terminal to prompt on. Detect that and print
+# instructions instead of hanging.
+if [ "$AUTH" = "1" ] && [ -x "$("$MISE" which gh 2>/dev/null || true)" ]; then
+  if "$MISE" exec -- gh auth status >/dev/null 2>&1; then
+    say "gh already authenticated"
+  elif [ -t 0 ]; then
+    say "gh is not authenticated — launching login (choose SSH)"
+    "$MISE" exec -- gh auth login || warn "gh auth login failed or was cancelled"
+  else
+    warn "gh is not authenticated. Run this once the shell is back:"
+    printf '        gh auth login    # choose SSH\n'
+  fi
 fi
 
 # --- neovim config ----------------------------------------------------------

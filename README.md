@@ -97,6 +97,21 @@ Note that `link` only ever adds symlinks — it never removes one whose source h
 been deleted from `home/`. If you drop a file from the repo, delete its symlink
 in `$HOME` by hand.
 
+## gh
+
+`gh` is declared in the mise config, and `.config/gh/config.yml` is tracked —
+SSH as the git protocol, nvim as the editor, and a handful of aliases (`gh co`,
+`gh prs`, `gh prv`, …). Those work everywhere, unlike the zsh aliases in
+`aliases.zsh`, which only exist in interactive shells.
+
+**`~/.config/gh/hosts.yml` holds the OAuth token and is gitignored.** Don't move
+it under `home/`. gh rewrites `config.yml` in place when you run `gh config
+set`, and since it's a symlink those edits land in this repo — commit them.
+
+Auth can't be automated: `bootstrap.sh` runs `gh auth login` if it has a
+terminal, and prints the command if it doesn't (with `curl | sh`, stdin is the
+script, so there's nothing to prompt on). Skip it with `AUTH=0`.
+
 ## Secrets
 
 Not handled here. Nothing in this repo is encrypted, so **don't commit

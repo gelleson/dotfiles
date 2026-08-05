@@ -9,4 +9,7 @@ secrets/*.plain.*
 .env
 .env.*
 
+# gh stores its OAuth token here — never track it.
+home/.config/gh/hosts.yml
+
 .DS_Store

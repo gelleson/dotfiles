@@ -42,6 +42,16 @@ alias gco='git checkout'
 alias gb='git branch'
 command -v lazygit >/dev/null 2>&1 && alias lg=lazygit
 
+# gh — more aliases live in .config/gh/config.yml (gh's own alias system,
+# which works everywhere, not just interactive zsh).
+if command -v gh >/dev/null 2>&1; then
+  alias ghpr='gh pr create --fill'
+  alias ghprs='gh pr list'
+  alias ghco='gh pr checkout'
+  alias ghw='gh repo view --web'
+  alias ghrun='gh run watch'
+fi
+
 # dotfiles — this repo
 alias dot='cd ~/.dotfiles'
 alias dotl='mise run --cd ~/.dotfiles link'

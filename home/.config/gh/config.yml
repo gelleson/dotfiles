@@ -1,0 +1,16 @@
+# Use SSH for git operations that gh performs (clone, pr checkout, etc).
+git_protocol: ssh
+editor: nvim
+prompt: enabled
+aliases:
+    # PR workflow
+    co: pr checkout
+    prs: pr list
+    prv: pr view --web
+    prc: pr create --fill
+    # Issues
+    is: issue list
+    isv: issue view --web
+    # What's happening on this repo
+    runs: run list --limit 10
+version: "1"
