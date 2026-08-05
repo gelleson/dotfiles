@@ -1,12 +1,48 @@
 # Global mise config. Symlinked to ~/.config/mise/config.toml by `mise run link`.
 # `mise use -g` edits this file in place (it preserves comments and other keys,
 # only rewriting the [tools] table).
+#
+# Nothing here is installed until `mise install`. Delete lines you don't want
+# before running it — the language runtimes below are several GB in total.
 
 [tools]
 gh = "latest"
-# Add toolchains here or with `mise use -g node@lts`, e.g.:
-#   node = "lts"
-#   python = "3.13"
+
+# --- neovim + what the config at ~/.config/nvim needs to function -----------
+# https://github.com/gelleson/nvim — AstroNvim v5+, 20 language packs.
+neovim = "latest"
+node = "lts"           # most Mason-installed LSPs are npm packages
+ripgrep = "latest"     # telescope live_grep
+fd = "latest"          # telescope file finding
+lazygit = "latest"     # git UI, bound in AstroNvim
+tree-sitter = "latest" # parser CLI
+lua-language-server = "latest"
+stylua = "latest"
+
+# --- runtimes for the astrocommunity packs that config imports --------------
+# Each line maps to a `{ import = "astrocommunity.pack.X" }` in community.lua.
+# Trim aggressively — you probably don't write all of these.
+rust = "latest"
+go = "latest"
+python = "3.13"
+deno = "latest"   # pack.typescript-all-in-one + plugins/deno.lua
+java = "latest"
+zig = "latest"
+dart = "latest"
+php = "latest"
+gleam = "latest"
+erlang = "latest" # required by gleam
+just = "latest"
+helm = "latest"
+
+# Not covered: pack.nix — Nix can't be managed by mise; install it separately
+# if you want nil/nixd. pack.angular, .yaml, .toml, .json, .sql, .markdown and
+# .php LSPs all ride on node above.
+
+# --- containers -------------------------------------------------------------
+# On macOS this is the CLI only. It still needs a Linux VM:
+#   podman machine init && podman machine start
+podman = "latest"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
