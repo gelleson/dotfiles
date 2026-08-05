@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Composer ships only as composer.phar, so mise puts `composer.phar` on PATH.
+# This wrapper gives it the conventional name. Requires php.
+exec composer.phar "$@"

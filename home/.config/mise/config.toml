@@ -29,9 +29,19 @@ deno = "latest"   # pack.typescript-all-in-one + plugins/deno.lua
 java = "latest"
 zig = "latest"
 dart = "latest"
-php = "latest"
+# php: DISABLED. The only backends are vfox/asdf, both of which build PHP from
+# source and need system libs this machine doesn't have. Worse, the vfox plugin
+# throws on every config load, which breaks *all* mise commands. Re-enable only
+# with a working toolchain — note pack.php and composer below both need it.
+# php = "latest"
 gleam = "latest"
 erlang = "latest" # required by gleam
+
+# Composer, PHP's dependency manager. Not in mise's registry, so it comes
+# straight from GitHub releases. Upstream ships only composer.phar, so this
+# lands on PATH as `composer.phar` — home/.local/bin/composer wraps it under
+# the conventional name. Needs php, which must be installed for it to run.
+"github:composer/composer" = "latest"
 just = "latest"
 helm = "latest"
 
