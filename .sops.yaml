@@ -1,7 +1,0 @@
-# sops encryption policy for this repo.
-# The matching private key lives ONLY in the macOS login keychain, under the
-# service name "sops-age-key". There is no copy on disk. It is the root of
-# trust for everything in secrets/ — see `mise run key:status`.
-creation_rules:
-  - path_regex: secrets/.*\.(json|yaml|env)$
-    age: age1g2ntwrsnarq0act7pjq8sluhap5q64rqrttyqlstwmhkss9475ksxe9knt

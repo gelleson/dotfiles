@@ -3,18 +3,10 @@
 # only rewriting the [tools] table).
 
 [tools]
-age = "latest"
 gh = "latest"
-sops = "latest"
 # Add toolchains here or with `mise use -g node@lts`, e.g.:
 #   node = "lts"
 #   python = "3.13"
-
-[env]
-# mise decrypts this with its built-in sops support (see `mise settings sops`),
-# using the age key at ~/.config/sops/age/keys.txt. Each key in the JSON becomes
-# an env var; values are redacted in `mise env` output.
-_.file = "~/.dotfiles/secrets/env.json"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
