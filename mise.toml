@@ -63,6 +63,58 @@ find . -type f | sed 's|^\./||' | while read -r rel; do
 done
 '''
 
+[tasks."key:import"]
+description = "Import an age key file into the macOS keychain, then shred the file"
+run = '''
+set -euo pipefail
+src="${1:-$HOME/.config/sops/age/keys.txt}"
+[ -f "$src" ] || { echo "no key file at $src"; exit 1; }
+key=$(grep '^AGE-SECRET-KEY' "$src")
+security add-generic-password -a "$USER" -s sops-age-key \
+  -l "sops age key (dotfiles)" -D "age private key" \
+  -w "$key" -T /usr/bin/security -U
+echo "imported into keychain as 'sops-age-key'"
+echo "the plaintext file at $src is now redundant — remove it with:"
+echo "  rm -P $src"
+'''
+
+[tasks."key:export"]
+description = "Write the keychain age key back to a file (recovery / new machine)"
+run = '''
+set -euo pipefail
+dest="${1:-$HOME/.config/sops/age/keys.txt}"
+key=$(security find-generic-password -s sops-age-key -w)
+mkdir -p "$(dirname "$dest")"
+umask 077
+{ echo "# recovered from macOS keychain"; echo "$key"; } > "$dest"
+chmod 600 "$dest"
+echo "wrote $dest (mode 600)"
+'''
+
+[tasks."key:status"]
+description = "Show whether the age key is available and which recipient it is"
+run = '''
+if key=$(security find-generic-password -s sops-age-key -w 2>/dev/null); then
+  echo "keychain:   present"
+  echo "recipient:  $(echo "$key" | age-keygen -y 2>/dev/null)"
+else
+  echo "keychain:   MISSING"
+fi
+[ -f "$HOME/.config/sops/age/keys.txt" ] \
+  && echo "key file:   still present at ~/.config/sops/age/keys.txt (plaintext)" \
+  || echo "key file:   absent (good — keychain is the only copy)"
+# NEVER expand SOPS_AGE_KEY itself here — ${VAR:-default} prints the VALUE
+# when the var is set, which would spill the private key to the terminal.
+if [ -n "${SOPS_AGE_KEY:-}" ]; then
+  # Note: shell brace-length syntax is unusable in mise tasks — mise renders
+  # them as Tera templates, and a brace followed by a hash opens a Tera
+  # comment. Use wc instead.
+  echo "env:        SOPS_AGE_KEY is set ($(printf %s "$SOPS_AGE_KEY" | wc -c | tr -d ' ') chars)"
+else
+  echo "env:        SOPS_AGE_KEY is not set"
+fi
+'''
+
 [tasks."secrets:edit"]
 description = "Open the encrypted secrets file in $EDITOR (sops decrypts in memory)"
 run = 'sops "$MISE_PROJECT_ROOT/secrets/env.json"'
