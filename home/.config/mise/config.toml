@@ -49,6 +49,12 @@ helm = "latest"
 # if you want nil/nixd. pack.angular, .yaml, .toml, .json, .sql, .markdown and
 # .php LSPs all ride on node above.
 
+# --- agent tooling ----------------------------------------------------------
+# Background terminal server for coding agents: persistent panes that survive
+# disconnects, per-pane working/blocked/idle status, socket API. Single Rust
+# binary. Pairs with the opencode/sidekick plugins in the nvim config.
+herdr = "latest"
+
 # --- containers -------------------------------------------------------------
 # On macOS this is the CLI only. It still needs a Linux VM:
 #   podman machine init && podman machine start
