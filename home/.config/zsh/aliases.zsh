@@ -69,10 +69,4 @@ alias reload='exec zsh'
 # mkdir and cd into it.
 take() { mkdir -p "$1" && cd "$1"; }
 
-# Fuzzy-free directory jump: cd to the first match under $HOME.
-# (If you later install zoxide via mise, drop this in favour of `z`.)
-cdf() {
-  local d
-  d=$(find "$HOME" -maxdepth 4 -type d -name "*$1*" -not -path '*/.*' 2>/dev/null | head -1)
-  [[ -n $d ]] && cd "$d" || echo "no match for $1"
-}
+# Directory jumping is zoxide's job now — see navigation.zsh (`z`, `zi`).

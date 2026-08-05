@@ -67,6 +67,11 @@ podman = "latest"
 # between containers is limited — see apple/container's README.
 container = "latest"
 
+# --- shell navigation -------------------------------------------------------
+# Wired up in home/.config/zsh/navigation.zsh.
+zoxide = "latest" # `z` / `zi` frecency-based directory jumping
+fzf = "latest"    # ctrl-r history, ctrl-t files, alt-c cd; backs `zi`
+
 [settings]
 # Auto-install missing tools when a project's config requests them.
 not_found_auto_install = true

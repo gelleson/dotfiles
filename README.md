@@ -30,7 +30,8 @@ comment out:
 | `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
 | `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
 | `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
-| `aliases.zsh` | git/ls/mise shortcuts, `take`, `cdf` |
+| `aliases.zsh` | git/ls/mise/gh shortcuts, `take` |
+| `navigation.zsh` | zoxide (`z`, `zi`) and fzf keybindings |
 | `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
 
 Two things worth knowing:
@@ -40,6 +41,13 @@ Two things worth knowing:
   `zsh-history-substring-search` plugin with a built-in.
 - **A leading space keeps a command out of history** (`HIST_IGNORE_SPACE`). Use
   it when a command carries a token.
+- **`z <partial>` jumps** to the best-matching directory you've been in before,
+  `zi` opens an fzf picker over the matches. Plain `cd` is deliberately left
+  alone; to have zoxide replace it outright, use `zoxide init zsh --cmd cd` in
+  `navigation.zsh`.
+- **fzf binds ctrl-r / ctrl-t / alt-c** for history, files, and cd. It's guarded
+  on `[[ -t 0 ]]` because its ZLE widgets need a real terminal — without that,
+  every `zsh -ic` in a script prints `can't change option: zle`.
 
 Swapping the prompt for starship: `mise use -g starship`, then replace
 `prompt.zsh` with `eval "$(starship init zsh)"`.

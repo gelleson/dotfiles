@@ -11,7 +11,7 @@ eval "$($HOME/.local/bin/mise activate zsh)"
 
 # Modules, sourced in order. Each is independent — comment one out freely.
 ZSH_MODULES=$HOME/.config/zsh
-for _mod in options history completion keybindings aliases prompt; do
+for _mod in options history completion keybindings aliases navigation prompt; do
   [[ -r $ZSH_MODULES/$_mod.zsh ]] && source $ZSH_MODULES/$_mod.zsh
 done
 unset _mod
