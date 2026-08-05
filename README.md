@@ -47,17 +47,40 @@ Swapping the prompt for starship: `mise use -g starship`, then replace
 ## Bootstrap a new machine
 
 ```sh
-# 1. mise
-curl https://mise.run | sh
-
-# 2. this repo
-git clone git@github.com:USER/dotfiles.git ~/.dotfiles
-
-# 3. link everything into $HOME, then restart the shell
-cd ~/.dotfiles
-~/.local/bin/mise run link
-exec zsh
+curl -fsSL https://raw.githubusercontent.com/gelleson/dotfiles/main/bootstrap.sh | sh
 ```
+
+That installs mise, clones this repo, links everything into `$HOME`, installs
+every declared tool, and clones the neovim config. Then `exec zsh`.
+
+It's idempotent — re-running pulls and relinks rather than failing.
+
+**This URL only works if the repo is public.** `raw.githubusercontent.com`
+returns 404 for a private repo without a token. If you keep this private, clone
+first and run the script locally:
+
+```sh
+git clone git@github.com:gelleson/dotfiles.git ~/.dotfiles
+sh ~/.dotfiles/bootstrap.sh
+```
+
+Knobs, all env vars:
+
+| Var | Default | Effect |
+|---|---|---|
+| `TOOLS` | `1` | `0` skips `mise install` — just link the dotfiles |
+| `NVIM` | `1` | `0` skips cloning the neovim config |
+| `DOTFILES_DIR` | `~/.dotfiles` | where to clone |
+| `DOTFILES_REPO` | `gelleson/dotfiles` | fork-friendly |
+
+```sh
+TOOLS=0 sh ~/.dotfiles/bootstrap.sh    # config only, no 2GB of runtimes
+```
+
+Prerequisites the script checks for and fails loudly on: `git`, `curl`, and on
+macOS the Command Line Tools (`xcode-select --install`). A bare Mac has a `git`
+stub that only triggers the CLT installer, so this is checked explicitly rather
+than discovered halfway through.
 
 ## Daily use
 
