@@ -60,6 +60,13 @@ herdr = "latest"
 #   podman machine init && podman machine start
 podman = "latest"
 
+# Apple's native container runtime. mise unpacks the signed .pkg upstream
+# ships (there is no plain binary), so the CLI lands under Payload/bin.
+#   container system start   # boots the helper before first use
+# NOTE: Apple targets macOS 26 for this. On macOS 15 it runs but networking
+# between containers is limited — see apple/container's README.
+container = "latest"
+
 [settings]
 # Auto-install missing tools when a project's config requests them.
 not_found_auto_install = true
