@@ -149,25 +149,39 @@ als() {
 # own (`hs curran` -> sides/curran); no argument picks one with fzf. Session names
 # can't hold '/', so sides/curran runs as `sides-curran`.
 hs() {
-  local root=~/codes/namespaces ns=$1 d
-  local -a cands
+  emulate -L zsh -o extended_glob   # the (*/)# match patterns below need it
+  local root=~/codes/namespaces ns=$1 name d
+  local -a dirs sessions hits
   for d in $root/*(/N) $root/*/*(/N); do
-    [[ -d $d/.git ]] || cands+=(${d#$root/})   # repos aren't namespaces
+    [[ -d $d/.git ]] || dirs+=(${d#$root/})   # repos aren't namespaces
   done
-  (( $#cands )) || { print -u2 "hs: no namespaces under $root"; return 1 }
-  cands=(${(o)cands})
+  dirs=(${(o)dirs})
+  sessions=(${(f)"$(herdr session list 2>/dev/null | tail -n +2 | awk '{print $1}')"})
 
   if [[ -z $ns ]]; then
-    ns=$(print -l $cands | fzf --prompt='session ▸ ' --height=100% --border) || return
-  elif [[ ! -d $root/$ns ]]; then
-    # Match on the last component, so a group name alone is enough when unique.
-    local -a hits=(${(M)cands:#(*/)#$ns})
-    case $#hits in
-      1) ns=$hits[1] ;;
-      0) print -u2 "hs: no namespace matching '$ns' under $root"; return 1 ;;
-      *) ns=$(print -l $hits | fzf --prompt="session ▸ " --height=100% --border --select-1) || return ;;
-    esac
+    # Running sessions whose folder is gone still belong in the list.
+    local -a named=(${dirs//\//-})
+    ns=$(print -l $dirs ${sessions:#(${(j:|:)named})} |
+      fzf --prompt='session ▸ ' --height=100% --border) || return
   fi
   [[ -n $ns ]] || return
-  (cd $root/$ns && herdr --session ${ns//\//-})
+  name=${ns//\//-}
+
+  # A live session wins over the folder, so a namespace that has been renamed or
+  # deleted underneath a running session still opens.
+  if (( ! $sessions[(Ie)$name] )) && [[ ! -d $root/$ns ]]; then
+    hits=(${(M)dirs:#(*/)#$ns} ${(M)sessions:#(*-)#$ns})
+    case $#hits in
+      1) ns=$hits[1]; name=${ns//\//-} ;;
+      0) print -u2 "hs: no session or namespace matching '$ns'"; return 1 ;;
+      *) ns=$(print -l $hits | fzf --prompt='session ▸ ' --height=100% --border --select-1) || return
+         name=${ns//\//-} ;;
+    esac
+  fi
+
+  if [[ -d $root/$ns ]]; then
+    (cd $root/$ns && herdr --session $name)
+  else
+    herdr --session $name
+  fi
 }
