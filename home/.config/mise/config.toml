@@ -88,6 +88,7 @@ lsd = "latest"    # `tree` comes from `lsd --tree`; real tree ships source-only
 # no DOCKER_HOST and no shell config to find it.
 docker-cli = "latest"
 docker-compose = "latest"
+flyctl = "latest"
 
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
