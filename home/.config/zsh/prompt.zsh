@@ -28,8 +28,8 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd _prompt_precmd
 
 # %(?..) prints the arrow red only when the last command failed.
-# %~ collapses $HOME to ~ and named dirs to their names.
-PROMPT='%F{blue}%~%f${vcs_info_msg_0_} %(?.%F{green}.%F{red})❯%f '
+# %2~ collapses $HOME to ~ and shows only the last two path components.
+PROMPT='%F{blue}%2~%f${vcs_info_msg_0_} %(?.%F{green}.%F{red})❯%f '
 
 # Right side: mise-managed tool versions for the current dir, if any are
 # pinned by a local config. Cheap because mise caches this.
