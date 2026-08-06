@@ -185,3 +185,21 @@ hs() {
     herdr --session $name
   fi
 }
+
+# hsd [<filter>] — stop and delete a herdr session. The filter seeds fzf; you
+# still pick the session and confirm it.
+hsd() {
+  emulate -L zsh
+  local pick
+  local -a sessions
+  sessions=(${(f)"$(herdr session list 2>/dev/null | tail -n +2 | awk '{print $1}')"})
+  sessions=(${sessions:#default})   # herdr refuses to delete the default session
+  (( $#sessions )) || { print -u2 "hsd: no deletable sessions"; return 1 }
+
+  pick=$(print -l $sessions | fzf --prompt='delete ▸ ' --height=100% --border --query="${1:-}") || return
+  [[ -n $pick ]] || return
+  read -q "REPLY?delete session '$pick'? [y/N] " || { print; return 1 }
+  print
+  herdr session stop "$pick" >/dev/null 2>&1   # delete only takes stopped sessions
+  herdr session delete "$pick"
+}
