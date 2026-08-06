@@ -52,6 +52,15 @@ if command -v gh >/dev/null 2>&1; then
   alias ghrun='gh run watch'
 fi
 
+# Claude Code, per model. The [1m] suffix selects the 1M-token context
+# variant; haiku has no 1m variant, so it's plain.
+if command -v claude >/dev/null 2>&1; then
+  alias op='claude --model "opus[1m]"'
+  alias opus='claude --model "opus[1m]"'
+  alias sonnet='claude --model "sonnet[1m]"'
+  alias haiku='claude --model haiku'
+fi
+
 # dotfiles — this repo
 alias dot='cd ~/.dotfiles'
 alias dotl='mise run --cd ~/.dotfiles link'
