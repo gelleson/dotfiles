@@ -158,11 +158,11 @@ hs() {
   dirs=(${(o)dirs})
   sessions=(${(f)"$(herdr session list 2>/dev/null | tail -n +2 | awk '{print $1}')"})
 
+  # Bare `hs` is for jumping between sessions that already exist; naming a
+  # namespace is what starts a new one.
   if [[ -z $ns ]]; then
-    # Running sessions whose folder is gone still belong in the list.
-    local -a named=(${dirs//\//-})
-    ns=$(print -l $dirs ${sessions:#(${(j:|:)named})} |
-      fzf --prompt='session ▸ ' --height=100% --border) || return
+    (( $#sessions )) || { print -u2 "hs: no sessions yet — try: hs <namespace>"; return 1 }
+    ns=$(print -l $sessions | fzf --prompt='session ▸ ' --height=100% --border) || return
   fi
   [[ -n $ns ]] || return
   name=${ns//\//-}
