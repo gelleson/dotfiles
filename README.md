@@ -152,6 +152,10 @@ Keep them in the login keychain, a password manager, or an untracked
   it in place (comments and non-`[tools]` keys survive), so global tool changes
   land in the repo directly — `git status` here goes dirty whenever you install
   a tool. Commit them.
+- **herdr panes are persistent, so they don't see shell config changes.** A pane
+  started before you edited `.config/zsh/` is still running the shell that
+  sourced the old config — `z`, new aliases and newly installed tools will all
+  appear missing. Run `reload` (`exec zsh`) in that pane. New panes are fine.
 - macOS GUI apps launched from Finder read none of these shell files. If a GUI
   app needs mise tools, use `launchctl config user path`.
 - mise renders task bodies as Tera templates before running them, so a brace
