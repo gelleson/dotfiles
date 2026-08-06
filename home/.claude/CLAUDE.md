@@ -16,6 +16,30 @@ When asked to add, change, or remove an agent instruction:
 
 If it's ambiguous which is meant, treat it as project-local and say so.
 
+## This machine is reproducible — keep it that way
+
+Everything that survives a reinstall lives in `~/.dotfiles`, which is a private
+GitHub repo (`gelleson/dotfiles`) rebuilt by `bootstrap.sh` in one command.
+
+| What | Where |
+|---|---|
+| Every CLI tool and language runtime | `~/.dotfiles/home/.config/mise/config.toml` |
+| Shell config (options, history, completion, keybindings, aliases, navigation, prompt) | `~/.dotfiles/home/.config/zsh/` |
+| Everything else under `$HOME` | `~/.dotfiles/home/<same path>`, symlinked into place |
+| Repo tasks (`link`, `unlink`, `status`) | `~/.dotfiles/mise.toml` |
+| One-line machine bootstrap | `~/.dotfiles/bootstrap.sh` |
+
+**Use the `system-state` skill** before installing a tool, changing shell
+config, or adding any file under `$HOME`. It has the workflow and the traps.
+
+Never install with brew, `curl | sh`, or a downloaded package — tools come from
+mise so they're declared and reinstallable. Never edit a file in `$HOME`
+expecting it to persist: most are symlinks into `~/.dotfiles`, and anything not
+committed and pushed is lost on the next machine.
+
+Secrets never go in the repo. They belong in `~/.zshrc.local` (untracked) or the
+login keychain.
+
 ## Keep Code Simple
 
 Prefer the simplest implementation that correctly solves the current task.
