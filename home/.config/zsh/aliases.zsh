@@ -158,14 +158,14 @@ hs() {
   cands=(${(o)cands})
 
   if [[ -z $ns ]]; then
-    ns=$(print -l $cands | fzf --prompt='session ▸ ' --height=40% --border) || return
+    ns=$(print -l $cands | fzf --prompt='session ▸ ' --height=100% --border) || return
   elif [[ ! -d $root/$ns ]]; then
     # Match on the last component, so a group name alone is enough when unique.
     local -a hits=(${(M)cands:#(*/)#$ns})
     case $#hits in
       1) ns=$hits[1] ;;
       0) print -u2 "hs: no namespace matching '$ns' under $root"; return 1 ;;
-      *) ns=$(print -l $hits | fzf --prompt="session ▸ " --height=40% --border --select-1) || return ;;
+      *) ns=$(print -l $hits | fzf --prompt="session ▸ " --height=100% --border --select-1) || return ;;
     esac
   fi
   [[ -n $ns ]] || return
