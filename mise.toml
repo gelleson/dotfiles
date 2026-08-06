@@ -8,7 +8,7 @@ run = '''
 set -euo pipefail
 src="$MISE_PROJECT_ROOT/home"
 cd "$src"
-find . -type f | sed 's|^\./||' | while read -r rel; do
+find . \( -type f -o -type l \) | sed 's|^\./||' | while read -r rel; do
   target="$HOME/$rel"
   mkdir -p "$(dirname "$target")"
   if [ -L "$target" ]; then
@@ -32,7 +32,7 @@ run = '''
 set -euo pipefail
 src="$MISE_PROJECT_ROOT/home"
 cd "$src"
-find . -type f | sed 's|^\./||' | while read -r rel; do
+find . \( -type f -o -type l \) | sed 's|^\./||' | while read -r rel; do
   target="$HOME/$rel"
   if [ -L "$target" ]; then
     rm "$target"
@@ -47,7 +47,7 @@ description = "Show which home/ files are correctly linked"
 run = '''
 src="$MISE_PROJECT_ROOT/home"
 cd "$src"
-find . -type f | sed 's|^\./||' | while read -r rel; do
+find . \( -type f -o -type l \) | sed 's|^\./||' | while read -r rel; do
   target="$HOME/$rel"
   if [ -L "$target" ] && [ "$(readlink "$target")" = "$src/$rel" ]; then
     echo "  ok       ~/$rel"

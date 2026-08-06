@@ -12,6 +12,8 @@ home/            mirrors $HOME; every file here gets symlinked into place
   .config/zsh/   options, history, completion, keybindings, aliases, prompt
   .config/mise/  global tool versions
   .local/bin/    small wrapper scripts
+  .claude/       CLAUDE.md — global agent instructions
+  .codex/        AGENTS.md — symlink to the same file
 mise.toml        tasks for managing this repo (link/unlink/status)
 ```
 
@@ -124,6 +126,18 @@ set`, and since it's a symlink those edits land in this repo — commit them.
 Auth can't be automated: `bootstrap.sh` runs `gh auth login` if it has a
 terminal, and prints the command if it doesn't (with `curl | sh`, stdin is the
 script, so there's nothing to prompt on). Skip it with `AUTH=0`.
+
+## Agent instructions
+
+`home/.claude/CLAUDE.md` holds the global rules every coding agent on this
+machine follows. `home/.codex/AGENTS.md` is a **symlink inside the repo**
+pointing at it, so Claude Code and Codex read the same file and it can't drift.
+
+That's why the link/unlink/status tasks match `-type f -o -type l` rather than
+just `-type f` — a plain `-type f` silently skips symlinked entries, so
+`AGENTS.md` would never get linked.
+
+Project-level `CLAUDE.md` / `AGENTS.md` override this; it's the base layer.
 
 ## Secrets
 
