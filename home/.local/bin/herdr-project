@@ -1,0 +1,29 @@
+#!/usr/bin/env zsh
+# Fuzzy-pick a repo under ~/codes/namespaces and open it as a herdr space,
+# focusing the space already rooted there instead of opening a second one.
+# Bound to prefix+alt+p as a herdr popup; works as a plain command too.
+
+setopt null_glob
+# Scripts get /etc/zshenv's PATH, not .zprofile's, so the shims go on by hand.
+path=($HOME/.local/share/mise/shims $path)
+
+root=~/codes/namespaces
+# Repos sit at <namespace>/<repo> or <namespace>/<group>/<repo>.
+repos=(${root}/*/*/.git(N:h) ${root}/*/*/*/.git(N:h))
+(( $#repos )) || { print -u2 "no git repos under $root"; exit 1 }
+
+sel=$(print -l ${repos#$root/} | sort | fzf --prompt='project ▸ ' --height=100% --border) || exit
+[[ -n $sel ]] || exit
+dir=$root/$sel   # not `path` — in zsh that IS $PATH
+
+ws=$(herdr api snapshot | python3 -c '
+import json, sys
+snap = json.load(sys.stdin)["result"]["snapshot"]
+print(next((p["workspace_id"] for p in snap["panes"] if p.get("cwd") == sys.argv[1]), ""))
+' "$dir")
+
+if [[ -n $ws ]]; then
+  herdr workspace focus "$ws" >/dev/null
+else
+  herdr workspace create --cwd "$dir" --label "${sel:t}" --focus >/dev/null
+fi
