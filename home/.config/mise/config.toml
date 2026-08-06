@@ -78,6 +78,16 @@ lsd = "latest"    # `tree` comes from `lsd --tree`; real tree ships source-only
 # rather than its curl|bash installer. `matching` picks zb over zbx.
 "github:lucasgelfond/zerobrew" = { version = "latest", matching = "zb-", rename_exe = "zb" }
 "zerobrew:gum" = "latest"
+# --- containers -------------------------------------------------------------
+# Docker without Docker Desktop. colima runs dockerd in a lima VM and registers
+# a `colima` docker context, so docker-cli reaches it with no DOCKER_HOST and
+# Docker-assuming tooling (Laravel Sail) works unmodified. podman stays for
+# single containers: its mise package ships no macOS VM helpers (gvproxy,
+# vfkit), so it cannot run a machine, and compose stacks go through colima.
+colima = "latest"
+lima = "latest" # colima shells out to limactl; not optional
+docker-cli = "latest"
+docker-compose = "latest"
 
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
