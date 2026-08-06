@@ -69,6 +69,44 @@ if command -v claude >/dev/null 2>&1; then
   alias haiku='claude --model haiku'
 fi
 
+# Agent CLIs, named <cli><model>: c* is Claude Code, x* is Codex.
+#   co  opus        x55   codex 5.5
+#   cs  sonnet      xs56  codex sol 5.6
+#   ch  haiku       xt    codex terra
+#                   xl    codex luna
+# A leading effort flag skips the picker: -l low, -m medium, -h high, -x xhigh,
+# -X max. Without one, gum asks. Remaining arguments pass straight through.
+_ai() {
+  emulate -L zsh
+  local cli=$1 model=$2 effort
+  shift 2
+  case ${1-} in
+    -l) effort=low;    shift ;;
+    -m) effort=medium; shift ;;
+    -h) effort=high;   shift ;;
+    -x) effort=xhigh;  shift ;;
+    -X) effort=max;    shift ;;
+    *)  effort=$(gum choose --header="$model effort" low medium high xhigh max) || return ;;
+  esac
+  [[ -n $effort ]] || return
+  if [[ $cli == claude ]]; then
+    claude --model $model --effort $effort "$@"
+  else
+    codex -m $model -c model_reasoning_effort="$effort" "$@"
+  fi
+}
+if command -v claude >/dev/null 2>&1 && command -v gum >/dev/null 2>&1; then
+  alias co='_ai claude "opus[1m]"'
+  alias cs='_ai claude "sonnet[1m]"'
+  alias ch='_ai claude haiku'
+fi
+if command -v codex >/dev/null 2>&1 && command -v gum >/dev/null 2>&1; then
+  alias x55='_ai codex 5.5'
+  alias xs56='_ai codex sol-5.6'
+  alias xt='_ai codex terra'
+  alias xl='_ai codex luna'
+fi
+
 # dotfiles — this repo
 alias dot='cd ~/.dotfiles'
 alias dotl='mise run --cd ~/.dotfiles link'

@@ -77,6 +77,7 @@ lsd = "latest"    # `tree` comes from `lsd --tree`; real tree ships source-only
 # Upstream ships a self-contained Rust binary, so it comes from GitHub releases
 # rather than its curl|bash installer. `matching` picks zb over zbx.
 "github:lucasgelfond/zerobrew" = { version = "latest", matching = "zb-", rename_exe = "zb" }
+"zerobrew:gum" = "latest"
 
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
