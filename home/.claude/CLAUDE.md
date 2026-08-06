@@ -10,11 +10,14 @@ When asked to add, change, or remove an agent instruction:
 * **Only if the request says GLOBAL** — edit this file. It is a symlink to
   `~/.dotfiles/home/.claude/CLAUDE.md`, so also commit and push the dotfiles
   repo; `~/.codex/AGENTS.md` symlinks to it and updates automatically.
-* **Otherwise** — edit the current project's own `CLAUDE.md` / `AGENTS.md`,
-  creating it at the repo root if absent. Never edit this file for a
-  project-specific rule.
+* **Otherwise** — edit the current project's own `AGENTS.md`, creating it at the
+  repo root if absent. Never edit this file for a project-specific rule.
 
 If it's ambiguous which is meant, treat it as project-local and say so.
+
+Project instructions always live in **`AGENTS.md`**, with `CLAUDE.md` as a
+symlink to it — one file, every agent. Use the `agent-instructions` skill when
+creating them or when a repo has a standalone `CLAUDE.md` to normalize.
 
 ## This machine is reproducible — keep it that way
 
