@@ -42,9 +42,10 @@ if command -v claude >/dev/null 2>&1 && command -v gum >/dev/null 2>&1; then
   alias ch='_ai claude haiku'
 fi
 if command -v codex >/dev/null 2>&1 && command -v gum >/dev/null 2>&1; then
-  alias x='_ai codex 5.5'
-  alias xs='_ai codex sol-5.6'
-  alias xt='_ai codex terra'
-  alias xl='_ai codex luna'
+  # Full slugs — codex passes -m straight to the API, which 400s on short names.
+  alias x='_ai codex gpt-5.5'
+  alias xs='_ai codex gpt-5.6-sol'
+  alias xt='_ai codex gpt-5.6-terra'
+  alias xl='_ai codex gpt-5.6-luna'
 fi
 
