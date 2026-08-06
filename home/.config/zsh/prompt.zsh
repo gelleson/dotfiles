@@ -48,10 +48,12 @@ _prompt_precmd() {
   local p="${root:t}/${branch}${prefix:+/${prefix%/}}"
   _prompt_path=${p//\%/%%}
 
-  # Repos live at ~/codes/namespaces/<namespace>/<repo>; call the namespace out
-  # in its own color so which one you're in reads at a glance.
+  # Repos live at ~/codes/namespaces/<namespace>/<group>/<repo> (the group level
+  # is optional). Everything above the repo is the namespace: call it out in its
+  # own color — hashed from the full name, so each group is distinct — so which
+  # one you're in reads at a glance.
   if [[ $root == $HOME/codes/namespaces/*/* ]]; then
-    local ns=${${root#$HOME/codes/namespaces/}%%/*} ch h=0 i
+    local ns=${${root#$HOME/codes/namespaces/}:h} ch h=0 i
     for (( i = 1; i <= $#ns; i++ )); do
       ch=$ns[i]
       (( h = h * 31 + #ch ))
