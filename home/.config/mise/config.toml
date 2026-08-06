@@ -72,6 +72,17 @@ container = "latest"
 zoxide = "latest" # `z` / `zi` frecency-based directory jumping
 fzf = "latest"    # ctrl-r history, ctrl-t files, alt-c cd; backs `zi`
 lsd = "latest"    # `tree` comes from `lsd --tree`; real tree ships source-only
+# --- Homebrew formulae without Homebrew -------------------------------------
+# zerobrew (`zb`) installs Homebrew formulae 5-20x faster from its own CAS.
+# Upstream ships a self-contained Rust binary, so it comes from GitHub releases
+# rather than its curl|bash installer. `matching` picks zb over zbx.
+"github:lucasgelfond/zerobrew" = { version = "latest", matching = "zb-", rename_exe = "zb" }
+
+[plugins]
+# Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
+# and installed through zb. Not auto-installed: run
+#   mise plugins install zerobrew
+zerobrew = "https://github.com/kennyg/mise-zerobrew"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
