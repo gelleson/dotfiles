@@ -143,3 +143,22 @@ als() {
 }
 
 # Directory jumping is zoxide's job now — see navigation.zsh (`z`, `zi`).
+
+# hs [<namespace>[/<group>]] — attach to that namespace's herdr session, creating
+# it in the namespace directory the first time. With no argument, pick one with
+# fzf. Session names can't hold '/', so sides/curran runs as `sides-curran`.
+hs() {
+  local root=~/codes/namespaces ns=$1
+  if [[ -z $ns ]]; then
+    local -a cands
+    local d
+    for d in $root/*(/N) $root/*/*(/N); do
+      [[ -d $d/.git ]] || cands+=(${d#$root/})   # repos aren't namespaces
+    done
+    (( $#cands )) || { print -u2 "no namespaces under $root"; return 1 }
+    ns=$(print -l $cands | sort | fzf --prompt='session ▸ ' --height=40% --border) || return
+  fi
+  [[ -n $ns ]] || return
+  [[ -d $root/$ns ]] || { print -u2 "hs: no namespace '$ns' under $root"; return 1 }
+  (cd $root/$ns && herdr --session ${ns//\//-})
+}
