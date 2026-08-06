@@ -59,3 +59,7 @@ hsd() {
   herdr session stop "$pick" >/dev/null 2>&1   # delete only takes stopped sessions
   herdr session delete "$pick"
 }
+
+# hp — four-tab layout in the current herdr workspace: ai, editor (nvim .),
+# git (lazygit), terminal. See ~/.local/bin/herdr-panes.
+alias hp=herdr-panes

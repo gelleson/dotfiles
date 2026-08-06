@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+# Lay out the standard four tabs in the current herdr workspace: the tab you run
+# it from becomes `ai`, then editor (nvim .), git (lazygit), and a plain shell.
+# Aliased to `hp`. Everything opens in the current directory.
+
+# Scripts get /etc/zshenv's PATH, not .zprofile's, so the shims go on by hand.
+path=($HOME/.local/share/mise/shims $path)
+
+[[ -n $HERDR_WORKSPACE_ID ]] || { print -u2 "hp: not inside a herdr pane"; exit 1 }
+
+# tab <label> [command] — new tab in this workspace, optionally running something.
+tab() {
+  local pane
+  pane=$(herdr tab create --workspace $HERDR_WORKSPACE_ID --cwd $PWD --label $1 --no-focus |
+    python3 -c 'import json,sys; print(json.load(sys.stdin)["result"]["root_pane"]["pane_id"])')
+  [[ -n $2 ]] && herdr pane run $pane $2 >/dev/null
+}
+
+herdr tab rename $HERDR_TAB_ID ai >/dev/null
+tab editor 'nvim .'
+tab git lazygit
+tab terminal
+herdr tab focus $HERDR_TAB_ID >/dev/null
