@@ -16,6 +16,14 @@ alias ll='ls -lhG'
 alias la='ls -lhAG'
 alias lt='ls -lhtrG'   # newest last
 
+# tree — GNU tree isn't packaged for mise (source-only upstream), so this is
+# lsd's tree mode. Takes the same -L depth flag.
+if command -v lsd >/dev/null 2>&1; then
+  alias tree='lsd --tree'
+  alias tree2='lsd --tree --depth 2'
+  alias tree3='lsd --tree --depth 3'
+fi
+
 # Navigation
 alias ..='cd ..'
 alias ...='cd ../..'

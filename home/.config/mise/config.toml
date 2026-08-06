@@ -71,6 +71,7 @@ container = "latest"
 # Wired up in home/.config/zsh/navigation.zsh.
 zoxide = "latest" # `z` / `zi` frecency-based directory jumping
 fzf = "latest"    # ctrl-r history, ctrl-t files, alt-c cd; backs `zi`
+lsd = "latest"    # `tree` comes from `lsd --tree`; real tree ships source-only
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
