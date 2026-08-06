@@ -145,20 +145,29 @@ als() {
 # Directory jumping is zoxide's job now — see navigation.zsh (`z`, `zi`).
 
 # hs [<namespace>[/<group>]] — attach to that namespace's herdr session, creating
-# it in the namespace directory the first time. With no argument, pick one with
-# fzf. Session names can't hold '/', so sides/curran runs as `sides-curran`.
+# it in the namespace directory the first time. A bare group name resolves on its
+# own (`hs curran` -> sides/curran); no argument picks one with fzf. Session names
+# can't hold '/', so sides/curran runs as `sides-curran`.
 hs() {
-  local root=~/codes/namespaces ns=$1
+  local root=~/codes/namespaces ns=$1 d
+  local -a cands
+  for d in $root/*(/N) $root/*/*(/N); do
+    [[ -d $d/.git ]] || cands+=(${d#$root/})   # repos aren't namespaces
+  done
+  (( $#cands )) || { print -u2 "hs: no namespaces under $root"; return 1 }
+  cands=(${(o)cands})
+
   if [[ -z $ns ]]; then
-    local -a cands
-    local d
-    for d in $root/*(/N) $root/*/*(/N); do
-      [[ -d $d/.git ]] || cands+=(${d#$root/})   # repos aren't namespaces
-    done
-    (( $#cands )) || { print -u2 "no namespaces under $root"; return 1 }
-    ns=$(print -l $cands | sort | fzf --prompt='session ▸ ' --height=40% --border) || return
+    ns=$(print -l $cands | fzf --prompt='session ▸ ' --height=40% --border) || return
+  elif [[ ! -d $root/$ns ]]; then
+    # Match on the last component, so a group name alone is enough when unique.
+    local -a hits=(${(M)cands:#(*/)#$ns})
+    case $#hits in
+      1) ns=$hits[1] ;;
+      0) print -u2 "hs: no namespace matching '$ns' under $root"; return 1 ;;
+      *) ns=$(print -l $hits | fzf --prompt="session ▸ " --height=40% --border --select-1) || return ;;
+    esac
   fi
   [[ -n $ns ]] || return
-  [[ -d $root/$ns ]] || { print -u2 "hs: no namespace '$ns' under $root"; return 1 }
   (cd $root/$ns && herdr --session ${ns//\//-})
 }
