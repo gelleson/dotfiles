@@ -90,6 +90,7 @@ docker-cli = "latest"
 docker-compose = "latest"
 flyctl = "latest"
 bun = "latest"
+uv = "latest"
 
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
