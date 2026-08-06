@@ -3,6 +3,19 @@
 Applies to every project on this machine unless a project's own CLAUDE.md /
 AGENTS.md overrides it.
 
+## Where to write instruction changes
+
+When asked to add, change, or remove an agent instruction:
+
+* **Only if the request says GLOBAL** — edit this file. It is a symlink to
+  `~/.dotfiles/home/.claude/CLAUDE.md`, so also commit and push the dotfiles
+  repo; `~/.codex/AGENTS.md` symlinks to it and updates automatically.
+* **Otherwise** — edit the current project's own `CLAUDE.md` / `AGENTS.md`,
+  creating it at the repo root if absent. Never edit this file for a
+  project-specific rule.
+
+If it's ambiguous which is meant, treat it as project-local and say so.
+
 ## Keep Code Simple
 
 Prefer the simplest implementation that correctly solves the current task.
