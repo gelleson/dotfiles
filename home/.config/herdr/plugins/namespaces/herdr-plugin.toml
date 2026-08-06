@@ -1,0 +1,13 @@
+id = "gelleson.namespaces"
+name = "Namespaces"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "Label each space with its ~/codes/namespaces path"
+platforms = ["macos", "linux"]
+
+[[startup]]
+command = ["./tag.sh"]
+
+[[events]]
+on = "workspace.created"
+command = ["./tag.sh"]
