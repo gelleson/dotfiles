@@ -30,7 +30,7 @@ comment out:
 | `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
 | `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
 | `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
-| `aliases.zsh` | git/ls/mise/gh shortcuts, `take` |
+| `aliases.zsh` | git/ls/mise/gh/claude shortcuts, `take`, `als` |
 | `navigation.zsh` | zoxide (`z`, `zi`) and fzf keybindings |
 | `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
 
@@ -45,6 +45,11 @@ Two things worth knowing:
   `zi` opens an fzf picker over the matches. Plain `cd` is deliberately left
   alone; to have zoxide replace it outright, use `zoxide init zsh --cmd cd` in
   `navigation.zsh`.
+- **`als`** lists every alias and checks that its target exists, printing broken
+  ones in red. `als git` filters. Most aliases here are guarded on
+  `command -v`, so a missing tool means the alias silently isn't defined —
+  `als` is how you notice. It also prints gh's own aliases, which live in
+  `.config/gh/config.yml` and work outside zsh.
 - **fzf binds ctrl-r / ctrl-t / alt-c** for history, files, and cd. It's guarded
   on `[[ -t 0 ]]` because its ZLE widgets need a real terminal — without that,
   every `zsh -ic` in a script prints `can't change option: zle`.
