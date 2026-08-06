@@ -146,6 +146,31 @@ credentials** — no API tokens in `home/.zshrc`, no keys under `home/.config/`.
 Keep them in the login keychain, a password manager, or an untracked
 `~/.zshrc.local` sourced at the end of `home/.zshrc`.
 
+## Not reproducible: OrbStack
+
+One exception to "everything comes back from `bootstrap.sh`". Docker on this
+machine is [OrbStack](https://orbstack.dev), which ships only as a signed
+`.app`. Nothing here installs casks — it's absent from mise's registry, and
+zerobrew resolves formulae only (`zb install orbstack` fails as *missing
+formula*, as does any other cask). So **a rebuilt machine has no Docker daemon
+until you reinstall it by hand**:
+
+```sh
+curl -L -o /tmp/OrbStack.dmg https://orbstack.dev/download/stable/latest/arm64
+hdiutil attach -nobrowse /tmp/OrbStack.dmg
+cp -R "/Volumes/Install OrbStack"*/OrbStack.app /Applications/
+hdiutil detach "/Volumes/Install OrbStack"*
+open -a OrbStack     # first launch installs its privileged helper
+```
+
+It's also **paid for commercial use** — personal use is free.
+
+`docker-cli` and `docker-compose` still come from mise; OrbStack registers an
+`orbstack` docker context on launch, so they find it with no `DOCKER_HOST` and
+no shell config. If you'd rather stay fully reproducible, `mise use -g colima
+lima` is a drop-in replacement — same compose workflows, one more VM's worth of
+overhead, and no manual step here.
+
 ## Gotchas
 
 - `~/.config/mise/config.toml` is a symlink into this repo. `mise use -g` edits
