@@ -44,7 +44,8 @@ _prompt_precmd() {
     git rev-parse --git-common-dir --show-prefix --abbrev-ref HEAD 2>/dev/null)
   [[ -n $common_dir ]] || return
   [[ $branch == HEAD ]] && branch=$(git rev-parse --short HEAD 2>/dev/null)
-  local root=${common_dir:A:h} p="${${common_dir:A:h}:t}/${branch}${prefix:+/${prefix%/}}"
+  local root=${common_dir:A:h}
+  local p="${root:t}/${branch}${prefix:+/${prefix%/}}"
   _prompt_path=${p//\%/%%}
 
   # Repos live at ~/codes/namespaces/<namespace>/<repo>; call the namespace out
