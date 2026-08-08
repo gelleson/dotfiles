@@ -115,6 +115,14 @@ age = "latest"
 # instead. One-offs are `pnpm dlx`.
 pnpm = "latest"
 
+# --- env files ---------------------------------------------------------------
+# varlock — schema-validated .env (`.env.schema`) plus `varlock run -- <cmd>` to
+# inject resolved values. Not in mise's registry, so from GitHub releases: those
+# ship a standalone binary, which keeps it off node. The catch of that choice is
+# that varlock plugins come from npm and are not bundled — a project using one
+# needs `varlock install-plugin <name>` first.
+"github:dmno-dev/varlock" = "latest"
+
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
 # and installed through zb. Not auto-installed: run

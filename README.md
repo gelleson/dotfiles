@@ -32,7 +32,7 @@ comment out:
 | `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
 | `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
 | `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
-| `aliases.zsh` | git/ls/mise/gh/claude/uv/pnpm/temporal shortcuts, `take`, `als` |
+| `aliases.zsh` | git/ls/mise/gh/claude/uv/pnpm/temporal/varlock shortcuts, `take`, `als` |
 | `navigation.zsh` | zoxide (`z`, `zi`) and fzf keybindings |
 | `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
 
@@ -185,6 +185,12 @@ That's the path sops looks in by default on macOS, so `sops edit secrets.yaml`
 then works with no `SOPS_AGE_KEY_FILE` and no shell config. Put the matching
 public key in each project's `.sops.yaml`. Back the private key up somewhere
 outside this repo — lose it and every file encrypted to it is gone.
+
+`varlock` is the other half and not a competitor: it validates a project's
+`.env.schema` and injects resolved values into one command (`vlr pnpm dev`),
+where sops encrypts whole files that live in git. It comes from GitHub releases
+as a standalone binary, so its npm plugins aren't bundled — a project that uses
+one needs `varlock install-plugin <name>` first.
 
 ## Temporal
 
