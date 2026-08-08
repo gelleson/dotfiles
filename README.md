@@ -32,7 +32,7 @@ comment out:
 | `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
 | `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
 | `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
-| `aliases.zsh` | git/ls/mise/gh/claude/uv/temporal shortcuts, `take`, `als` |
+| `aliases.zsh` | git/ls/mise/gh/claude/uv/pnpm/temporal shortcuts, `take`, `als` |
 | `navigation.zsh` | zoxide (`z`, `zi`) and fzf keybindings |
 | `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
 

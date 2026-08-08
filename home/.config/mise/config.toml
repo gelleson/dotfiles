@@ -108,6 +108,13 @@ age = "latest"
 # distribution — that's temporal-server + sql tools and wants a real datastore.
 "aqua:temporalio/cli" = "latest"
 
+# --- node package manager ---------------------------------------------------
+# Standalone build, so it doesn't ride on the node above and corepack stays out
+# of it. Deliberately NOT `pnpm setup`: that wants a PNPM_HOME on PATH for
+# `pnpm add -g`, and global npm packages belong in this file as `npm:<pkg>`
+# instead. One-offs are `pnpm dlx`.
+pnpm = "latest"
+
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
 # and installed through zb. Not auto-installed: run
