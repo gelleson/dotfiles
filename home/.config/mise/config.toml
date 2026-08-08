@@ -94,6 +94,19 @@ bun = "latest"
 # interpreters under ~/.local/share/uv/python for projects. Shell side:
 # .config/zsh/aliases/uv.zsh and the committed _uv/_uvx completions.
 uv = "latest"
+# --- secrets ----------------------------------------------------------------
+# Encrypt/decrypt files in place with an age keypair. Nothing in THIS repo is
+# encrypted — these are for project repos. One-time setup per machine:
+#   age-keygen -o "$HOME/Library/Application Support/sops/age/keys.txt"
+# sops finds that path by default; the private key stays out of git, always.
+sops = "latest"
+age = "latest"
+
+# --- temporal ---------------------------------------------------------------
+# The `temporal` CLI, which bundles a SQLite dev server (`temporal server
+# start-dev`, aliased `tsd`). NOT the registry's `temporal`, which is the server
+# distribution — that's temporal-server + sql tools and wants a real datastore.
+"aqua:temporalio/cli" = "latest"
 
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`

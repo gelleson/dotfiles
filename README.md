@@ -32,7 +32,7 @@ comment out:
 | `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
 | `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
 | `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
-| `aliases.zsh` | git/ls/mise/gh/claude/uv shortcuts, `take`, `als` |
+| `aliases.zsh` | git/ls/mise/gh/claude/uv/temporal shortcuts, `take`, `als` |
 | `navigation.zsh` | zoxide (`z`, `zi`) and fzf keybindings |
 | `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
 
@@ -162,10 +162,38 @@ Project-level `CLAUDE.md` / `AGENTS.md` override this; it's the base layer.
 
 ## Secrets
 
-Not handled here. Nothing in this repo is encrypted, so **don't commit
-credentials** — no API tokens in `home/.zshrc`, no keys under `home/.config/`.
-Keep them in the login keychain, a password manager, or an untracked
-`~/.zshrc.local` sourced at the end of `home/.zshrc`.
+**Nothing in this repo is encrypted, and that hasn't changed** — no API tokens in
+`home/.zshrc`, no keys under `home/.config/`. Keep them in the login keychain, a
+password manager, or an untracked `~/.zshrc.local` sourced at the end of
+`home/.zshrc`.
+
+`sops` and `age` are declared in the mise config for *project* repos that keep
+encrypted files in git. One-time setup on a new machine, since the private key
+can obviously never be in here:
+
+```sh
+age-keygen -o "$HOME/Library/Application Support/sops/age/keys.txt"
+```
+
+That's the path sops looks in by default on macOS, so `sops edit secrets.yaml`
+then works with no `SOPS_AGE_KEY_FILE` and no shell config. Put the matching
+public key in each project's `.sops.yaml`. Back the private key up somewhere
+outside this repo — lose it and every file encrypted to it is gone.
+
+## Temporal
+
+`"aqua:temporalio/cli"` in the mise config, not the registry's `temporal` — that
+short name resolves to the *server* distribution (`temporal-server` plus
+Cassandra/SQL tools, wants a real datastore). The CLI is the useful half and
+embeds its own dev cluster:
+
+```sh
+tsd            # temporal server start-dev — SQLite, UI on http://localhost:8233
+twl            # temporal workflow list
+```
+
+Completions are committed like uv's, but `_temporal` is cobra's dynamic kind — it
+asks the binary on each tab, so it never needs regenerating after an upgrade.
 
 ## Not reproducible: OrbStack
 

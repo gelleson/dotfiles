@@ -9,6 +9,8 @@
 #   uvx --generate-shell-completion zsh > ~/.dotfiles/home/.config/zsh/completions/_uvx
 # A *new* file here stays invisible until the dump is rebuilt (the -C path below
 # trusts it for 24h): rm ~/.cache/zsh/zcompdump && exec zsh.
+# _temporal needs no regeneration — cobra's completion asks the binary itself
+# (`temporal __complete`) on every tab, so it tracks whatever version is installed.
 
 fpath=($HOME/.config/zsh/completions $fpath)
 
