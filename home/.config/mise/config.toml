@@ -90,6 +90,9 @@ docker-cli = "latest"
 docker-compose = "latest"
 flyctl = "latest"
 bun = "latest"
+# Python packaging. `python` above stays for the nvim LSPs; uv downloads its own
+# interpreters under ~/.local/share/uv/python for projects. Shell side:
+# .config/zsh/aliases/uv.zsh and the committed _uv/_uvx completions.
 uv = "latest"
 
 [plugins]
@@ -105,3 +108,7 @@ not_found_auto_install = true
 # Don't read .nvmrc / .python-version etc. unless explicitly wanted — keeps
 # resolution predictable and coming from mise config only.
 idiomatic_version_file_enable_tools = []
+
+# cd into a uv project and its .venv is on PATH — no `source .venv/bin/activate`,
+# and it deactivates on the way out. mise reads the venv, uv creates it.
+python.uv_venv_auto = true

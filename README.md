@@ -32,7 +32,7 @@ comment out:
 | `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
 | `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
 | `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
-| `aliases.zsh` | git/ls/mise/gh/claude shortcuts, `take`, `als` |
+| `aliases.zsh` | git/ls/mise/gh/claude/uv shortcuts, `take`, `als` |
 | `navigation.zsh` | zoxide (`z`, `zi`) and fzf keybindings |
 | `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
 
@@ -126,6 +126,27 @@ set`, and since it's a symlink those edits land in this repo — commit them.
 Auth can't be automated: `bootstrap.sh` runs `gh auth login` if it has a
 terminal, and prints the command if it doesn't (with `curl | sh`, stdin is the
 script, so there's nothing to prompt on). Skip it with `AUTH=0`.
+
+## uv (Python)
+
+`uv` comes from mise; everything Python-project-shaped goes through it.
+
+- **Venvs activate themselves.** `python.uv_venv_auto = true` in the mise config
+  puts `.venv/bin` on PATH when you `cd` into a project and takes it off when you
+  leave — no `source .venv/bin/activate` ever. It triggers on **`uv.lock`**, so a
+  bare `uv venv` with no lockfile is not enough; `uv sync` is.
+- **`python` outside a project** is still mise's 3.13 (there for the nvim LSPs).
+  uv keeps its own interpreters under `~/.local/share/uv/python`, so the two
+  never fight. `py` (= `uv run python`) works anywhere, project or not.
+- **`uv tool install ruff`** lands binaries in `~/.local/bin`, already first on
+  PATH from `.zshrc`. `uvx ruff` runs one without installing.
+- **Completions** for `uv` and `uvx` are committed under
+  `.config/zsh/completions/`, generated rather than eval'd at startup — the eval
+  form costs 60 ms, more than this whole shell. Regenerate after an upgrade with
+  the commands in `completion.zsh`.
+
+Aliases (`uv.zsh`): `uvr` run, `uvs` sync, `uva` add, `uvrm` remove, `uvt` tool,
+`py` python.
 
 ## Agent instructions
 

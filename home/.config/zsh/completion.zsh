@@ -1,5 +1,14 @@
 # Completion. compinit is the single slowest thing in most zsh startups, so
 # the dump file is only rebuilt once a day rather than on every shell.
+#
+# completions/ holds committed, generated completion functions — zsh autoloads
+# them on first tab, so they cost nothing at startup (`eval "$(uv
+# generate-shell-completion zsh)"` costs 60 ms, which is more than this whole
+# shell). Regenerate after a tool upgrade:
+#   uv generate-shell-completion zsh > ~/.dotfiles/home/.config/zsh/completions/_uv
+#   uvx --generate-shell-completion zsh > ~/.dotfiles/home/.config/zsh/completions/_uvx
+# A *new* file here stays invisible until the dump is rebuilt (the -C path below
+# trusts it for 24h): rm ~/.cache/zsh/zcompdump && exec zsh.
 
 fpath=($HOME/.config/zsh/completions $fpath)
 
