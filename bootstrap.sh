@@ -67,6 +67,12 @@ say "linking dotfiles into \$HOME"
 "$MISE" trust -q "$DOTFILES_DIR" 2>/dev/null || true
 "$MISE" run --cd "$DOTFILES_DIR" link
 
+# --- fonts ------------------------------------------------------------------
+if [ "$(uname -s)" = "Darwin" ]; then
+  say "installing nerd fonts"
+  "$MISE" run --cd "$DOTFILES_DIR" fonts || warn "font install failed"
+fi
+
 # --- tools ------------------------------------------------------------------
 # One failing tool must not abort the run — some backends build from source and
 # are fragile. Report what broke and carry on.

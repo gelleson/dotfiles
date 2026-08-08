@@ -26,6 +26,22 @@ find . \( -type f -o -type l \) | sed 's|^\./||' | while read -r rel; do
 done
 '''
 
+[tasks.fonts]
+description = "Install the Nerd Fonts referenced by the ghostty config into ~/Library/Fonts"
+run = '''
+set -euo pipefail
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+mkdir -p "$HOME/Library/Fonts"
+for f in BigBlueTerminal JetBrainsMono; do
+  curl -fsSL -o "$tmp/$f.zip" \
+    "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/$f.zip"
+  unzip -qo "$tmp/$f.zip" -d "$tmp/$f"
+  find "$tmp/$f" -name '*.ttf' -exec cp {} "$HOME/Library/Fonts/" \;
+  echo "  installed $f"
+done
+'''
+
 [tasks.unlink]
 description = "Replace symlinks in $HOME with real copies (undo link)"
 run = '''
