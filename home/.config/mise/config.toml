@@ -123,6 +123,15 @@ pnpm = "latest"
 # needs `varlock install-plugin <name>` first.
 "github:dmno-dev/varlock" = "latest"
 
+# --- local dev URLs ----------------------------------------------------------
+# portless (vercel-labs) — stable https://<name>.localhost instead of ports.
+# npm backend because its releases carry no binaries, so it runs on whatever
+# node is on PATH and needs >=24: inside a project pinning node 23 or older it
+# refuses to start. Its state (including a local CA private key) lives in
+# ~/.portless, which stays out of this repo. See the README for the one-time
+# trust/proxy steps a rebuilt machine needs.
+portless = "latest"
+
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
 # and installed through zb. Not auto-installed: run

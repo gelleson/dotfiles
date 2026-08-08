@@ -32,7 +32,7 @@ comment out:
 | `history.zsh` | 200k entries, shared across shells, dedup, ignore-on-leading-space |
 | `completion.zsh` | `compinit` with a 24h-cached dump, case-insensitive matching, menu select |
 | `keybindings.zsh` | emacs mode, prefix history search on ↑/↓, `^X^E` to edit in `$EDITOR` |
-| `aliases.zsh` | git/ls/mise/gh/claude/uv/pnpm/temporal/varlock shortcuts, `take`, `als` |
+| `aliases.zsh` | git/ls/mise/gh/claude/uv/pnpm/temporal/varlock/portless shortcuts, `take`, `als` |
 | `navigation.zsh` | zoxide (`z`, `zi`) and fzf keybindings |
 | `prompt.zsh` | `vcs_info` git prompt, no subprocess per redraw |
 
@@ -153,6 +153,28 @@ script, so there's nothing to prompt on). Skip it with `AUTH=0`.
 
 Aliases (`uv.zsh`): `uvr` run, `uvs` sync, `uva` add, `uvrm` remove, `uvt` tool,
 `py` python.
+
+## portless
+
+`https://myapp.localhost` instead of `localhost:3000`. Bare `portless` runs the
+project's dev script through the proxy; `pl`, `pll` (list), `pld` (doctor).
+
+Two things `bootstrap.sh` can't do for you, because both touch the OS rather than
+`$HOME` — run them once per machine:
+
+```sh
+portless trust             # generate the local CA, add it to the trust store
+portless service install   # start the HTTPS proxy at login (it binds :443)
+portless hosts sync        # only if you use Safari, which ignores .localhost
+```
+
+`portless doctor` tells you which of those are still missing. State lives in
+`~/.portless` — **not** under `home/`, deliberately: it holds the CA's private
+key. `portless clean` removes the state, the trust entry, and the hosts block.
+
+The npm backend means portless runs on whatever `node` is on PATH, and it needs
+>= 24. In a project pinning an older node it will refuse to start; run it from
+outside that project, or bump the project.
 
 ## Agent instructions
 
