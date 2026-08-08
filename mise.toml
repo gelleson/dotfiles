@@ -33,7 +33,7 @@ set -euo pipefail
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 mkdir -p "$HOME/Library/Fonts"
-for f in BigBlueTerminal JetBrainsMono; do
+for f in ProggyClean BigBlueTerminal JetBrainsMono; do
   curl -fsSL -o "$tmp/$f.zip" \
     "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/$f.zip"
   unzip -qo "$tmp/$f.zip" -d "$tmp/$f"
