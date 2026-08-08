@@ -131,10 +131,16 @@ script, so there's nothing to prompt on). Skip it with `AUTH=0`.
 
 `uv` comes from mise; everything Python-project-shaped goes through it.
 
-- **Venvs activate themselves.** `python.uv_venv_auto = true` in the mise config
-  puts `.venv/bin` on PATH when you `cd` into a project and takes it off when you
-  leave — no `source .venv/bin/activate` ever. It triggers on **`uv.lock`**, so a
-  bare `uv venv` with no lockfile is not enough; `uv sync` is.
+- **Venvs activate themselves.** `python.uv_venv_auto = "source"` in the mise
+  config puts `.venv/bin` on PATH when you `cd` into a project and takes it off
+  when you leave — no `source .venv/bin/activate` ever. It triggers on
+  **`uv.lock`**, so a bare `uv venv` with no lockfile is not enough; `uv sync` is.
+- **`"source"`, not `true`.** `true` is create-then-source: mise runs `uv venv`
+  *in the cd hook*. Enter a project pinned to a Python that isn't downloaded yet
+  and the prompt blocks on a CPython download — and because `.venv` still doesn't
+  exist, the next prompt starts another `uv venv`, and they pile up into a hang.
+  `"source"` only ever activates a venv that already exists. Creating one stays
+  your job: `uv sync`.
 - **`python` outside a project** is still mise's 3.13 (there for the nvim LSPs).
   uv keeps its own interpreters under `~/.local/share/uv/python`, so the two
   never fight. `py` (= `uv run python`) works anywhere, project or not.

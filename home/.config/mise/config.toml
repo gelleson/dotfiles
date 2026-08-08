@@ -123,5 +123,11 @@ not_found_auto_install = true
 idiomatic_version_file_enable_tools = []
 
 # cd into a uv project and its .venv is on PATH — no `source .venv/bin/activate`,
-# and it deactivates on the way out. mise reads the venv, uv creates it.
-python.uv_venv_auto = true
+# and it deactivates on the way out.
+#
+# "source", NOT true. `true` means create-then-source: mise runs `uv venv`
+# in the cd hook, so entering a project whose python isn't downloaded yet blocks
+# the prompt on a CPython download — and since the venv doesn't exist yet, every
+# following prompt fires another `uv venv`, which piles up into a hang. "source"
+# only activates a venv that already exists; `uv sync` stays explicit.
+python.uv_venv_auto = "source"
