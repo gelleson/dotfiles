@@ -22,7 +22,10 @@ stylua = "latest"
 # --- runtimes for the astrocommunity packs that config imports --------------
 # Each line maps to a `{ import = "astrocommunity.pack.X" }` in community.lua.
 # Trim aggressively — you probably don't write all of these.
-rust = "latest"
+# components: the rustup toolchain ships neither by default. Without
+# rust-analyzer the `~/.cargo/bin` shim falls through to the mise shim and back,
+# and nvim's LSP dies on "infinite recursion". rust-src is go-to-def into std.
+rust = { version = "latest", components = "rust-analyzer,rust-src" }
 go = "latest"
 python = "3.13"
 deno = "latest"   # pack.typescript-all-in-one + plugins/deno.lua
