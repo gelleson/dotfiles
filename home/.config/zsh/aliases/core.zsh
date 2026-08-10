@@ -29,6 +29,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias -- -='cd -'
+alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs'
 
 # Safety. -i prompts before clobbering; NO_CLOBBER already guards `>`.
 alias cp='cp -i'
