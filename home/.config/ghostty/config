@@ -1,6 +1,3 @@
 # Ghostty. Fonts come from `mise run fonts` in this repo.
-# BigBlueTerm has only a regular face; JetBrainsMono backs it for
-# bold/italic and any glyph it's missing.
-font-family = BigBlueTermPlus Nerd Font Mono
 font-family = JetBrainsMono Nerd Font Mono
 font-size = 19
