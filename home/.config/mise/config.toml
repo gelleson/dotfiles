@@ -135,6 +135,12 @@ pnpm = "latest"
 # trust/proxy steps a rebuilt machine needs.
 portless = "latest"
 
+# --- document conversion ------------------------------------------------------
+# anydoc (firecrawl) — docx/pptx/xlsx/pdf -> GitHub-Flavored Markdown. Rust core
+# shipped as a native binary through npm, so the npm backend rather than
+# github: releases. Needs npm.package_manager = "npm" below to install.
+"npm:@firecrawl/anydoc" = "latest"
+
 [plugins]
 # Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
 # and installed through zb. Not auto-installed: run
@@ -158,3 +164,9 @@ idiomatic_version_file_enable_tools = []
 # following prompt fires another `uv venv`, which piles up into a hang. "source"
 # only activates a venv that already exists; `uv sync` stays explicit.
 python.uv_venv_auto = "source"
+
+# Use real npm for the `npm:` backend. The "auto" default picks mise's bundled
+# aube client, which aborts non-interactively ("user aborted `mise add <pkg>`")
+# and hangs waiting for a prompt on a tty — so `npm:` installs fail on a fresh
+# machine, including during bootstrap.
+npm.package_manager = "npm"
