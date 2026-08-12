@@ -229,30 +229,35 @@ twl            # temporal workflow list
 Completions are committed like uv's, but `_temporal` is cobra's dynamic kind — it
 asks the binary on each tab, so it never needs regenerating after an upgrade.
 
-## Not reproducible: OrbStack
+## Homebrew and the Brewfile
 
-One exception to "everything comes back from `bootstrap.sh`". Docker on this
-machine is [OrbStack](https://orbstack.dev), which ships only as a signed
-`.app`. Nothing here installs casks — it's absent from mise's registry, and
-zerobrew resolves formulae only (`zb install orbstack` fails as *missing
-formula*, as does any other cask). So **a rebuilt machine has no Docker daemon
-until you reinstall it by hand**:
+mise owns every CLI tool and runtime. Homebrew exists for the one thing mise
+has no concept of — **casks** — plus the rare formula missing from mise's
+registry. That split is the whole rule; the `Brewfile` at the repo root is
+deliberately three entries long, and `bootstrap.sh` runs `brew bundle` on it.
+
+Adding to it should be rare. Check `mise registry | grep -i <name>` first —
+if it resolves there, it belongs in the mise config instead, where it stays
+pinnable per project.
 
 ```sh
-curl -L -o /tmp/OrbStack.dmg https://orbstack.dev/download/stable/latest/arm64
-hdiutil attach -nobrowse /tmp/OrbStack.dmg
-cp -R "/Volumes/Install OrbStack"*/OrbStack.app /Applications/
-hdiutil detach "/Volumes/Install OrbStack"*
-open -a OrbStack     # first launch installs its privileged helper
+brew bundle        --file ~/.dotfiles/Brewfile   # install what's declared
+brew bundle check  --file ~/.dotfiles/Brewfile   # what's missing?
+brew bundle cleanup --file ~/.dotfiles/Brewfile  # what's installed but undeclared?
 ```
 
-It's also **paid for commercial use** — personal use is free.
+This replaced [zerobrew](https://github.com/lucasgelfond/zerobrew), which was
+faster but formulae-only: its `zb install --help` claims "formulas and casks",
+yet as of v0.3.2 a cask token only ever hits the *formula* endpoint, so
+`zb install orbstack` failed as *missing formula*. Casks were the reason to
+have it, so it lost its job.
 
-`docker-cli` and `docker-compose` still come from mise; OrbStack registers an
+**OrbStack** (the Docker daemon, and **paid for commercial use**) still needs
+one `open -a OrbStack` after a rebuild to install its privileged helper.
+`docker-cli` and `docker-compose` stay on mise; OrbStack registers an
 `orbstack` docker context on launch, so they find it with no `DOCKER_HOST` and
-no shell config. If you'd rather stay fully reproducible, `mise use -g colima
-lima` is a drop-in replacement — same compose workflows, one more VM's worth of
-overhead, and no manual step here.
+no shell config. **LM Studio** pairs with `ollama` from mise — same GGUF
+models, GUI and CLI halves of the same thing.
 
 ## Gotchas
 
@@ -266,6 +271,18 @@ overhead, and no manual step here.
   appear missing. Run `reload` (`exec zsh`) in that pane. New panes are fine.
 - macOS GUI apps launched from Finder read none of these shell files. If a GUI
   app needs mise tools, use `launchctl config user path`.
+- **Quit an app before `brew install --cask --adopt` it.** Adopting hands an
+  already-installed `.app` to Homebrew without redownloading, but it writes
+  xattrs to files inside the bundle, and macOS refuses that while the app is
+  running. Adopting a running OrbStack failed on exactly that — and brew's
+  rollback *deletes the app*, backup included. `~/.orbstack` (containers,
+  images, VM state) survived and a plain `brew install --cask orbstack`
+  restored everything, but the ten seconds in between were not fun.
+- **Homebrew's installer wants to append its `shellenv` line to `~/.zprofile`,
+  which is a symlink into this repo.** Don't let it — it writes a hardcoded
+  `/Users/<you>` path into the tracked file. `.zprofile` already evals it,
+  guarded, and *before* the mise shims: both prepend to PATH, so the one
+  running last wins, and mise must win for every tool it declares.
 - mise renders task bodies as Tera templates before running them, so a brace
   followed by a hash opens a template comment and breaks the task. Shell
   brace-length syntax is therefore unusable in `mise.toml`; use `wc -c`.

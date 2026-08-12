@@ -75,17 +75,12 @@ container = "latest"
 zoxide = "latest" # `z` / `zi` frecency-based directory jumping
 fzf = "latest"    # ctrl-r history, ctrl-t files, alt-c cd; backs `zi`
 lsd = "latest"    # `tree` comes from `lsd --tree`; real tree ships source-only
-# --- Homebrew formulae without Homebrew -------------------------------------
-# zerobrew (`zb`) installs Homebrew formulae 5-20x faster from its own CAS.
-# Upstream ships a self-contained Rust binary, so it comes from GitHub releases
-# rather than its curl|bash installer. `matching` picks zb over zbx.
-"github:lucasgelfond/zerobrew" = { version = "latest", matching = "zb-", rename_exe = "zb" }
-"zerobrew:gum" = "latest"
+# Homebrew formulae are NOT declared here — see the Brewfile at the repo root.
+# zerobrew used to fill that role from this file; it was dropped for real
+# Homebrew, which handles casks too. `gum` moved to the Brewfile.
 # --- docker client ----------------------------------------------------------
-# Client only — the daemon comes from OrbStack, which is a signed .app and so
-# CANNOT be declared here (no cask support in mise's registry or in zb; `zb
-# install orbstack` fails as "missing formula"). It is the one thing on this
-# machine a rebuild will not restore. See the README.
+# Client only — the daemon comes from OrbStack, a cask, so it belongs in the
+# Brewfile rather than here (mise's registry has no casks). See the README.
 #
 # OrbStack registers its own `orbstack` docker context on launch, so these need
 # no DOCKER_HOST and no shell config to find it.
@@ -141,12 +136,6 @@ portless = "latest"
 # github: releases. Needs npm.package_manager = "npm" below to install.
 "npm:@firecrawl/anydoc" = "latest"
 ollama = "latest"
-
-[plugins]
-# Backend plugin so formulae can be declared here as `"zerobrew:jq" = "latest"`
-# and installed through zb. Not auto-installed: run
-#   mise plugins install zerobrew
-zerobrew = "https://github.com/kennyg/mise-zerobrew"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.

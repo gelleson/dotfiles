@@ -17,6 +17,7 @@ MISE="$HOME/.local/bin/mise"
 NVIM="${NVIM:-1}"   # 0 to skip the neovim config
 TOOLS="${TOOLS:-1}" # 0 to skip `mise install` (just link the dotfiles)
 AUTH="${AUTH:-1}"   # 0 to skip the gh auth prompt
+BREW="${BREW:-1}"   # 0 to skip Homebrew and the Brewfile (casks won't install)
 
 say()  { printf '\033[1;34m==>\033[0m %s\n' "$1"; }
 warn() { printf '\033[1;33m warn\033[0m %s\n' "$1"; }
@@ -83,6 +84,37 @@ if [ "$TOOLS" = "1" ]; then
   fi
 else
   say "skipping tool install (TOOLS=0)"
+fi
+
+# --- homebrew ---------------------------------------------------------------
+# Only for casks and the handful of formulae mise's registry lacks — see the
+# Brewfile. mise stays the source for everything else.
+#
+# The installer needs sudo, and under `curl | sh` stdin is the script itself,
+# so there is no terminal to prompt on. Same problem as gh auth below: detect
+# it and print instructions rather than hang.
+BREW_BIN=/opt/homebrew/bin/brew
+if [ "$BREW" = "1" ]; then
+  if [ ! -x "$BREW_BIN" ]; then
+    if [ -t 0 ]; then
+      say "installing Homebrew (needs sudo)"
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+        || warn "Homebrew install failed"
+    else
+      warn "no terminal for Homebrew's sudo prompt — install it by hand, then rerun:"
+      warn '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+    fi
+  fi
+  # Don't let the installer append its own shellenv line to ~/.zprofile — that
+  # file is a symlink into this repo and already evals it, guarded.
+  if [ -x "$BREW_BIN" ]; then
+    say "installing Brewfile packages"
+    eval "$("$BREW_BIN" shellenv)"
+    "$BREW_BIN" bundle --file "$DOTFILES_DIR/Brewfile" || warn "brew bundle had failures"
+    say "OrbStack needs one launch to install its privileged helper: open -a OrbStack"
+  fi
+else
+  say "skipping Homebrew (BREW=0)"
 fi
 
 # --- github cli -------------------------------------------------------------
