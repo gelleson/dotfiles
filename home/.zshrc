@@ -19,3 +19,8 @@ unset _mod
 # Machine-local overrides — untracked, never committed. Put tokens and
 # work-specific config here rather than anywhere under ~/.dotfiles.
 [[ -r $HOME/.zshrc.local ]] && source $HOME/.zshrc.local
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/gelleson/.lmstudio/bin"
+# End of LM Studio CLI section
+
