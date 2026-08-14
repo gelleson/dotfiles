@@ -1,8 +1,14 @@
 # CLIProxyAPI. Bound to loopback; callers must present an api-key below.
-# Untracked on purpose — OAuth credentials land in auth-dir next to this file.
+# This file is tracked; the OAuth tokens in the same auth-dir are not.
 host: "127.0.0.1"
 port: 8317
 auth-dir: "~/.cli-proxy-api"
 api-keys:
   - "7dad7972a72db48d36df72ac607ac179f65b3d0803e32258"
+# Management API and control panel, same port, localhost only. Write the
+# secret-key in plaintext and the daemon bcrypts it in place on first start —
+# what's below is already the hash.
+remote-management:
+  allow-remote: false
+  secret-key: "$2a$10$fWy.M4nLBhLnBx/mD81JnOvJ6gIAA5opL8hs57mWoP0OvsJ/sh1OG"
 debug: false
