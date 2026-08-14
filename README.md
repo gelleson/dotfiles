@@ -259,6 +259,20 @@ one `open -a OrbStack` after a rebuild to install its privileged helper.
 no shell config. **LM Studio** pairs with `ollama` from mise — same GGUF
 models, GUI and CLI halves of the same thing.
 
+**cliproxyapi** ([CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI))
+wraps Claude Code, Codex, Gemini CLI and Qwen as one OpenAI-shaped API on
+`127.0.0.1:8317`, run as a `brew services` daemon. Absent from mise's registry.
+Its config path is baked in at build time and the service passes no flags, so
+`bootstrap.sh` symlinks `/opt/homebrew/etc/cliproxyapi.conf` at the linked
+`~/.cli-proxy-api/config.yaml`; brew's own example survives as `.conf.example`.
+That directory is also the *auth-dir*, so the provider OAuth tokens land beside
+the config — `.gitignore` tracks the config alone and excludes everything else
+in there. Log in per provider once after a rebuild:
+
+```sh
+cliproxyapi -claude-login    # also -codex-login, -kimi-login, -xai-login
+```
+
 ## Gotchas
 
 - `~/.config/mise/config.toml` is a symlink into this repo. `mise use -g` edits

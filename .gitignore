@@ -12,4 +12,9 @@ secrets/*.plain.*
 # gh stores its OAuth token here — never track it.
 home/.config/gh/hosts.yml
 
+# cliproxyapi's auth-dir is the same directory as its config. Only the config
+# is tracked; the provider OAuth tokens beside it never are.
+home/.cli-proxy-api/*
+!home/.cli-proxy-api/config.yaml
+
 .DS_Store

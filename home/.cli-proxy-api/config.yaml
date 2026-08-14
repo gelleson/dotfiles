@@ -1,0 +1,8 @@
+# CLIProxyAPI. Bound to loopback; callers must present an api-key below.
+# Untracked on purpose — OAuth credentials land in auth-dir next to this file.
+host: "127.0.0.1"
+port: 8317
+auth-dir: "~/.cli-proxy-api"
+api-keys:
+  - "7dad7972a72db48d36df72ac607ac179f65b3d0803e32258"
+debug: false

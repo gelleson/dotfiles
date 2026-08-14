@@ -112,6 +112,12 @@ if [ "$BREW" = "1" ]; then
     eval "$("$BREW_BIN" shellenv)"
     "$BREW_BIN" bundle --file "$DOTFILES_DIR/Brewfile" || warn "brew bundle had failures"
     say "OrbStack needs one launch to install its privileged helper: open -a OrbStack"
+    # cliproxyapi's default config path is fixed at build time and the brew
+    # service passes no flags, so point it at the linked config.
+    if [ -x /opt/homebrew/opt/cliproxyapi/bin/cliproxyapi ]; then
+      ln -sfn "$HOME/.cli-proxy-api/config.yaml" /opt/homebrew/etc/cliproxyapi.conf
+      "$BREW_BIN" services start cliproxyapi >/dev/null || warn "cliproxyapi service failed to start"
+    fi
   fi
 else
   say "skipping Homebrew (BREW=0)"
