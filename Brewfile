@@ -16,6 +16,11 @@
 # mise's registry; came from zerobrew until that was dropped for Homebrew.
 brew "gum"
 
+# Local proxy that exposes Gemini CLI / Codex / Claude Code / Qwen as an API
+# on :8317. Not in mise's registry. Config: ~/.cli-proxy-api/config.yaml
+# (untracked — holds provider credentials). `brew services start cliproxyapi`.
+brew "cliproxyapi"
+
 # --- casks ------------------------------------------------------------------
 # These are the reason Homebrew is here at all. Both were previously manual
 # .dmg installs that a rebuild silently skipped, documented in the README as
