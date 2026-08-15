@@ -21,6 +21,10 @@ brew "gum"
 # (untracked — holds provider credentials). `brew services start cliproxyapi`.
 brew "cliproxyapi"
 
+# Roaming SSH that survives sleep and IP changes. Not in mise's registry.
+# Needs mosh-server on the remote too, and UDP 60000-61000 open.
+brew "mosh"
+
 # --- casks ------------------------------------------------------------------
 # These are the reason Homebrew is here at all. Both were previously manual
 # .dmg installs that a rebuild silently skipped, documented in the README as
@@ -32,3 +36,9 @@ cask "orbstack"
 
 # Local LLM GUI. Pairs with `ollama` from mise — same GGUF models.
 cask "lm-studio"
+
+# Tailscale VPN — the standalone build, not the App Store one. Ships the menu
+# bar app AND the `tailscale` CLI at /usr/local/bin. Installs a pkg, so a
+# fresh machine needs an interactive `sudo` password during bundling, plus one
+# login to the tailnet afterwards.
+cask "tailscale-app"
