@@ -135,7 +135,6 @@ portless = "latest"
 # shipped as a native binary through npm, so the npm backend rather than
 # github: releases. Needs npm.package_manager = "npm" below to install.
 "npm:@firecrawl/anydoc" = "latest"
-ollama = "latest"
 agy = "latest"
 
 [settings]

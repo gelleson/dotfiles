@@ -34,7 +34,7 @@ brew "mosh"
 # still needs one `open -a OrbStack` after bundling. Paid for commercial use.
 cask "orbstack"
 
-# Local LLM GUI. Pairs with `ollama` from mise — same GGUF models.
+# Local LLM GUI. Runs GGUF models locally, and ships the `lms` CLI.
 cask "lm-studio"
 
 # Tailscale VPN — the standalone build, not the App Store one. Ships the menu

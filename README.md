@@ -256,8 +256,8 @@ have it, so it lost its job.
 one `open -a OrbStack` after a rebuild to install its privileged helper.
 `docker-cli` and `docker-compose` stay on mise; OrbStack registers an
 `orbstack` docker context on launch, so they find it with no `DOCKER_HOST` and
-no shell config. **LM Studio** pairs with `ollama` from mise — same GGUF
-models, GUI and CLI halves of the same thing.
+no shell config. **LM Studio** runs GGUF models locally and ships the `lms`
+CLI.
 
 **cliproxyapi** ([CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI))
 wraps Claude Code, Codex, Gemini CLI and Qwen as one OpenAI-shaped API on
