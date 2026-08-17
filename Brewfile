@@ -25,6 +25,11 @@ brew "cliproxyapi"
 # Needs mosh-server on the remote too, and UDP 60000-61000 open.
 brew "mosh"
 
+# Local LLM runtime. In mise's registry too, but only as a bare binary —
+# Homebrew ships the launchd plist, so the server can run as a background
+# service: `brew services start ollama`. Models live in ~/.ollama (untracked).
+brew "ollama"
+
 # --- casks ------------------------------------------------------------------
 # These are the reason Homebrew is here at all. Both were previously manual
 # .dmg installs that a rebuild silently skipped, documented in the README as
