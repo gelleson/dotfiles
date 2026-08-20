@@ -61,6 +61,12 @@ helm = "latest"
 # binary. Pairs with the opencode/sidekick plugins in the nvim config.
 herdr = "latest"
 
+# fx (vercel-labs) — a coding agent that is a harness first: single Zig binary,
+# `fx ask --json` for structured output, `fx acp` to drive it from an editor.
+# NOT the registry's `fx`, which is antonmedv's JSON viewer — hence the explicit
+# github: backend, and why the two can never both be installed under this name.
+"github:vercel-labs/fx" = "latest"
+
 # --- containers -------------------------------------------------------------
 # On macOS this is the CLI only. It still needs a Linux VM:
 #   podman machine init && podman machine start
