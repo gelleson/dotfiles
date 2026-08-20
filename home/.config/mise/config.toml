@@ -26,7 +26,10 @@ stylua = "latest"
 # rust-analyzer the `~/.cargo/bin` shim falls through to the mise shim and back,
 # and nvim's LSP dies on "infinite recursion". rust-src is go-to-def into std.
 rust = { version = "latest", components = "rust-analyzer,rust-src" }
-go = "latest"
+# Exact pin, not "latest": mise's version index (mise-versions.jdx.dev) still
+# tops out at 1.26.6, so both "latest" and a "1.27" prefix fail to resolve.
+# Back to "latest" once `mise ls-remote go` lists 1.27.x.
+go = "1.27.0"
 python = "3.13"
 deno = "latest"   # pack.typescript-all-in-one + plugins/deno.lua
 java = "latest"
