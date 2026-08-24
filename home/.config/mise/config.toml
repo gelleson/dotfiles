@@ -30,6 +30,8 @@ rust = { version = "latest", components = "rust-analyzer,rust-src" }
 # tops out at 1.26.6, so both "latest" and a "1.27" prefix fail to resolve.
 # Back to "latest" once `mise ls-remote go` lists 1.27.x.
 go = "1.27.0"
+# gopls isn't in mise's registry; the go: backend builds it from source.
+"go:golang.org/x/tools/gopls" = "latest"
 python = "3.13"
 deno = "latest"   # pack.typescript-all-in-one + plugins/deno.lua
 java = "latest"
