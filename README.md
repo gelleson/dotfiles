@@ -190,23 +190,34 @@ Project-level `CLAUDE.md` / `AGENTS.md` override this; it's the base layer.
 
 ## Secrets
 
-**Nothing in this repo is encrypted, and that hasn't changed** — no API tokens in
-`home/.zshrc`, no keys under `home/.config/`. Keep them in the login keychain, a
-password manager, or an untracked `~/.zshrc.local` sourced at the end of
-`home/.zshrc`.
+**Nothing under `home/` is encrypted** — no API tokens in `home/.zshrc`, no keys
+under `home/.config/`. Everything there is symlinked into place and read by
+programs that can't decrypt, so it has to stay plaintext, which means it has to
+stay boring. Keep real secrets in the login keychain, a password manager, or an
+untracked `~/.zshrc.local` sourced at the end of `home/.zshrc`.
 
-`sops` and `age` are declared in the mise config for *project* repos that keep
-encrypted files in git. One-time setup on a new machine, since the private key
-can obviously never be in here:
+`secrets/` is the exception: sops-encrypted files that are *not* symlinked
+anywhere, for config that has to survive a rebuild but holds live credentials.
+`.sops.yaml` encrypts only the secret-bearing keys (`api-key`, `api-keys`,
+`secret-key`, `token`, `password`), so the rest stays readable in diffs.
+
+```sh
+sops secrets/cliproxyapi-remote.yaml       # edit decrypted, re-encrypts on save
+sops -d secrets/cliproxyapi-remote.yaml    # print plaintext
+```
+
+One-time setup on a new machine, since the private key can obviously never be
+in here:
 
 ```sh
 age-keygen -o "$HOME/Library/Application Support/sops/age/keys.txt"
 ```
 
-That's the path sops looks in by default on macOS, so `sops edit secrets.yaml`
-then works with no `SOPS_AGE_KEY_FILE` and no shell config. Put the matching
-public key in each project's `.sops.yaml`. Back the private key up somewhere
-outside this repo — lose it and every file encrypted to it is gone.
+That's the path sops looks in by default on macOS, so `sops` works with no
+`SOPS_AGE_KEY_FILE` and no shell config. **Back the private key up somewhere
+outside this repo** — lose it and `secrets/` is gone with it, and `bootstrap.sh`
+can't help: a fresh `age-keygen` makes a *different* key. The public key for
+this repo lives in `.sops.yaml`; project repos each get their own.
 
 `varlock` is the other half and not a competitor: it validates a project's
 `.env.schema` and injects resolved values into one command (`vlr pnpm dev`),
@@ -271,6 +282,21 @@ in there. Log in per provider once after a rebuild:
 
 ```sh
 cliproxyapi -claude-login    # also -codex-login, -kimi-login, -xai-login
+```
+
+A second instance runs on the Hetzner box
+(`gelleson@ubuntu-16gb-fsn1-1.betta-iwato.ts.net`), same version but installed
+by hand: binary at `~/cliproxyapi/cli-proxy-api`, config beside it at
+`~/cliproxyapi/config.yaml` (found via the unit's `WorkingDirectory`, not
+`~/.cli-proxy-api/`), run by the user unit `~/.config/systemd/user/
+cliproxyapi.service`. Its config is the interesting one — routing, model aliases
+and four live provider keys — so it is backed up here, encrypted, as
+`secrets/cliproxyapi-remote.yaml`. That copy is a backup, not the source of
+truth: edit the server's file, then re-snapshot.
+
+```sh
+ssh gelleson@ubuntu-16gb-fsn1-1.betta-iwato.ts.net 'cat ~/cliproxyapi/config.yaml' \
+  > secrets/cliproxyapi-remote.yaml && sops -e -i secrets/cliproxyapi-remote.yaml
 ```
 
 ## Gotchas

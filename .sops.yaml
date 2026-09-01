@@ -1,0 +1,13 @@
+# sops rules for this repo. The matching private key lives at
+# ~/Library/Application Support/sops/age/keys.txt (gitignored, never in git) —
+# back it up by hand or nothing under secrets/ can be decrypted on a new machine.
+#
+#   sops secrets/<file>          # edit decrypted, re-encrypts on save
+#   sops -d secrets/<file>       # print plaintext
+#
+# encrypted_regex keeps everything but the actual secrets in cleartext, so
+# diffs stay readable.
+creation_rules:
+  - path_regex: ^secrets/.*\.yaml$
+    encrypted_regex: ^(api-key|api-keys|secret-key|token|password)$
+    age: age1xudjaanyvs95n0auc45t5a6v90ztm6pf9r4z0l0fx90jfrmdca2stgmvn7

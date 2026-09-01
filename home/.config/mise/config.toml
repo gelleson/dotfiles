@@ -110,8 +110,8 @@ bun = "latest"
 # .config/zsh/aliases/uv.zsh and the committed _uv/_uvx completions.
 uv = "latest"
 # --- secrets ----------------------------------------------------------------
-# Encrypt/decrypt files in place with an age keypair. Nothing in THIS repo is
-# encrypted — these are for project repos. One-time setup per machine:
+# Encrypt/decrypt files in place with an age keypair. Used by this repo's
+# secrets/ (see .sops.yaml) and by project repos. One-time setup per machine:
 #   age-keygen -o "$HOME/Library/Application Support/sops/age/keys.txt"
 # sops finds that path by default; the private key stays out of git, always.
 sops = "latest"
