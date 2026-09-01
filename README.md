@@ -198,12 +198,14 @@ untracked `~/.zshrc.local` sourced at the end of `home/.zshrc`.
 
 `secrets/` is the exception: sops-encrypted files that are *not* symlinked
 anywhere, for config that has to survive a rebuild but holds live credentials.
+`bootstrap.sh` decrypts them into place, which makes the age key a hard
+dependency of a rebuild — see the warning below.
 `.sops.yaml` encrypts only the secret-bearing keys (`api-key`, `api-keys`,
 `secret-key`, `token`, `password`), so the rest stays readable in diffs.
 
 ```sh
-sops secrets/cliproxyapi-remote.yaml       # edit decrypted, re-encrypts on save
-sops -d secrets/cliproxyapi-remote.yaml    # print plaintext
+sops secrets/cliproxyapi.yaml       # edit decrypted, re-encrypts on save
+sops -d secrets/cliproxyapi.yaml    # print plaintext
 ```
 
 One-time setup on a new machine, since the private key can obviously never be
@@ -274,11 +276,17 @@ CLI.
 wraps Claude Code, Codex, Gemini CLI and Qwen as one OpenAI-shaped API on
 `127.0.0.1:8317`, run as a `brew services` daemon. Absent from mise's registry.
 Its config path is baked in at build time and the service passes no flags, so
-`bootstrap.sh` symlinks `/opt/homebrew/etc/cliproxyapi.conf` at the linked
+`bootstrap.sh` symlinks `/opt/homebrew/etc/cliproxyapi.conf` at
 `~/.cli-proxy-api/config.yaml`; brew's own example survives as `.conf.example`.
-That directory is also the *auth-dir*, so the provider OAuth tokens land beside
-the config — `.gitignore` tracks the config alone and excludes everything else
-in there. Log in per provider once after a rebuild:
+
+That config is **not** under `home/` and is not symlinked into the repo. It
+holds four live provider keys, so the tracked copy is the encrypted
+`secrets/cliproxyapi.yaml` and `bootstrap.sh` decrypts it into place. It has to
+live outside `home/` because `mise run link` symlinks everything under there
+unconditionally, which would put ciphertext where the daemon expects config.
+The same directory is the *auth-dir*, so the OAuth tokens land beside it;
+`.gitignore` excludes the whole directory. Log in per provider once after a
+rebuild:
 
 ```sh
 cliproxyapi -claude-login    # also -codex-login, -kimi-login, -xai-login
@@ -289,14 +297,25 @@ A second instance runs on the Hetzner box
 by hand: binary at `~/cliproxyapi/cli-proxy-api`, config beside it at
 `~/cliproxyapi/config.yaml` (found via the unit's `WorkingDirectory`, not
 `~/.cli-proxy-api/`), run by the user unit `~/.config/systemd/user/
-cliproxyapi.service`. Its config is the interesting one — routing, model aliases
-and four live provider keys — so it is backed up here, encrypted, as
-`secrets/cliproxyapi-remote.yaml`. That copy is a backup, not the source of
-truth: edit the server's file, then re-snapshot.
+cliproxyapi.service`.
+
+Both hosts run the **same config**, `secrets/cliproxyapi.yaml`: fill-first
+routing over every credential, with client-visible model ids normalised to
+OpenRouter slugs (`anthropic/claude-opus-5`, `openai/gpt-5.6-sol`) so a client
+can be pointed at either machine without touching its model names. 91 models
+across the two OAuth logins and four keyed providers. `api-keys` is the union
+of what both hosts were using — `local`, `sk-local`, and the generated hex one —
+so nothing that already worked stopped working.
+
+Edit it with `sops secrets/cliproxyapi.yaml`, then push it to both:
 
 ```sh
-ssh gelleson@ubuntu-16gb-fsn1-1.betta-iwato.ts.net 'cat ~/cliproxyapi/config.yaml' \
-  > secrets/cliproxyapi-remote.yaml && sops -e -i secrets/cliproxyapi-remote.yaml
+sops -d secrets/cliproxyapi.yaml > ~/.cli-proxy-api/config.yaml
+brew services restart cliproxyapi
+
+sops -d secrets/cliproxyapi.yaml \
+  | ssh gelleson@ubuntu-16gb-fsn1-1.betta-iwato.ts.net \
+      'cat > ~/cliproxyapi/config.yaml && systemctl --user restart cliproxyapi'
 ```
 
 ## Gotchas

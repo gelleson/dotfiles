@@ -12,9 +12,11 @@ secrets/*.plain.*
 # gh stores its OAuth token here — never track it.
 home/.config/gh/hosts.yml
 
-# cliproxyapi's auth-dir is the same directory as its config. Only the config
-# is tracked; the provider OAuth tokens beside it never are.
-home/.cli-proxy-api/*
-!home/.cli-proxy-api/config.yaml
+# cliproxyapi's config holds live provider keys, so the tracked copy is the
+# encrypted secrets/cliproxyapi.yaml and bootstrap.sh decrypts it into
+# ~/.cli-proxy-api/. Nothing in that directory — config or OAuth token — is
+# tracked, and it must stay out of home/ so `mise run link` can't symlink
+# ciphertext over the daemon's config.
+home/.cli-proxy-api/
 
 .DS_Store

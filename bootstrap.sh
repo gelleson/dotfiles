@@ -113,8 +113,24 @@ if [ "$BREW" = "1" ]; then
     "$BREW_BIN" bundle --file "$DOTFILES_DIR/Brewfile" || warn "brew bundle had failures"
     say "OrbStack needs one launch to install its privileged helper: open -a OrbStack"
     # cliproxyapi's default config path is fixed at build time and the brew
-    # service passes no flags, so point it at the linked config.
+    # service passes no flags, so point it at the config in the auth-dir.
+    # That config holds live provider keys, so the repo only carries the
+    # sops-encrypted copy — decrypt it into place. Needs the age key at
+    # ~/Library/Application Support/sops/age/keys.txt, which by definition
+    # isn't in this repo; without it the daemon has no config and won't start.
     if [ -x /opt/homebrew/opt/cliproxyapi/bin/cliproxyapi ]; then
+      mkdir -p "$HOME/.cli-proxy-api"
+      if [ -f "$HOME/.cli-proxy-api/config.yaml" ]; then
+        say "cliproxyapi config already present, leaving it alone"
+      elif sops -d "$DOTFILES_DIR/secrets/cliproxyapi.yaml" \
+             > "$HOME/.cli-proxy-api/config.yaml" 2>/dev/null; then
+        chmod 600 "$HOME/.cli-proxy-api/config.yaml"
+        say "decrypted cliproxyapi config"
+      else
+        rm -f "$HOME/.cli-proxy-api/config.yaml"
+        warn "could not decrypt secrets/cliproxyapi.yaml — restore the age key, then:"
+        warn "  sops -d $DOTFILES_DIR/secrets/cliproxyapi.yaml > ~/.cli-proxy-api/config.yaml"
+      fi
       ln -sfn "$HOME/.cli-proxy-api/config.yaml" /opt/homebrew/etc/cliproxyapi.conf
       "$BREW_BIN" services start cliproxyapi >/dev/null || warn "cliproxyapi service failed to start"
     fi
