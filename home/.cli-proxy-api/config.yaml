@@ -5,6 +5,7 @@ port: 8317
 auth-dir: "~/.cli-proxy-api"
 api-keys:
   - "7dad7972a72db48d36df72ac607ac179f65b3d0803e32258"
+  - "local"
 # Management API and control panel, same port, localhost only. Write the
 # secret-key in plaintext and the daemon bcrypts it in place on first start —
 # what's below is already the hash.
