@@ -69,6 +69,12 @@ herdr = "latest"
 # github: backend, and why the two can never both be installed under this name.
 "github:vercel-labs/fx" = "latest"
 
+# --- http client --------------------------------------------------------------
+# HTTPie (`http` / `https`). The registry only has httpie-go and xh, neither of
+# which is the real thing, so it comes from PyPI via the pipx backend — which
+# runs on uv below, not the python above.
+"pipx:httpie" = "latest"
+
 # --- containers -------------------------------------------------------------
 # On macOS this is the CLI only. It still needs a Linux VM:
 #   podman machine init && podman machine start
