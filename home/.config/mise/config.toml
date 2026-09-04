@@ -10,7 +10,7 @@ gh = "latest"
 
 # --- neovim + what the config at ~/.config/nvim needs to function -----------
 # https://github.com/gelleson/nvim — AstroNvim v5+, 20 language packs.
-neovim = "latest"
+neovim = "nightly"
 node = "26"            # most Mason-installed LSPs are npm packages
 ripgrep = "latest"     # telescope live_grep
 fd = "latest"          # telescope file finding
