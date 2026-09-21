@@ -32,6 +32,11 @@ gaps.outer.bottom =     8
 gaps.outer.top =        8
 gaps.outer.right =      8
 
+# The coding workspace lives on the Studio Display. If that monitor is absent
+# AeroSpace falls back to the main one, so an undocked laptop still works.
+[workspace-to-monitor-force-assignment]
+2 = 'Studio Display'
+
 # Fixed homes: 1 browser, 2 coding, 3 chat. Each app lands there regardless of
 # which workspace is focused. app-id is an exact match, so each app needs its
 # own block — `aerospace list-windows --all --format '%{app-bundle-id}'` prints
