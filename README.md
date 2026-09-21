@@ -280,7 +280,15 @@ CLI.
 --dry-run` validates without applying. Bindings are alt-based and i3-shaped:
 `alt-h/j/k/l` to focus, add shift to move, `alt-1`..`alt-9` for workspaces,
 `alt-enter` for a new Ghostty window, and `alt-shift-;` for a one-shot service
-mode (`esc` reloads, `r` resets the layout, `f` toggles floating). A fresh
+mode (`esc` reloads, `r` resets the layout, `f` toggles floating).
+
+Workspace 2 is the coding workspace — `on-window-detected` rules send Ghostty
+and OrbStack windows there whatever workspace is focused. `if.app-id` is an
+exact match, so one block per app; `aerospace list-windows --all --format
+'%{app-bundle-id}'` prints the id of anything already open. The rules only fire
+on newly detected windows, so windows open before a reload stay put.
+
+A fresh
 machine needs one **Accessibility** grant in System Settings > Privacy &
 Security before it can move any windows.
 
