@@ -42,6 +42,12 @@ cask "orbstack"
 # Local LLM GUI. Runs GGUF models locally, and ships the `lms` CLI.
 cask "lm-studio"
 
+# i3-like tiling window manager. Lives in a third-party tap, so the tap has to
+# be declared too. Config: home/.config/aerospace/aerospace.toml. Needs one
+# Accessibility permission grant in System Settings after a fresh install.
+tap "nikitabobko/tap"
+cask "aerospace"
+
 # Tailscale VPN — the standalone build, not the App Store one. Ships the menu
 # bar app AND the `tailscale` CLI at /usr/local/bin. Installs a pkg, so a
 # fresh machine needs an interactive `sudo` password during bundling, plus one

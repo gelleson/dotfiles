@@ -11,6 +11,7 @@ home/            mirrors $HOME; every file here gets symlinked into place
   .zprofile      login-only PATH setup
   .config/zsh/   options, history, completion, keybindings, aliases, prompt
   .config/mise/  global tool versions
+  .config/aerospace/ AeroSpace tiling window manager
   .local/bin/    small wrapper scripts
   .claude/       CLAUDE.md — global agent instructions
   .codex/        AGENTS.md — symlink to the same file
@@ -271,6 +272,17 @@ one `open -a OrbStack` after a rebuild to install its privileged helper.
 `orbstack` docker context on launch, so they find it with no `DOCKER_HOST` and
 no shell config. **LM Studio** runs GGUF models locally and ships the `lms`
 CLI.
+
+**AeroSpace** is an i3-like tiling window manager, from the third-party
+`nikitabobko/tap` (declared in the Brewfile right above the cask, so
+`brew bundle` taps before it installs). It starts at login and auto-reloads
+`home/.config/aerospace/aerospace.toml` on save; `aerospace reload-config
+--dry-run` validates without applying. Bindings are alt-based and i3-shaped:
+`alt-h/j/k/l` to focus, add shift to move, `alt-1`..`alt-9` for workspaces,
+`alt-enter` for a new Ghostty window, and `alt-shift-;` for a one-shot service
+mode (`esc` reloads, `r` resets the layout, `f` toggles floating). A fresh
+machine needs one **Accessibility** grant in System Settings > Privacy &
+Security before it can move any windows.
 
 **cliproxyapi** ([CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI))
 wraps Claude Code, Codex, Gemini CLI and Qwen as one OpenAI-shaped API on
