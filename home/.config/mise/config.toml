@@ -109,6 +109,13 @@ bun = "latest"
 # interpreters under ~/.local/share/uv/python for projects. Shell side:
 # .config/zsh/aliases/uv.zsh and the committed _uv/_uvx completions.
 uv = "latest"
+# --- aws --------------------------------------------------------------------
+# The `aws` CLI (v2). The aqua backend pulls Amazon's own signed release
+# artifact and checks its checksum — not a repackaged bottle. `awscli` and
+# plain `aws` in the registry are aliases for this same package; only one of
+# the three may be declared or they collide on the `aws` shim.
+aws-cli = "latest"
+
 # --- secrets ----------------------------------------------------------------
 # Encrypt/decrypt files in place with an age keypair. Used by this repo's
 # secrets/ (see .sops.yaml) and by project repos. One-time setup per machine:
