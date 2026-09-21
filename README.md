@@ -282,8 +282,9 @@ CLI.
 `alt-enter` for a new Ghostty window, and `alt-shift-;` for a one-shot service
 mode (`esc` reloads, `r` resets the layout, `f` toggles floating).
 
-Workspace 2 is the coding workspace — `on-window-detected` rules send Ghostty
-and OrbStack windows there whatever workspace is focused. `if.app-id` is an
+Apps have fixed homes, set by `on-window-detected` rules that fire whatever
+workspace is focused: **1** browser (Safari), **2** coding (Ghostty, OrbStack),
+**3** chat (Slack). `if.app-id` is an
 exact match, so one block per app; `aerospace list-windows --all --format
 '%{app-bundle-id}'` prints the id of anything already open. The rules only fire
 on newly detected windows, so windows open before a reload stay put.

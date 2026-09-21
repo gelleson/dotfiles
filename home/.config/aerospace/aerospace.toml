@@ -32,10 +32,14 @@ gaps.outer.bottom =     8
 gaps.outer.top =        8
 gaps.outer.right =      8
 
-# Workspace 2 is the coding workspace: every dev app opens there regardless of
+# Fixed homes: 1 browser, 2 coding, 3 chat. Each app lands there regardless of
 # which workspace is focused. app-id is an exact match, so each app needs its
 # own block — `aerospace list-windows --all --format '%{app-bundle-id}'` prints
 # the id of anything currently open.
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = 'move-node-to-workspace 1'
+
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
 run = 'move-node-to-workspace 2'
@@ -43,6 +47,10 @@ run = 'move-node-to-workspace 2'
 [[on-window-detected]]
 if.app-id = 'dev.kdrag0n.MacVirt' # OrbStack
 run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace 3'
 
 [mode.main.binding]
     alt-enter = 'exec-and-forget open -na Ghostty'
