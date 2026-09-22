@@ -1,0 +1,5 @@
+# Git identity. Without it git invents one from the hostname
+# (user@Machine.local), which GitHub cannot link to the account.
+[user]
+	name = gelleson
+	email = altynbek@higgsfield.ai
