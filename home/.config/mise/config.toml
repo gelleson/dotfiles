@@ -162,6 +162,7 @@ portless = "latest"
 agy = "latest"
 k9s = "latest"
 kubectl = "1.36.4"
+usql = "latest"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
