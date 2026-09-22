@@ -160,6 +160,7 @@ portless = "latest"
 # github: releases. Needs npm.package_manager = "npm" below to install.
 "npm:@firecrawl/anydoc" = "latest"
 agy = "latest"
+k9s = "latest"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
