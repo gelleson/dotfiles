@@ -22,8 +22,11 @@ als() {
     # Explicit array assignment: ${${(z)val}[1]} subscripts the *string*, so a
     # single-word target like "nvim" would yield "n".
     words=(${(z)val})
+    while [[ $words[1] == [[:alpha:]_]*=* ]]; do shift words; done   # LANG=C git ...
     cmd=$words[1]
-    if (( $+commands[$cmd] || $+functions[$cmd] || $+builtins[$cmd] || $+aliases[$cmd] )) \
+    # A $-expansion or an inline function definition can't be checked by name.
+    if [[ $cmd == \$* || $words[2] == '()' ]] \
+       || (( $+commands[$cmd] || $+functions[$cmd] || $+builtins[$cmd] || $+aliases[$cmd] )) \
        || (( ${reswords[(I)$cmd]} )); then
       printf '%-10s %s\n' "$name" "$val"
       (( ok++ ))
