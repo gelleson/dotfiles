@@ -41,7 +41,7 @@ als() {
   done
 
   if [[ -t 1 ]] && (( $+commands[fzf] )); then
-    line=$(print -rl -- $lines | fzf --ansi --prompt='alias ▸ ' --header="$ok ok, $broken broken") || return
+    line=$(print -rl -- $lines | fzf --ansi --height=100% --prompt='alias ▸ ' --header="$ok ok, $broken broken") || return
     print -z -- "${line%% *} "
     return
   fi
