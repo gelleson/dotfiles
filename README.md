@@ -315,12 +315,15 @@ with one Braun T3 orange on Esc and the knob; the **Kick75** gets the LEGO
 palette; the **built-in** keyboard alone gets black caps, white legends and the
 macOS system blue on the pressed workspace. Each palette is one `case` branch in `sketchybarrc`.
 The wallpaper follows too, set by `sketchybarrc` on every load from
-`wallpapers/{kick,node,builtin}.png`: LEGO studs and four accent bricks, the
-Node's dot texture with an orange 5x2 LED block, or a plain gradient when only
-the built-in keyboard is there. Each has the Kazakh and Australian flags top
-right, below the bar. `swift wallpapers.swift` in that directory
-redraws them. The first switch from an AeroSpace-launched bar may ask to let
-SketchyBar control System Events.
+`wallpapers/{kick,node,builtin}.png`: LEGO studs, or the Node's dot texture
+with an orange 5x2 LED block, each crossed near the top by two lines in Kazakh
+sky blue and Australian navy (plates for the Kick, bigger dots for the Node).
+The built-in keyboard alone gets a plain gradient. They are drawn at the
+built-in display's 3456x2234; `swift wallpapers.swift` in that directory
+redraws them. macOS caches wallpapers by path, so after a redraw clear
+`~/Library/Containers/com.apple.wallpaper.agent/Data/Library/Caches/com.apple.wallpaper.caches/extension-com.apple.wallpaper.extension.image/`
+and `killall WallpaperAgent Dock`. The first switch from an AeroSpace-launched
+bar may ask to let SketchyBar control System Events.
 
 Homebrew 7 refuses third-party taps until they're trusted, so both tapped
 entries in the Brewfile carry `trusted: true`.
