@@ -84,7 +84,7 @@ sketchybar --add item battery right \
 sketchybar --add item volume right \
   --subscribe volume volume_change \
   --set volume background.drawing=off label.drawing=off \
-    icon.color=$WHITE icon.width=24 icon.align=center \
+    icon.color=$WHITE icon.width=24 icon.align=center icon.y_offset=0 \
     icon.padding_left=0 icon.padding_right=0 \
     icon.background.drawing=on icon.background.color=$RED \
     icon.background.height=24 icon.background.corner_radius=12 \
