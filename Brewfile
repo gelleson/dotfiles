@@ -39,9 +39,6 @@ brew "ollama"
 # still needs one `open -a OrbStack` after bundling. Paid for commercial use.
 cask "orbstack"
 
-# Local LLM GUI. Runs GGUF models locally, and ships the `lms` CLI.
-cask "lm-studio"
-
 # i3-like tiling window manager. Lives in a third-party tap, so the tap has to
 # be declared too. Config: home/.config/aerospace/aerospace.toml. Needs one
 # Accessibility permission grant in System Settings after a fresh install.

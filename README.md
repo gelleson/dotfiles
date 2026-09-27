@@ -270,8 +270,7 @@ have it, so it lost its job.
 one `open -a OrbStack` after a rebuild to install its privileged helper.
 `docker-cli` and `docker-compose` stay on mise; OrbStack registers an
 `orbstack` docker context on launch, so they find it with no `DOCKER_HOST` and
-no shell config. **LM Studio** runs GGUF models locally and ships the `lms`
-CLI.
+no shell config.
 
 **AeroSpace** is an i3-like tiling window manager, from the third-party
 `nikitabobko/tap` (declared in the Brewfile right above the cask, so
