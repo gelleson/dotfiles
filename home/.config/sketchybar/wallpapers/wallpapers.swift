@@ -12,11 +12,76 @@ func render(_ name: String, _ draw: (CGContext) -> Void) {
                       space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
   ctx.translateBy(x: 0, y: CGFloat(H)); ctx.scaleBy(x: 1, y: -1)   // top-left origin
   draw(ctx)
+  flags(ctx)
   let png = NSBitmapImageRep(cgImage: ctx.makeImage()!).representation(using: .png, properties: [:])!
   try! png.write(to: URL(fileURLWithPath: "\(name).png"))
 }
 func dot(_ ctx: CGContext, _ x: Int, _ y: Int, _ r: Int, _ c: CGColor) {
   ctx.setFillColor(c); ctx.fillEllipse(in: CGRect(x: x - r, y: y - r, width: 2 * r, height: 2 * r))
+}
+
+func star(_ ctx: CGContext, _ cx: Double, _ cy: Double, _ r: Double, _ points: Int, _ c: CGColor) {
+  ctx.setFillColor(c); ctx.beginPath()
+  for i in 0..<(points * 2) {
+    let rad = i % 2 == 0 ? r : r * (points == 7 ? 0.44 : 0.4)
+    let a = Double(i) * .pi / Double(points) - .pi / 2
+    let p = CGPoint(x: cx + rad * cos(a), y: cy + rad * sin(a))
+    i == 0 ? ctx.move(to: p) : ctx.addLine(to: p)
+  }
+  ctx.closePath(); ctx.fillPath()
+}
+
+// Kazakhstan and Australia (no Union Jack, as on the bar's key), top right.
+// Kept inside the strip the built-in display crops off, and below the bar.
+func flags(_ ctx: CGContext) {
+  let h = 200.0, w = 400.0, gap = 60.0, top = 220.0
+  let au = CGRect(x: Double(W) - 480 - w, y: top, width: w, height: h)
+  let kz = au.offsetBy(dx: -(w + gap), dy: 0)
+  let gold = rgb(0xfec50c), white = rgb(0xffffff)
+
+  func field(_ r: CGRect, _ c: CGColor) {
+    ctx.saveGState(); ctx.addPath(CGPath(roundedRect: r, cornerWidth: 10, cornerHeight: 10, transform: nil))
+    ctx.clip(); ctx.setFillColor(c); ctx.fill(r)
+  }
+
+  // Kazakhstan: sky blue, a 32-ray sun over a steppe eagle, ornament at the hoist.
+  field(kz, rgb(0x00afca))
+  let sx = kz.midX + 10, sy = kz.minY + h * 0.4
+  ctx.setFillColor(gold)
+  for i in 0..<32 {
+    let a = Double(i) * .pi / 16, b = a + .pi / 32
+    ctx.beginPath()
+    ctx.move(to: CGPoint(x: sx + 38 * cos(a - .pi / 32), y: sy + 38 * sin(a - .pi / 32)))
+    ctx.addLine(to: CGPoint(x: sx + 62 * cos(a), y: sy + 62 * sin(a)))
+    ctx.addLine(to: CGPoint(x: sx + 38 * cos(b), y: sy + 38 * sin(b)))
+    ctx.fillPath()
+  }
+  ctx.fillEllipse(in: CGRect(x: sx - 32, y: sy - 32, width: 64, height: 64))
+  ctx.beginPath()   // eagle: two swept wings meeting under the sun
+  ctx.move(to: CGPoint(x: sx - 110, y: sy + 70))
+  ctx.addQuadCurve(to: CGPoint(x: sx, y: sy + 100), control: CGPoint(x: sx - 50, y: sy + 110))
+  ctx.addQuadCurve(to: CGPoint(x: sx + 110, y: sy + 70), control: CGPoint(x: sx + 50, y: sy + 110))
+  ctx.addQuadCurve(to: CGPoint(x: sx, y: sy + 116), control: CGPoint(x: sx + 50, y: sy + 128))
+  ctx.addQuadCurve(to: CGPoint(x: sx - 110, y: sy + 70), control: CGPoint(x: sx - 50, y: sy + 128))
+  ctx.fillPath()
+  for i in 0..<7 {   // ornament column
+    let cy = kz.minY + 18 + Double(i) * 27.3, cx = kz.minX + 30
+    ctx.beginPath()
+    ctx.move(to: CGPoint(x: cx, y: cy - 11)); ctx.addLine(to: CGPoint(x: cx + 11, y: cy))
+    ctx.addLine(to: CGPoint(x: cx, y: cy + 11)); ctx.addLine(to: CGPoint(x: cx - 11, y: cy))
+    ctx.fillPath()
+  }
+  ctx.restoreGState()
+
+  // Australia: Commonwealth Star at the hoist, Southern Cross on the fly.
+  field(au, rgb(0x012169))
+  star(ctx, au.minX + w * 0.25, au.minY + h * 0.62, h * 0.15, 7, white)
+  star(ctx, au.minX + w * 0.75, au.minY + h * 0.17, h * 0.07, 7, white)
+  star(ctx, au.minX + w * 0.62, au.minY + h * 0.45, h * 0.07, 7, white)
+  star(ctx, au.minX + w * 0.87, au.minY + h * 0.38, h * 0.07, 7, white)
+  star(ctx, au.minX + w * 0.75, au.minY + h * 0.83, h * 0.07, 7, white)
+  star(ctx, au.minX + w * 0.81, au.minY + h * 0.57, h * 0.04, 5, white)
+  ctx.restoreGState()
 }
 
 // Kick75: LEGO studs on the Obsidian Black case, four bricks in the accents.

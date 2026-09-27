@@ -317,7 +317,8 @@ macOS system blue on the pressed workspace. Each palette is one `case` branch in
 The wallpaper follows too, set by `sketchybarrc` on every load from
 `wallpapers/{kick,node,builtin}.png`: LEGO studs and four accent bricks, the
 Node's dot texture with an orange 5x2 LED block, or a plain gradient when only
-the built-in keyboard is there. `swift wallpapers.swift` in that directory
+the built-in keyboard is there. Each has the Kazakh and Australian flags top
+right, below the bar. `swift wallpapers.swift` in that directory
 redraws them. The first switch from an AeroSpace-launched bar may ask to let
 SketchyBar control System Events.
 
