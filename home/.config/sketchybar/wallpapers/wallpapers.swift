@@ -35,19 +35,20 @@ let glyphs: [Character: [String]] = [
   "E": ["111", "100", "110", "100", "111"], "7": ["111", "001", "010", "010", "010"],
   "5": ["111", "100", "111", "001", "111"],
 ]
-// Grid cells (column, row) lit by `text`, centered on a grid of `cols` x `rows`.
-func pixels(_ text: String, _ cols: Int, _ rows: Int) -> [(Int, Int)] {
+// Grid cells (column, row, letter index) lit by `text`, centered on a grid of
+// `cols` x `rows`. The index lets each letter take the next accent color.
+func pixels(_ text: String, _ cols: Int, _ rows: Int) -> [(Int, Int, Int)] {
   let x0 = (cols - (4 * text.count - 1)) / 2, y0 = (rows - 5) / 2
-  var out: [(Int, Int)] = []
+  var out: [(Int, Int, Int)] = []
   for (i, ch) in text.enumerated() {
     for (r, line) in glyphs[ch]!.enumerated() {
-      for (c, bit) in line.enumerated() where bit == "1" { out.append((x0 + 4 * i + c, y0 + r)) }
+      for (c, bit) in line.enumerated() where bit == "1" { out.append((x0 + 4 * i + c, y0 + r, i)) }
     }
   }
   return out
 }
 
-// Kick75: LEGO studs on the Obsidian Black case, KICK75 in white bricks, four 2x2 bricks bottom left
+// Kick75: LEGO studs on the Obsidian Black case, KICK75 in bricks of its accents, four 2x2 bricks bottom left
 // in the keyboard's accents, and the flag cells as 1x2
 // bricks, the same height as those.
 render("kick") { ctx in
@@ -60,9 +61,10 @@ render("kick") { ctx in
     ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: bx + 2, y: by + 2, width: 2 * s - 4, height: 2 * s - 4))
     for j in 0..<4 { dot(ctx, bx + s / 2 + (j % 2) * s, by + s / 2 + (j / 2) * s, 24, rgb(stud)) }
   }
-  for (gx, gy) in pixels("KICK75", W / s, H / s) {
-    ctx.setFillColor(rgb(0xf2f2ee)); ctx.fill(CGRect(x: gx * s + 2, y: gy * s + 2, width: s - 4, height: s - 4))
-    dot(ctx, gx * s + s / 2, gy * s + s / 2, 24, rgb(0xfbfbf8))
+  for (gx, gy, i) in pixels("KICK75", W / s, H / s) {
+    let (base, stud) = bricks[i % bricks.count]
+    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: gx * s + 2, y: gy * s + 2, width: s - 4, height: s - 4))
+    dot(ctx, gx * s + s / 2, gy * s + s / 2, 24, rgb(stud))
   }
   for (col, base, stud) in flagCells {
     let x = (W / s - col) * s, y = 3 * s
@@ -72,14 +74,15 @@ render("kick") { ctx in
 }
 
 // Node75 Ink Gray: the perforated texture over the near-black case, NODE75 in
-// dot-matrix dots, the flag
+// dot-matrix dots of its accents, the flag
 // cells as larger dots, and a 5x2 LED matrix lit in the mint Esc green.
 render("node") { ctx in
   ctx.setFillColor(rgb(0x161617)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
   let s = 40
   for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 4, rgb(0x242527)) } }
-  for (px, py) in pixels("NODE75", W / s / 2, H / s / 2) {   // each font pixel is 2x2 dots
-    for j in 0..<4 { dot(ctx, (2 * px + j % 2) * s + s / 2, (2 * py + j / 2) * s + s / 2, 12, rgb(0xa8a9ab)) }
+  let accents: [UInt32] = [0x3fbf8a, 0xe8b423, 0xe24a3b]   // mint, yellow, red
+  for (px, py, i) in pixels("NODE75", W / s / 2, H / s / 2) {   // each font pixel is 2x2 dots
+    for j in 0..<4 { dot(ctx, (2 * px + j % 2) * s + s / 2, (2 * py + j / 2) * s + s / 2, 12, rgb(accents[i % accents.count])) }
   }
   for (col, base, _) in flagCells { dot(ctx, (W / s - col) * s + s / 2, 6 * s + s / 2, 12, rgb(base)) }
   let lit: Set<Int> = [0, 1, 2, 5, 6]
