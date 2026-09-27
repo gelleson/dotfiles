@@ -26,8 +26,20 @@ case $KB in
     ENTER=0xff5b5e63    ENTER_SKIRT=0xff2a2b2f    ENTER_LEGEND=0xffdcdcd6
     KNOB=0xff47494e     KNOB_LEGEND=0xffe0672a
     ;;
+  builtin)
+    # The MacBook's own keys: black caps, white legends, no accent but the
+    # macOS system blue on the pressed workspace.
+    CASE=0xff111214
+    KEY=0xff2a2a2d      KEY_SKIRT=0xff050506      LEGEND=0xffe8e8e6
+    PRESSED=0xff0a84ff
+    MOD=0xff3a3a3e      MOD_SKIRT=0xff0b0b0c      MOD_LEGEND=0xffe8e8e6
+    ESC=0xff3a3a3e      ESC_SKIRT=0xff0b0b0c      ESC_LEGEND=0xffe8e8e6
+    SPACE=0xff3a3a3e    SPACE_SKIRT=0xff0b0b0c    SPACE_LEGEND=0xffe8e8e6
+    ENTER=0xff3a3a3e    ENTER_SKIRT=0xff0b0b0c    ENTER_LEGEND=0xffe8e8e6
+    KNOB=0xff2a2a2d     KNOB_LEGEND=0xffe8e8e6
+    ;;
   *)
-    # Kick75, and the built-in keyboard: an Obsidian Black case, white and grey PBT caps, and the LEGO
+    # Kick75: an Obsidian Black case, white and grey PBT caps, and the LEGO
     # accents — green Esc, yellow Space, blue Enter, red knob.
     CASE=0xff1c1c1e
     KEY=0xfff2f2ee      KEY_SKIRT=0xffb4b5b0      LEGEND=0xff2b2c2e

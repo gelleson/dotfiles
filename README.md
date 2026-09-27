@@ -311,8 +311,9 @@ center, where the notch would hide it. `sketchybar --reload` applies edits.
 The palette follows the connected keyboard: `plugins/keyboard.sh` checks
 `hidutil list` (connected devices only, Bluetooth included) every 10s and
 reloads the bar on a change. **Node75 Ink Gray** gets a graphite case and caps
-with one Braun T3 orange on Esc and the knob; the **Kick75**, or no NuPhy at
-all, gets the LEGO palette. Each palette is one `case` branch in `sketchybarrc`.
+with one Braun T3 orange on Esc and the knob; the **Kick75** gets the LEGO
+palette; the **built-in** keyboard alone gets black caps, white legends and the
+macOS system blue on the pressed workspace. Each palette is one `case` branch in `sketchybarrc`.
 The wallpaper follows too, set by `sketchybarrc` on every load from
 `wallpapers/{kick,node,builtin}.png`: LEGO studs and four accent bricks, the
 Node's dot texture with an orange 5x2 LED block, or a plain gradient when only
