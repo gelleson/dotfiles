@@ -57,12 +57,17 @@ sketchybar --add item front_app left \
     script='sketchybar --set $NAME label="${INFO:-$(aerospace list-windows --focused --format %{app-name})}"'
 
 # Right side, added right to left.
-# Melbourne, on a key in the Australian flag: navy cap, red skirt.
+# Melbourne, on a key cut from the Australian flag (au.png, drawn @2x to the
+# key's 224x22 size). The label sits between the Union Jack and the Southern
+# Cross. If the label length changes, set W in au.swift to twice the new key
+# width and rerun: swift au.swift au.png
 sketchybar --add item mel right \
-  --set mel update_freq=30 icon=🇦🇺 icon.font="Apple Color Emoji:Regular:14.0" \
-    icon.color=$WHITE label.color=$WHITE \
+  --set mel update_freq=30 icon.drawing=off \
+    label.color=$WHITE label.padding_left=52 label.padding_right=40 \
+    label.shadow.drawing=on label.shadow.color=0xff000000 label.shadow.distance=1 \
     background.color=$AU_BLUE background.shadow.color=$AU_RED \
-    background.border_width=1 background.border_color=$WHITE \
+    background.image="$CONFIG_DIR/au.png" background.image.scale=0.5 \
+    background.image.corner_radius=5 \
     script='sketchybar --set $NAME label="mel $(TZ=Australia/Melbourne date "+%a %H:%M")"'
 
 sketchybar --add item clock right \
