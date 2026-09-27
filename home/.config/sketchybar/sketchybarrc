@@ -57,13 +57,12 @@ sketchybar --add item front_app left \
     script='sketchybar --set $NAME label="${INFO:-$(aerospace list-windows --focused --format %{app-name})}"'
 
 # Right side, added right to left.
-# Melbourne, on a key cut from the Australian flag (au.png, drawn @2x to the
-# key's 224x22 size). The label sits between the Union Jack and the Southern
-# Cross. If the label length changes, set W in au.swift to twice the new key
+# Melbourne, on a key cut from the Australian flag minus the Union Jack
+# (au.png, drawn @2x to the key's 184x22 size), Southern Cross on the right. If the label length changes, set W in au.swift to twice the new key
 # width and rerun: swift au.swift au.png
 sketchybar --add item mel right \
   --set mel update_freq=30 icon.drawing=off \
-    label.color=$WHITE label.padding_left=52 label.padding_right=40 \
+    label.color=$WHITE label.padding_left=12 label.padding_right=40 \
     label.shadow.drawing=on label.shadow.color=0xff000000 label.shadow.distance=1 \
     background.color=$AU_BLUE background.shadow.color=$AU_RED \
     background.image="$CONFIG_DIR/au.png" background.image.scale=0.5 \
