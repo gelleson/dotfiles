@@ -316,8 +316,9 @@ palette; the **built-in** keyboard alone gets black caps, white legends and the
 macOS system blue on the pressed workspace. Each palette is one `case` branch in `sketchybarrc`.
 The wallpaper follows too, set by `sketchybarrc` on every load from
 `wallpapers/{kick,node,builtin}.png`: LEGO studs, or the Node's dot texture
-with an orange 5x2 LED block, each crossed near the top by two lines in Kazakh
-sky blue and Australian navy (plates for the Kick, bigger dots for the Node).
+with an orange 5x2 LED block, each with four Kazakh sky-blue cells, a gap and
+four Australian navy ones at the top right (1x1 bricks on the Kick, bigger dots
+on the Node).
 The built-in keyboard alone gets a plain gradient. They are drawn at the
 built-in display's 3456x2234; `swift wallpapers.swift` in that directory
 redraws them. macOS caches wallpapers by path, so after a redraw clear

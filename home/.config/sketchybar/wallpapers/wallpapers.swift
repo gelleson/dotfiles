@@ -21,33 +21,31 @@ func dot(_ ctx: CGContext, _ x: Int, _ y: Int, _ r: Int, _ c: CGColor) {
   ctx.setFillColor(c); ctx.fillEllipse(in: CGRect(x: x - r, y: y - r, width: 2 * r, height: 2 * r))
 }
 
-// Two lines on each wallpaper in the flags' main colors: Kazakh sky blue,
-// then Australian navy. Below the bar and inside the Studio Display's crop.
-let lines: [(UInt32, UInt32)] = [(0x00afca, 0x3cc6db), (0x012169, 0x1c3d8c)]   // (base, highlight)
+// Top right on each: four Kazakh sky-blue cells, a gap, four Australian navy.
+// Below the bar and inside the Studio Display's crop. Returns the grid column
+// for each cell, counted from the right edge, with its (base, highlight).
+let flagCells: [(Int, UInt32, UInt32)] =
+  (0..<4).map { (12 - $0, 0x00afca, 0x3cc6db) } + (0..<4).map { (6 - $0, 0x012169, 0x2a4f9e) }
 
-// Kick75: LEGO studs on the Obsidian Black case, and the two lines as long
-// plates across the top.
+// Kick75: LEGO studs on the Obsidian Black case, the flag cells as 1x1 bricks.
 render("kick") { ctx in
   ctx.setFillColor(rgb(0x1c1c1e)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
   let s = 80
   for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 24, rgb(0x232326)) } }
-  for (i, (base, stud)) in lines.enumerated() {
-    let y = s * (3 + i)
-    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: 0, y: y, width: W, height: s))
-    for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, y + s / 2, 24, rgb(stud)) }
+  for (col, base, stud) in flagCells {
+    let x = (W / s - col) * s, y = 3 * s
+    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: x + 2, y: y + 2, width: s - 4, height: s - 4))
+    dot(ctx, x + s / 2, y + s / 2, 24, rgb(stud))
   }
 }
 
-// Node75 Ink Gray: the dotted texture over graphite, the two lines as larger
-// dots across the top, and its 5x2 LED matrix lit in the one orange accent.
+// Node75 Ink Gray: the dotted texture over graphite, the flag cells as larger
+// dots, and its 5x2 LED matrix lit in the one orange accent.
 render("node") { ctx in
   ctx.setFillColor(rgb(0x2b2c2f)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
   let s = 40
-  for gy in 0..<(H / s) {
-    let c = gy - 6 < lines.count && gy >= 6 ? rgb(lines[gy - 6].0) : rgb(0x35373b)
-    let r = gy - 6 < lines.count && gy >= 6 ? 9 : 4
-    for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, r, c) }
-  }
+  for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 4, rgb(0x35373b)) } }
+  for (col, base, _) in flagCells { dot(ctx, (W / s - col) * s + s / 2, 6 * s + s / 2, 12, rgb(base)) }
   let lit: Set<Int> = [0, 1, 2, 5, 6]
   for i in 0..<10 {
     let x = 7 * s + (i % 5) * 2 * s, y = H - 9 * s + (i / 5) * 2 * s
