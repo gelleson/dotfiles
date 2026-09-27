@@ -16,6 +16,7 @@ GREEN=0xff4b9f4a   GREEN_SKIRT=0xff2c6b2b
 YELLOW=0xfff2cd37  YELLOW_SKIRT=0xffb08d1c
 BLUE=0xff0055bf    BLUE_SKIRT=0xff003580
 RED=0xffc91a09
+AU_BLUE=0xff012169 AU_RED=0xffe4002b
 
 # 32pt matches the notch, so the bar fills exactly the strip macOS reserves.
 sketchybar --bar height=32 color=$CASE padding_left=6 padding_right=6
@@ -28,7 +29,7 @@ sketchybar --default \
   label.padding_left=4 label.padding_right=12 \
   background.height=22 background.corner_radius=5 background.y_offset=2 \
   background.color=$WHITE \
-  background.shadow.drawing=on background.shadow.angle=270 \
+  background.shadow.drawing=on background.shadow.angle=90 \
   background.shadow.distance=3 background.shadow.color=$WHITE_SKIRT
 
 sketchybar --add item esc left \
@@ -55,6 +56,14 @@ sketchybar --add item front_app left \
     script='sketchybar --set $NAME label="${INFO:-$(aerospace list-windows --focused --format %{app-name})}"'
 
 # Right side, added right to left.
+# Melbourne, on a key in the Australian flag: navy cap, red skirt.
+sketchybar --add item mel right \
+  --set mel update_freq=30 icon=🇦🇺 icon.font="Apple Color Emoji:Regular:14.0" \
+    icon.color=$WHITE label.color=$WHITE \
+    background.color=$AU_BLUE background.shadow.color=$AU_RED \
+    background.border_width=1 background.border_color=$WHITE \
+    script='sketchybar --set $NAME label="mel $(TZ=Australia/Melbourne date "+%a %H:%M")"'
+
 sketchybar --add item clock right \
   --set clock update_freq=30 icon=󰌑 icon.color=$WHITE label.color=$WHITE \
     background.color=$BLUE background.shadow.color=$BLUE_SKIRT \
