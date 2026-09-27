@@ -317,7 +317,7 @@ macOS system blue on the pressed workspace. Each palette is one `case` branch in
 The wallpaper follows too, set by `sketchybarrc` on every load from
 `wallpapers/{kick,node,builtin}.png`: LEGO studs with four accent bricks, or the Node's perforation
 with a mint 5x2 LED block, each with four Kazakh sky-blue cells, a gap and
-four Australian navy ones at the top right (1x1 bricks on the Kick, bigger dots
+four Australian navy ones at the top right (1x2 bricks on the Kick, bigger dots
 on the Node).
 The built-in keyboard alone gets a plain gradient. They are drawn at the
 built-in display's 3456x2234; `swift wallpapers.swift` in that directory

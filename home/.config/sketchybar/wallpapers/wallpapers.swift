@@ -28,7 +28,8 @@ let flagCells: [(Int, UInt32, UInt32)] =
   (0..<4).map { (12 - $0, 0x00afca, 0x3cc6db) } + (0..<4).map { (6 - $0, 0x012169, 0x2a4f9e) }
 
 // Kick75: LEGO studs on the Obsidian Black case, four 2x2 bricks bottom left
-// in the keyboard's accents, and the flag cells as 1x1 bricks.
+// in the keyboard's accents, and the flag cells as 1x2
+// bricks, the same height as those.
 render("kick") { ctx in
   ctx.setFillColor(rgb(0x1c1c1e)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
   let s = 80
@@ -41,8 +42,8 @@ render("kick") { ctx in
   }
   for (col, base, stud) in flagCells {
     let x = (W / s - col) * s, y = 3 * s
-    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: x + 2, y: y + 2, width: s - 4, height: s - 4))
-    dot(ctx, x + s / 2, y + s / 2, 24, rgb(stud))
+    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: x + 2, y: y + 2, width: s - 4, height: 2 * s - 4))
+    for j in 0..<2 { dot(ctx, x + s / 2, y + s / 2 + j * s, 24, rgb(stud)) }
   }
 }
 
