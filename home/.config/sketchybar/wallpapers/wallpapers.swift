@@ -39,17 +39,17 @@ render("kick") { ctx in
   }
 }
 
-// Node75 Ink Gray: the dotted texture over graphite, the flag cells as larger
-// dots, and its 5x2 LED matrix lit in the one orange accent.
+// Node75 Ink Gray: the perforated texture over the near-black case, the flag
+// cells as larger dots, and a 5x2 LED matrix lit in the mint Esc green.
 render("node") { ctx in
-  ctx.setFillColor(rgb(0x2b2c2f)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
+  ctx.setFillColor(rgb(0x161617)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
   let s = 40
-  for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 4, rgb(0x35373b)) } }
+  for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 4, rgb(0x242527)) } }
   for (col, base, _) in flagCells { dot(ctx, (W / s - col) * s + s / 2, 6 * s + s / 2, 12, rgb(base)) }
   let lit: Set<Int> = [0, 1, 2, 5, 6]
   for i in 0..<10 {
     let x = 7 * s + (i % 5) * 2 * s, y = H - 9 * s + (i / 5) * 2 * s
-    dot(ctx, x, y, 14, lit.contains(i) ? rgb(0xe0672a) : rgb(0x3d3f44))
+    dot(ctx, x, y, 14, lit.contains(i) ? rgb(0x3fbf8a) : rgb(0x2e2f32))
   }
 }
 

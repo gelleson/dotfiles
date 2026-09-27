@@ -15,16 +15,17 @@ osascript -e "tell application \"System Events\" to tell every desktop to set pi
 # Each key role is a cap color, its skirt, and its legend.
 case $KB in
   node)
-    # Node75 Ink Gray: a graphite case, graphite caps, no loud accents but one
-    # Braun T3 orange on Esc and the knob.
-    CASE=0xff2b2c2f
-    KEY=0xff47494e      KEY_SKIRT=0xff1d1e21      LEGEND=0xffdcdcd6
-    PRESSED=0xff6b6e74
-    MOD=0xff5b5e63      MOD_SKIRT=0xff2a2b2f      MOD_LEGEND=0xffdcdcd6
-    ESC=0xffe0672a      ESC_SKIRT=0xff97410f      ESC_LEGEND=0xfff2f2ee
-    SPACE=0xff5b5e63    SPACE_SKIRT=0xff2a2b2f    SPACE_LEGEND=0xffdcdcd6
-    ENTER=0xff5b5e63    ENTER_SKIRT=0xff2a2b2f    ENTER_LEGEND=0xffdcdcd6
-    KNOB=0xff47494e     KNOB_LEGEND=0xffe0672a
+    # Node75 Ink Gray: a near-black case, dark grey caps with muted grey
+    # legends, a lighter spacebar, and three accents — mint Esc, and the
+    # yellow and red keys top right (Enter and the knob here).
+    CASE=0xff161617
+    KEY=0xff3a3b3e      KEY_SKIRT=0xff242527      LEGEND=0xffa8a9ab
+    PRESSED=0xff5a5c60
+    MOD=0xff3a3b3e      MOD_SKIRT=0xff242527      MOD_LEGEND=0xffa8a9ab
+    ESC=0xff3fbf8a      ESC_SKIRT=0xff23845c      ESC_LEGEND=0xff161617
+    SPACE=0xff4b4c50    SPACE_SKIRT=0xff2a2b2e    SPACE_LEGEND=0xffc8c9cb
+    ENTER=0xffe8b423    ENTER_SKIRT=0xffa47a0c    ENTER_LEGEND=0xff161617
+    KNOB=0xffe24a3b     KNOB_LEGEND=0xfff2f2ee
     ;;
   builtin)
     # The MacBook's own keys: black caps, white legends, no accent but the
