@@ -315,7 +315,7 @@ grey caps and three accents: mint Esc, yellow Enter (the clock), red knob; the *
 palette; the **built-in** keyboard alone gets black caps, white legends and the
 macOS system blue on the pressed workspace. Each palette is one `case` branch in `sketchybarrc`.
 The wallpaper follows too, set by `sketchybarrc` on every load from
-`wallpapers/{kick,node,builtin}.png`: LEGO studs, or the Node's perforation
+`wallpapers/{kick,node,builtin}.png`: LEGO studs with four accent bricks, or the Node's perforation
 with a mint 5x2 LED block, each with four Kazakh sky-blue cells, a gap and
 four Australian navy ones at the top right (1x1 bricks on the Kick, bigger dots
 on the Node).
