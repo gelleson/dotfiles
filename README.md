@@ -318,8 +318,8 @@ The wallpaper follows too, set by `sketchybarrc` on every load from
 `wallpapers/{kick,node,builtin}.png`: LEGO studs with four accent bricks, or the Node's perforation
 with a mint 5x2 LED block, each with four Kazakh sky-blue cells, a gap and
 four Australian navy ones at the top right (1x2 bricks on the Kick, bigger dots
-on the Node).
-The built-in keyboard alone gets a plain gradient. They are drawn at the
+on the Node), and the keyboard's name in the center in the same style: KICK75
+in white bricks, NODE75 in dot-matrix dots. The built-in keyboard alone gets a plain gradient. They are drawn at the
 built-in display's 3456x2234; `swift wallpapers.swift` in that directory
 redraws them. macOS caches wallpapers by path, so after a redraw clear
 `~/Library/Containers/com.apple.wallpaper.agent/Data/Library/Caches/com.apple.wallpaper.caches/extension-com.apple.wallpaper.extension.image/`
