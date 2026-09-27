@@ -11,6 +11,7 @@ FONT="BigBlueTerm437 Nerd Font"   # 8-bit pixel face, from `mise run fonts`
 CASE=0xff1c1c1e
 LEGEND=0xff2b2c2e
 WHITE=0xfff2f2ee   WHITE_SKIRT=0xffb4b5b0
+GREY=0xffa0a5a9    GREY_SKIRT=0xff6c6e68
 GREEN=0xff4b9f4a   GREEN_SKIRT=0xff2c6b2b
 YELLOW=0xfff2cd37  YELLOW_SKIRT=0xffb08d1c
 BLUE=0xff0055bf    BLUE_SKIRT=0xff003580
@@ -34,11 +35,11 @@ sketchybar --add item esc left \
   --set esc icon= label=esc icon.color=$WHITE label.color=$WHITE \
     background.color=$GREEN background.shadow.color=$GREEN_SKIRT
 
-# Number row: one key per AeroSpace workspace, the focused one pressed down.
+# Number row: a key per occupied AeroSpace workspace, the focused one pressed.
 sketchybar --add event aerospace_workspace_change
 for sid in $(aerospace list-workspaces --all); do
   sketchybar --add item space.$sid left \
-    --subscribe space.$sid aerospace_workspace_change \
+    --subscribe space.$sid aerospace_workspace_change front_app_switched \
     --set space.$sid icon.drawing=off label=$sid \
       label.width=24 label.align=center label.padding_left=0 label.padding_right=0 \
       click_script="aerospace workspace $sid" \
@@ -58,6 +59,12 @@ sketchybar --add item clock right \
   --set clock update_freq=30 icon=󰌑 icon.color=$WHITE label.color=$WHITE \
     background.color=$BLUE background.shadow.color=$BLUE_SKIRT \
     script='sketchybar --set $NAME label="$(date "+%a %d %H:%M")"'
+
+# A grey modifier key: CPU and memory in use.
+sketchybar --add item system right \
+  --set system update_freq=5 icon.drawing=off label.padding_left=12 \
+    background.color=$GREY background.shadow.color=$GREY_SKIRT \
+    script="$PLUGINS/system.sh"
 
 sketchybar --add item battery right \
   --subscribe battery power_source_change system_woke \

@@ -297,11 +297,13 @@ Security before it can move any windows.
 
 **SketchyBar** (from `felixkratz/formulae`) replaces the menu bar, styled after
 the NuPhy Kick75: a black case, white keycaps with a hard-shadow skirt, a pixel
-font, and LEGO accents: green `esc`, a number-row key per workspace (the
-focused one pressed down, click to switch), a yellow spacebar with the front
-app, a red volume knob, and a blue Enter key for the clock. AeroSpace launches
+font, and LEGO accents: green `esc`, a number-row key per occupied workspace
+(the focused one pressed down, click to switch), a yellow spacebar with the
+front app, a red volume knob, battery, a grey CPU/memory key, and a blue Enter
+key for the clock. AeroSpace launches
 it (`after-startup-command`) and triggers `aerospace_workspace_change`, and
-keeps 1-9 persistent so the row is always full. The macOS menu bar has to
+keeps 1-9 persistent; `on-focus-changed` refreshes the row when a window
+moves or closes, so empty workspaces drop out. The macOS menu bar has to
 auto-hide; `bootstrap.sh` sets that. The notch display reserves the bar's 32pt
 strip itself, so only other monitors get the extra top gap. Nothing sits in the
 center, where the notch would hide it. `sketchybar --reload` applies edits.

@@ -21,6 +21,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
 
+# Moving or closing a window shifts focus without changing workspace; refresh
+# the bar too so empty workspaces drop out of the number row.
+on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_workspace_change']
+
 # Flatten single-child containers and alternate orientation when nesting, so a
 # split always goes the direction you expect without manual layout fixing.
 enable-normalization-flatten-containers = true
