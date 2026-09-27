@@ -42,8 +42,16 @@ cask "orbstack"
 # i3-like tiling window manager. Lives in a third-party tap, so the tap has to
 # be declared too. Config: home/.config/aerospace/aerospace.toml. Needs one
 # Accessibility permission grant in System Settings after a fresh install.
+# Homebrew 7 refuses third-party taps until trusted; `trusted: true` records
+# that in ~/.homebrew/trust.json, which needs the fully-qualified name.
 tap "nikitabobko/tap"
-cask "aerospace"
+cask "nikitabobko/tap/aerospace", trusted: true
+
+# Status bar that replaces the macOS menu bar, styled after the NuPhy Kick75.
+# Config: home/.config/sketchybar/. AeroSpace launches it at startup, so no
+# brew service. Needs "Automatically hide and show the menu bar" set to Always.
+tap "felixkratz/formulae"
+brew "felixkratz/formulae/sketchybar", trusted: true
 
 # Tailscale VPN — the standalone build, not the App Store one. Ships the menu
 # bar app AND the `tailscale` CLI at /usr/local/bin. Installs a pkg, so a

@@ -9,6 +9,18 @@ config-version = 2
 start-at-login = true
 auto-reload-config = true
 
+# SketchyBar (home/.config/sketchybar) starts with AeroSpace rather than as a
+# brew service. It refuses to run twice, so an AeroSpace restart is harmless.
+after-startup-command = ['exec-and-forget sketchybar']
+
+# Keep 1-9 alive when empty so the bar always shows the full number row.
+persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+# Tell the bar which workspace key to press down.
+exec-on-workspace-change = ['/bin/bash', '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
+
 # Flatten single-child containers and alternate orientation when nesting, so a
 # split always goes the direction you expect without manual layout fixing.
 enable-normalization-flatten-containers = true
@@ -29,7 +41,9 @@ gaps.inner.horizontal = 8
 gaps.inner.vertical =   8
 gaps.outer.left =       8
 gaps.outer.bottom =     8
-gaps.outer.top =        8
+# The notch display already reserves the 32pt strip SketchyBar sits in;
+# anything else needs the bar's height added to the gap.
+gaps.outer.top =        [{ monitor.'Built-in' = 8 }, 40]
 gaps.outer.right =      8
 
 # The coding workspace lives on the Studio Display. If that monitor is absent

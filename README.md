@@ -12,6 +12,7 @@ home/            mirrors $HOME; every file here gets symlinked into place
   .config/zsh/   options, history, completion, keybindings, aliases, prompt
   .config/mise/  global tool versions
   .config/aerospace/ AeroSpace tiling window manager
+  .config/sketchybar/ status bar, styled after the NuPhy Kick75
   .local/bin/    small wrapper scripts
   .claude/       CLAUDE.md — global agent instructions
   .codex/        AGENTS.md — symlink to the same file
@@ -293,6 +294,20 @@ on newly detected windows, so windows open before a reload stay put.
 A fresh
 machine needs one **Accessibility** grant in System Settings > Privacy &
 Security before it can move any windows.
+
+**SketchyBar** (from `felixkratz/formulae`) replaces the menu bar, styled after
+the NuPhy Kick75: a black case, white keycaps with a hard-shadow skirt, a pixel
+font, and LEGO accents: green `esc`, a number-row key per workspace (the
+focused one pressed down, click to switch), a yellow spacebar with the front
+app, a red volume knob, and a blue Enter key for the clock. AeroSpace launches
+it (`after-startup-command`) and triggers `aerospace_workspace_change`, and
+keeps 1-9 persistent so the row is always full. The macOS menu bar has to
+auto-hide; `bootstrap.sh` sets that. The notch display reserves the bar's 32pt
+strip itself, so only other monitors get the extra top gap. Nothing sits in the
+center, where the notch would hide it. `sketchybar --reload` applies edits.
+
+Homebrew 7 refuses third-party taps until they're trusted, so both tapped
+entries in the Brewfile carry `trusted: true`.
 
 **cliproxyapi** ([CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI))
 wraps Claude Code, Codex, Gemini CLI and Qwen as one OpenAI-shaped API on

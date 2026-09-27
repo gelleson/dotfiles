@@ -74,6 +74,12 @@ if [ "$(uname -s)" = "Darwin" ]; then
   "$MISE" run --cd "$DOTFILES_DIR" fonts || warn "font install failed"
 fi
 
+# SketchyBar replaces the menu bar, so the real one always auto-hides. Takes
+# effect at the next login.
+if [ "$(uname -s)" = "Darwin" ]; then
+  defaults write NSGlobalDomain _HIDE_MENU_BAR -bool true
+fi
+
 # --- tools ------------------------------------------------------------------
 # One failing tool must not abort the run — some backends build from source and
 # are fragile. Report what broke and carry on.
