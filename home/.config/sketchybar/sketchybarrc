@@ -9,6 +9,9 @@ PLUGINS="$CONFIG_DIR/plugins"
 FONT="BigBlueTerm437 Nerd Font"   # 8-bit pixel face, from `mise run fonts`
 KB=$("$PLUGINS/keyboard.sh")
 
+# Wallpaper to match; the built-in keyboard alone gets a plain one.
+osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$CONFIG_DIR/wallpapers/$KB.png\""
+
 # Each key role is a cap color, its skirt, and its legend.
 case $KB in
   node)
@@ -24,7 +27,7 @@ case $KB in
     KNOB=0xff47494e     KNOB_LEGEND=0xffe0672a
     ;;
   *)
-    # Kick75: an Obsidian Black case, white and grey PBT caps, and the LEGO
+    # Kick75, and the built-in keyboard: an Obsidian Black case, white and grey PBT caps, and the LEGO
     # accents — green Esc, yellow Space, blue Enter, red knob.
     CASE=0xff1c1c1e
     KEY=0xfff2f2ee      KEY_SKIRT=0xffb4b5b0      LEGEND=0xff2b2c2e

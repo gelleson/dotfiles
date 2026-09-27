@@ -313,6 +313,12 @@ The palette follows the connected keyboard: `plugins/keyboard.sh` checks
 reloads the bar on a change. **Node75 Ink Gray** gets a graphite case and caps
 with one Braun T3 orange on Esc and the knob; the **Kick75**, or no NuPhy at
 all, gets the LEGO palette. Each palette is one `case` branch in `sketchybarrc`.
+The wallpaper follows too, set by `sketchybarrc` on every load from
+`wallpapers/{kick,node,builtin}.png`: LEGO studs and four accent bricks, the
+Node's dot texture with an orange 5x2 LED block, or a plain gradient when only
+the built-in keyboard is there. `swift wallpapers.swift` in that directory
+redraws them. The first switch from an AeroSpace-launched bar may ask to let
+SketchyBar control System Events.
 
 Homebrew 7 refuses third-party taps until they're trusted, so both tapped
 entries in the Brewfile carry `trusted: true`.
