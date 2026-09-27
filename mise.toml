@@ -30,14 +30,17 @@ done
 description = "Install the Nerd Fonts referenced by the ghostty config into ~/Library/Fonts"
 run = '''
 set -euo pipefail
-tmp="$(mktemp -d)"
-trap 'rm -rf "$tmp"' EXIT
 mkdir -p "$HOME/Library/Fonts"
-for f in ProggyClean BigBlueTerminal JetBrainsMono; do
-  curl -fsSL -o "$tmp/$f.zip" \
-    "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/$f.zip"
-  unzip -qo "$tmp/$f.zip" -d "$tmp/$f"
-  find "$tmp/$f" -name '*.ttf' -exec cp {} "$HOME/Library/Fonts/" \;
+# .tar.xz is ~12MB for all three vs ~155MB of .zip.
+# Archive name : installed file prefix — skip what's already there.
+for pair in ProggyClean:ProggyCleanCE BigBlueTerminal:BigBlueTerm JetBrainsMono:JetBrainsMono; do
+  f="${pair%%:*}"
+  if compgen -G "$HOME/Library/Fonts/${pair#*:}*NerdFont*.ttf" >/dev/null; then
+    echo "  $f already installed"
+    continue
+  fi
+  curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/$f.tar.xz" \
+    | tar -xJf - -C "$HOME/Library/Fonts" '*.ttf'
   echo "  installed $f"
 done
 '''
