@@ -27,7 +27,7 @@ func dot(_ ctx: CGContext, _ x: Int, _ y: Int, _ r: Int, _ c: CGColor) {
 let flagCells: [(Int, UInt32, UInt32)] =
   (0..<4).map { (12 - $0, 0x00afca, 0x3cc6db) } + (0..<4).map { (6 - $0, 0x012169, 0x2a4f9e) }
 
-// Kick75: LEGO studs on the Obsidian Black case, four 2x2 bricks bottom right
+// Kick75: LEGO studs on the Obsidian Black case, four 2x2 bricks bottom left
 // in the keyboard's accents, and the flag cells as 1x1 bricks.
 render("kick") { ctx in
   ctx.setFillColor(rgb(0x1c1c1e)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
@@ -35,7 +35,7 @@ render("kick") { ctx in
   for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 24, rgb(0x232326)) } }
   let bricks: [(UInt32, UInt32)] = [(0x4b9f4a, 0x5cb35b), (0xf2cd37, 0xf7dc6a), (0x0055bf, 0x1f6fd6), (0xc91a09, 0xdd3522)]
   for (i, (base, stud)) in bricks.enumerated() {
-    let bx = (W / s - 3 * (bricks.count - i) - 2) * s, by = (H / s - 5) * s
+    let bx = (2 + 3 * i) * s, by = (H / s - 5) * s
     ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: bx + 2, y: by + 2, width: 2 * s - 4, height: 2 * s - 4))
     for j in 0..<4 { dot(ctx, bx + s / 2 + (j % 2) * s, by + s / 2 + (j / 2) * s, 24, rgb(stud)) }
   }
