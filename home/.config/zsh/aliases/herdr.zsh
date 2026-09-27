@@ -29,7 +29,7 @@ hs() {
     hits=(${(M)dirs:#(*/)#$ns} ${(M)sessions:#(*-)#$ns})
     case $#hits in
       1) ns=$hits[1]; name=${ns//\//-} ;;
-      0) print -u2 "hs: no session or namespace matching '$ns'"; return 1 ;;
+      0) mkdir -p $root/$ns || return ;;   # naming a namespace that isn't there yet creates it
       *) ns=$(print -l $hits | fzf --prompt='session ▸ ' --height=100% --border --select-1) || return
          name=${ns//\//-} ;;
     esac
@@ -58,6 +58,23 @@ hsd() {
   print
   herdr session stop "$pick" >/dev/null 2>&1   # delete only takes stopped sessions
   herdr session delete "$pick"
+}
+
+# hsda — stop and delete every herdr session (except default).
+hsda() {
+  emulate -L zsh
+  local s
+  local -a sessions
+  sessions=(${(f)"$(herdr session list 2>/dev/null | tail -n +2 | awk '{print $1}')"})
+  sessions=(${sessions:#default})   # herdr refuses to delete the default session
+  (( $#sessions )) || { print -u2 "hsda: no deletable sessions"; return 1 }
+
+  read -q "REPLY?delete ${#sessions} session(s): ${sessions}? [y/N] " || { print; return 1 }
+  print
+  for s in $sessions; do
+    herdr session stop "$s" >/dev/null 2>&1
+    herdr session delete "$s"
+  done
 }
 
 # hp — four-tab layout in the current herdr workspace: ai, editor (nvim .),
