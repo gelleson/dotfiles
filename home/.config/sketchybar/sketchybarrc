@@ -1,21 +1,41 @@
 #!/bin/sh
-# SketchyBar styled after the NuPhy Kick75: an Obsidian Black case, white and
-# grey PBT caps, and the LEGO accents — green Esc, yellow Space, blue Enter,
-# red knob. Every item is a keycap; a hard shadow below it is the skirt.
+# SketchyBar styled after whichever NuPhy is connected. Every item is a
+# keycap; a hard shadow below it is the skirt. plugins/keyboard.sh picks the
+# palette and reloads the bar when the keyboard changes.
 # Launched by AeroSpace (after-startup-command). Reference:
 # https://felixkratz.github.io/SketchyBar/config/bar
 
 PLUGINS="$CONFIG_DIR/plugins"
 FONT="BigBlueTerm437 Nerd Font"   # 8-bit pixel face, from `mise run fonts`
+KB=$("$PLUGINS/keyboard.sh")
 
-CASE=0xff1c1c1e
-LEGEND=0xff2b2c2e
-WHITE=0xfff2f2ee   WHITE_SKIRT=0xffb4b5b0
-GREY=0xffa0a5a9    GREY_SKIRT=0xff6c6e68
-GREEN=0xff4b9f4a   GREEN_SKIRT=0xff2c6b2b
-YELLOW=0xfff2cd37  YELLOW_SKIRT=0xffb08d1c
-BLUE=0xff0055bf    BLUE_SKIRT=0xff003580
-RED=0xffc91a09
+# Each key role is a cap color, its skirt, and its legend.
+case $KB in
+  node)
+    # Node75 Ink Gray: a graphite case, graphite caps, no loud accents but one
+    # Braun T3 orange on Esc and the knob.
+    CASE=0xff2b2c2f
+    KEY=0xff47494e      KEY_SKIRT=0xff1d1e21      LEGEND=0xffdcdcd6
+    PRESSED=0xff6b6e74
+    MOD=0xff5b5e63      MOD_SKIRT=0xff2a2b2f      MOD_LEGEND=0xffdcdcd6
+    ESC=0xffe0672a      ESC_SKIRT=0xff97410f      ESC_LEGEND=0xfff2f2ee
+    SPACE=0xff5b5e63    SPACE_SKIRT=0xff2a2b2f    SPACE_LEGEND=0xffdcdcd6
+    ENTER=0xff5b5e63    ENTER_SKIRT=0xff2a2b2f    ENTER_LEGEND=0xffdcdcd6
+    KNOB=0xff47494e     KNOB_LEGEND=0xffe0672a
+    ;;
+  *)
+    # Kick75: an Obsidian Black case, white and grey PBT caps, and the LEGO
+    # accents — green Esc, yellow Space, blue Enter, red knob.
+    CASE=0xff1c1c1e
+    KEY=0xfff2f2ee      KEY_SKIRT=0xffb4b5b0      LEGEND=0xff2b2c2e
+    PRESSED=0xffa0a5a9
+    MOD=0xffa0a5a9      MOD_SKIRT=0xff6c6e68      MOD_LEGEND=0xff2b2c2e
+    ESC=0xff4b9f4a      ESC_SKIRT=0xff2c6b2b      ESC_LEGEND=0xfff2f2ee
+    SPACE=0xfff2cd37    SPACE_SKIRT=0xffb08d1c    SPACE_LEGEND=0xff2b2c2e
+    ENTER=0xff0055bf    ENTER_SKIRT=0xff003580    ENTER_LEGEND=0xfff2f2ee
+    KNOB=0xffc91a09     KNOB_LEGEND=0xfff2f2ee
+    ;;
+esac
 AU_BLUE=0xff012169 AU_RED=0xffe4002b
 
 # 32pt matches the notch, so the bar fills exactly the strip macOS reserves.
@@ -29,13 +49,13 @@ sketchybar --default \
   label.padding_left=4 label.padding_right=12 \
   background.height=22 background.corner_radius=5 background.y_offset=2 \
   icon.y_offset=2 label.y_offset=2 \
-  background.color=$WHITE \
+  background.color=$KEY \
   background.shadow.drawing=on background.shadow.angle=90 \
-  background.shadow.distance=3 background.shadow.color=$WHITE_SKIRT
+  background.shadow.distance=3 background.shadow.color=$KEY_SKIRT
 
 sketchybar --add item esc left \
-  --set esc icon= label=esc icon.color=$WHITE label.color=$WHITE \
-    background.color=$GREEN background.shadow.color=$GREEN_SKIRT
+  --set esc icon= label=esc icon.color=$ESC_LEGEND label.color=$ESC_LEGEND \
+    background.color=$ESC background.shadow.color=$ESC_SKIRT
 
 # Number row: a key per occupied AeroSpace workspace, the focused one pressed.
 sketchybar --add event aerospace_workspace_change
@@ -45,7 +65,7 @@ for sid in $(aerospace list-workspaces --all); do
     --set space.$sid icon.drawing=off label=$sid \
       label.width=24 label.align=center label.padding_left=0 label.padding_right=0 \
       click_script="aerospace workspace $sid" \
-      script="$PLUGINS/aerospace.sh $sid"
+      script="$PLUGINS/aerospace.sh $sid $KEY $PRESSED"
 done
 
 # Spacebar. Left rather than center: the notch would swallow a centered item.
@@ -53,16 +73,17 @@ sketchybar --add item front_app left \
   --subscribe front_app front_app_switched \
   --set front_app icon.drawing=off label.width=200 label.align=center \
     label.max_chars=20 label.padding_left=0 label.padding_right=0 \
-    background.color=$YELLOW background.shadow.color=$YELLOW_SKIRT \
+    label.color=$SPACE_LEGEND background.color=$SPACE background.shadow.color=$SPACE_SKIRT \
     script='sketchybar --set $NAME label="${INFO:-$(aerospace list-windows --focused --format %{app-name})}"'
 
 # Right side, added right to left.
 # Melbourne, on a key cut from the Australian flag minus the Union Jack
-# (au.png, drawn @2x to the key's 184x22 size), Southern Cross on the right. If the label length changes, set W in au.swift to twice the new key
-# width and rerun: swift au.swift au.png
+# (au.png, drawn @2x to the key's 184x22 size), Southern Cross on the right.
+# Same on both keyboards. If the label length changes, set W in au.swift to
+# twice the new key width and rerun: swift au.swift au.png
 sketchybar --add item mel right \
   --set mel update_freq=30 icon.drawing=off \
-    label.color=$WHITE label.padding_left=12 label.padding_right=40 \
+    label.color=0xffffffff label.padding_left=12 label.padding_right=40 \
     label.shadow.drawing=on label.shadow.color=0xff000000 label.shadow.distance=1 \
     background.color=$AU_BLUE background.shadow.color=$AU_RED \
     background.image="$CONFIG_DIR/au.png" background.image.scale=0.5 \
@@ -70,28 +91,34 @@ sketchybar --add item mel right \
     script='sketchybar --set $NAME label="mel $(TZ=Australia/Melbourne date "+%a %H:%M")"'
 
 sketchybar --add item clock right \
-  --set clock update_freq=30 icon=󰌑 icon.color=$WHITE label.color=$WHITE \
-    background.color=$BLUE background.shadow.color=$BLUE_SKIRT \
+  --set clock update_freq=30 icon=󰌑 icon.color=$ENTER_LEGEND label.color=$ENTER_LEGEND \
+    background.color=$ENTER background.shadow.color=$ENTER_SKIRT \
     script='sketchybar --set $NAME label="$(date "+%a %d %H:%M")"'
 
-# A grey modifier key: CPU and memory in use.
+# A modifier key: CPU and memory in use.
 sketchybar --add item system right \
   --set system update_freq=5 icon.drawing=off label.padding_left=12 \
-    background.color=$GREY background.shadow.color=$GREY_SKIRT \
+    label.color=$MOD_LEGEND background.color=$MOD background.shadow.color=$MOD_SKIRT \
     script="$PLUGINS/system.sh"
 
 sketchybar --add item battery right \
   --subscribe battery power_source_change system_woke \
   --set battery update_freq=120 script="$PLUGINS/battery.sh"
 
-# The volume knob: a bare red dial, no keycap under it.
+# The volume knob: a bare dial, no keycap under it.
 sketchybar --add item volume right \
   --subscribe volume volume_change \
   --set volume background.drawing=off label.drawing=off \
-    icon.color=$WHITE icon.width=24 icon.align=center icon.y_offset=0 \
+    icon.color=$KNOB_LEGEND icon.width=24 icon.align=center icon.y_offset=0 \
     icon.padding_left=0 icon.padding_right=0 \
-    icon.background.drawing=on icon.background.color=$RED \
+    icon.background.drawing=on icon.background.color=$KNOB \
     icon.background.height=24 icon.background.corner_radius=12 \
     script="$PLUGINS/volume.sh"
+
+# Hidden: polls for the keyboard every 10s and reloads the bar when it changes.
+# Bluetooth connects raise no SketchyBar event, so polling is the only signal.
+sketchybar --add item keyboard left \
+  --subscribe keyboard system_woke \
+  --set keyboard drawing=off update_freq=10 script="$PLUGINS/keyboard.sh $KB"
 
 sketchybar --update

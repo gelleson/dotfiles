@@ -308,6 +308,12 @@ auto-hide; `bootstrap.sh` sets that. The notch display reserves the bar's 32pt
 strip itself, so only other monitors get the extra top gap. Nothing sits in the
 center, where the notch would hide it. `sketchybar --reload` applies edits.
 
+The palette follows the connected keyboard: `plugins/keyboard.sh` checks
+`hidutil list` (connected devices only, Bluetooth included) every 10s and
+reloads the bar on a change. **Node75 Ink Gray** gets a graphite case and caps
+with one Braun T3 orange on Esc and the knob; the **Kick75**, or no NuPhy at
+all, gets the LEGO palette. Each palette is one `case` branch in `sketchybarrc`.
+
 Homebrew 7 refuses third-party taps until they're trusted, so both tapped
 entries in the Brewfile carry `trusted: true`.
 
