@@ -66,7 +66,7 @@ sketchybar --add item mel right \
     label.shadow.drawing=on label.shadow.color=0xff000000 label.shadow.distance=1 \
     background.color=$AU_BLUE background.shadow.color=$AU_RED \
     background.image="$CONFIG_DIR/au.png" background.image.scale=0.5 \
-    background.image.corner_radius=5 \
+    background.image.corner_radius=5 background.image.y_offset=2 \
     script='sketchybar --set $NAME label="mel $(TZ=Australia/Melbourne date "+%a %H:%M")"'
 
 sketchybar --add item clock right \
