@@ -55,10 +55,10 @@ gaps.outer.right =      8
 [workspace-to-monitor-force-assignment]
 2 = 'Studio Display'
 
-# Fixed homes: 1 browser, 2 coding, 3 chat. Each app lands there regardless of
-# which workspace is focused. app-id is an exact match, so each app needs its
-# own block — `aerospace list-windows --all --format '%{app-bundle-id}'` prints
-# the id of anything currently open.
+# Fixed homes: 1 browser, 2 coding, 3 chat, 4 Kubernetes. Each app lands there
+# regardless of which workspace is focused. app-id is an exact match, so each
+# app needs its own block — `aerospace list-windows --all --format
+# '%{app-bundle-id}'` prints the id of anything currently open.
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace 1'
@@ -74,6 +74,10 @@ run = 'move-node-to-workspace 2'
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.aptakube.Aptakube'
+run = 'move-node-to-workspace 4'
 
 [mode.main.binding]
     alt-enter = 'exec-and-forget open -na Ghostty'
