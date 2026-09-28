@@ -77,7 +77,7 @@ fi
 # SketchyBar replaces the menu bar, so the real one always auto-hides. Takes
 # effect at the next login. The Dock auto-hides too.
 if [ "$(uname -s)" = "Darwin" ]; then
-  defaults write NSGlobalDomain _HIDE_MENU_BAR -bool true
+  defaults write NSGlobalDomain _HIHideMenuBar -bool true
   defaults write com.apple.dock autohide -bool true
 fi
 
