@@ -25,6 +25,9 @@ brew "cliproxyapi"
 # Needs mosh-server on the remote too, and UDP 60000-61000 open.
 brew "mosh"
 
+# PlanetScale database CLI. Not in mise's registry; homebrew-core has it.
+brew "pscale"
+
 # Local LLM runtime. In mise's registry too, but only as a bare binary —
 # Homebrew ships the launchd plist, so the server can run as a background
 # service: `brew services start ollama`. Models live in ~/.ollama (untracked).
