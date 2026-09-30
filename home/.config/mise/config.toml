@@ -162,6 +162,12 @@ portless = "latest"
 # shipped as a native binary through npm, so the npm backend rather than
 # github: releases. Needs npm.package_manager = "npm" below to install.
 "npm:@firecrawl/anydoc" = "latest"
+
+# --- logs ---------------------------------------------------------------------
+# vlogscli — interactive LogsQL client for VictoriaLogs. Not in the registry; it
+# ships as `vlogscli-prod` inside the `vlutils` release archive (alongside
+# vlagent), so pick the non-enterprise archive, rename, and expose only it.
+"github:VictoriaMetrics/VictoriaLogs" = { version = "latest", matching_regex = '^vlutils-.*-v[0-9.]+\.tar\.gz$', rename_exe = { "vlogscli-prod" = "vlogscli" }, filter_bins = ["vlogscli"] }
 agy = "latest"
 k9s = "latest"
 kubectl = "1.36.4"
