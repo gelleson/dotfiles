@@ -123,6 +123,9 @@ aws-cli = "latest"
 # sops finds that path by default; the private key stays out of git, always.
 sops = "latest"
 age = "latest"
+# Infisical CLI — the default for project secrets (see ~/.claude/CLAUDE.md):
+# `infisical run -- <cmd>` injects them, `infisical secrets` reads/sets them.
+infisical = { version = "latest", asset_pattern = "cli_{{ version }}_{{ os(macos='darwin') }}_{{ arch(x64='amd64') }}.tar.gz" }
 
 # --- temporal ---------------------------------------------------------------
 # The `temporal` CLI, which bundles a SQLite dev server (`temporal server

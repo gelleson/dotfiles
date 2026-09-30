@@ -49,6 +49,21 @@ the next machine.
 Secrets never go in the repo. They belong in `~/.zshrc.local` (untracked) or the
 login keychain.
 
+## Project secrets: Infisical CLI
+
+For secrets in any project, use the **Infisical CLI** (`infisical`, from mise).
+It takes the role sops would. Use the CLI only: no Infisical SDKs, raw API
+calls, or MCP.
+
+* `infisical login`, then `infisical init` to link a repo (writes
+  `.infisical.json`, which holds no secrets and is committed).
+* `infisical run -- <cmd>` injects secrets as env vars. `infisical secrets get`
+  and `infisical secrets set` read and write them.
+* Never write secret values to `.env`, config files, or the repo, and never print
+  them unless asked.
+* Files already encrypted with sops (e.g. `~/.dotfiles/secrets/`) stay on sops.
+  Don't migrate them unless asked.
+
 ## Keep Code Simple
 
 Prefer the simplest implementation that correctly solves the current task.
