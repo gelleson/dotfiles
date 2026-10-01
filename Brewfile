@@ -61,3 +61,9 @@ brew "felixkratz/formulae/sketchybar", trusted: true
 # fresh machine needs an interactive `sudo` password during bundling, plus one
 # login to the tailnet afterwards.
 cask "tailscale-app"
+
+# Spaced-repetition flashcards for interview prep (~/codes/namespaces/interview/prep).
+# Cards arrive through the AnkiConnect add-on (code 2055492159), installed from
+# inside Anki (Tools -> Add-ons), so a fresh machine needs that step plus one
+# AnkiWeb login.
+cask "anki"
