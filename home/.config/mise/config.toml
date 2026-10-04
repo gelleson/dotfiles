@@ -165,8 +165,9 @@ portless = "latest"
 
 # --- cloudflare ---------------------------------------------------------------
 # cf — Cloudflare's unified CLI. npm backend because the registry's `cf` is the
-# Cloud Foundry CLI, a different tool.
-"npm:cf" = "latest"
+# Cloud Foundry CLI, a different tool. Pinned: npm tags the 1.0 beta as latest,
+# but mise's "latest" skips prereleases and lands on 0.15.
+"npm:cf" = "1.0.0-beta.12"
 
 # --- logs ---------------------------------------------------------------------
 # vlogscli — interactive LogsQL client for VictoriaLogs. Not in the registry; it
