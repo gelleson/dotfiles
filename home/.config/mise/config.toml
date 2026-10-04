@@ -163,6 +163,11 @@ portless = "latest"
 # github: releases. Needs npm.package_manager = "npm" below to install.
 "npm:@firecrawl/anydoc" = "latest"
 
+# --- cloudflare ---------------------------------------------------------------
+# cf — Cloudflare's unified CLI. npm backend because the registry's `cf` is the
+# Cloud Foundry CLI, a different tool.
+"npm:cf" = "latest"
+
 # --- logs ---------------------------------------------------------------------
 # vlogscli — interactive LogsQL client for VictoriaLogs. Not in the registry; it
 # ships as `vlogscli-prod` inside the `vlutils` release archive (alongside
