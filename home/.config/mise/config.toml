@@ -179,7 +179,7 @@ k9s = "latest"
 kubectl = "1.36.4"
 usql = "latest"
 pre-commit = "latest"
-pi = "latest"
+pi = "1.1.0"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
