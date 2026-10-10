@@ -14,8 +14,8 @@ auto-reload-config = true
 after-startup-command = [
     'exec-and-forget sketchybar',
     # No per-workspace layout option exists; set the root container at startup.
-    'layout --workspace 2 --root accordion',
-    'layout --workspace 3 --root accordion',
+    'layout --workspace 2 --root v_accordion',
+    'layout --workspace 3 --root v_accordion',
 ]
 
 # Keep 1-9 alive when empty so the bar always shows the full number row.
@@ -108,7 +108,7 @@ run = 'move-node-to-workspace 4'
     alt-enter = 'exec-and-forget open -na Ghostty'
 
     alt-slash = 'layout tiles horizontal vertical'
-    alt-comma = 'layout accordion horizontal vertical'
+    alt-comma = 'layout v_accordion h_accordion'
     alt-f = 'fullscreen'
 
     alt-h = 'focus left'
