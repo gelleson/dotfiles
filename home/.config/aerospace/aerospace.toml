@@ -11,7 +11,12 @@ auto-reload-config = true
 
 # SketchyBar (home/.config/sketchybar) starts with AeroSpace rather than as a
 # brew service. It refuses to run twice, so an AeroSpace restart is harmless.
-after-startup-command = ['exec-and-forget sketchybar']
+after-startup-command = [
+    'exec-and-forget sketchybar',
+    # No per-workspace layout option exists; set the root container at startup.
+    'layout --workspace 2 --root accordion',
+    'layout --workspace 3 --root accordion',
+]
 
 # Keep 1-9 alive when empty so the bar always shows the full number row.
 persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
