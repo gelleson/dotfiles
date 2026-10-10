@@ -67,3 +67,6 @@ cask "tailscale-app"
 # inside Anki (Tools -> Add-ons), so a fresh machine needs that step plus one
 # AnkiWeb login.
 cask "anki"
+
+# Chrome: portal.imei.gov.kz / NCALayer login works more reliably than Safari with wss://127.0.0.1.
+cask "google-chrome"
