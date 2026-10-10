@@ -88,6 +88,14 @@ if.app-id = 'com.tdesktop.Telegram'
 run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
+if.app-id = 'com.apple.Music'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.TV'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
 if.app-id = 'com.aptakube.Aptakube'
 run = 'move-node-to-workspace 4'
 
