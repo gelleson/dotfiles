@@ -70,3 +70,7 @@ cask "anki"
 
 # Chrome: portal.imei.gov.kz / NCALayer login works more reliably than Safari with wss://127.0.0.1.
 cask "google-chrome"
+
+# Display tuning for the 4K Mi Monitor: HiDPI scaled modes, DDC brightness/
+# sharpness from the menu bar. Free tier covers it; Pro is paid.
+cask "betterdisplay"
