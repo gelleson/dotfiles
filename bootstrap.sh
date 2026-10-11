@@ -75,10 +75,12 @@ if [ "$(uname -s)" = "Darwin" ]; then
 fi
 
 # SketchyBar replaces the menu bar, so the real one always auto-hides. Takes
-# effect at the next login. The Dock auto-hides too.
+# effect at the next login. The Dock auto-hides too. Font smoothing off keeps
+# text crisp on the 4K Mi Monitor at the non-integer 2560x1440 scale.
 if [ "$(uname -s)" = "Darwin" ]; then
   defaults write NSGlobalDomain _HIHideMenuBar -bool true
   defaults write com.apple.dock autohide -bool true
+  defaults -currentHost write -g AppleFontSmoothing -int 0
 fi
 
 # --- tools ------------------------------------------------------------------
