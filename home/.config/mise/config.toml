@@ -182,6 +182,7 @@ pre-commit = "latest"
 pi = "1.1.0"
 ast-grep = "latest"
 terraform = "latest"
+"npm:agent-browser" = "latest"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
