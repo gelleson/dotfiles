@@ -11,3 +11,12 @@
 	diffFilter = delta --color-only
 [delta]
 	navigate = true
+
+# GitHub auth through gh (from mise). Plain `gh`, not an absolute path: the
+# path `gh auth setup-git` writes names the gh version and breaks on upgrade.
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
