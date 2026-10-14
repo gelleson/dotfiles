@@ -71,10 +71,12 @@ cask "anki"
 # Chrome: portal.imei.gov.kz / NCALayer login works more reliably than Safari with wss://127.0.0.1.
 cask "google-chrome"
 
-# Display tuning for the 4K Mi Monitor. Tuned to software contrast 0.1 (free
-# tier); the Pro sharpen filter was tried and looked worse. Settings live in the
-# app's own prefs, so a fresh machine needs:
-#   betterdisplaycli set --name="Mi Monitor" --contrast=0.1
+# Display tuning for the 4K Mi Monitor. HDR stays off: on this 400-nit panel it
+# greys out SDR blacks at 90-100% brightness. With HDR off, software contrast
+# stays at 0; the old +0.1 only made up for HDR and crushes shadows in SDR. The
+# Pro sharpen filter was tried and looked worse. Settings live in the app's own
+# prefs, so a fresh machine needs:
+#   betterdisplaycli set --name="Mi Monitor" --contrast=0 --hdr=off
 cask "betterdisplay"
 
 # Zed editor. Not in mise's registry. The cask also links the `zed` CLI into
