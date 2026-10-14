@@ -3,3 +3,11 @@
 [user]
 	name = gelleson
 	email = altynbek@higgsfield.ai
+
+# delta (from mise) renders diffs, log -p, show and blame; n/N jump between files.
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
