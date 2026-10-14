@@ -1,0 +1,14 @@
+// Zed settings. IntelliJ keymap; same JetBrains Mono Nerd Font as ghostty,
+// installed by `mise run fonts` in ~/.dotfiles.
+{
+  "base_keymap": "JetBrains",
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "cli_default_open_behavior": "new_window",
+  "ui_font_size": 16,
+  "buffer_font_size": 21,
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "One Dark",
+  },
+}
