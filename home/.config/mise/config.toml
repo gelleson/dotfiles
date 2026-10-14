@@ -184,6 +184,7 @@ ast-grep = "latest"
 terraform = "latest"
 "npm:agent-browser" = "latest"
 "aqua:planetscale/cli" = "latest"
+delta = "latest"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.

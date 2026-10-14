@@ -76,3 +76,7 @@ cask "google-chrome"
 # app's own prefs, so a fresh machine needs:
 #   betterdisplaycli set --name="Mi Monitor" --contrast=0.1
 cask "betterdisplay"
+
+# Zed editor. Not in mise's registry. The cask also links the `zed` CLI into
+# /opt/homebrew/bin and generates shell completions. Self-updates in place.
+cask "zed"
