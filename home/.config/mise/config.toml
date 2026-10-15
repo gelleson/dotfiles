@@ -69,6 +69,11 @@ herdr = "latest"
 # github: backend, and why the two can never both be installed under this name.
 "github:vercel-labs/fx" = "latest"
 
+# opencode v2 ships as @opencode/cli on npm. The registry's aqua backend
+# (anomalyco/opencode) is still the 1.x line, so name the backend explicitly.
+# Its postinstall copies the platform binary into bin/ — without it, no binary.
+"npm:@opencode/cli" = { version = "2", allow_builds = ["@opencode/cli"] }
+
 # --- http client --------------------------------------------------------------
 # HTTPie (`http` / `https`). The registry only has httpie-go and xh, neither of
 # which is the real thing, so it comes from PyPI via the pipx backend — which
