@@ -148,6 +148,24 @@ else
   say "skipping Homebrew (BREW=0)"
 fi
 
+# --- ssh --------------------------------------------------------------------
+# sshd (and mosh, which starts over it) only takes logins from the tailnet.
+# The drop-in lives in /etc, so it needs sudo — same terminal problem as
+# Homebrew above. Remote Login itself is a toggle under System Settings >
+# General > Sharing.
+SSHD_CONF=etc/ssh/sshd_config.d/010-tailnet-only.conf
+if [ "$(uname -s)" = "Darwin" ]; then
+  if cmp -s "$DOTFILES_DIR/$SSHD_CONF" "/$SSHD_CONF"; then
+    say "sshd already limited to the tailnet"
+  elif [ -t 0 ]; then
+    say "limiting sshd to the tailnet (needs sudo)"
+    sudo install -m 644 "$DOTFILES_DIR/$SSHD_CONF" "/$SSHD_CONF" || warn "sshd drop-in install failed"
+  else
+    warn "no terminal for sudo — limit sshd to the tailnet by hand:"
+    warn "  sudo install -m 644 $DOTFILES_DIR/$SSHD_CONF /$SSHD_CONF"
+  fi
+fi
+
 # --- github cli -------------------------------------------------------------
 # gh is declared in the mise config, so it exists by now unless TOOLS=0.
 # Auth is interactive and can't be automated: with `curl | sh`, stdin is the
