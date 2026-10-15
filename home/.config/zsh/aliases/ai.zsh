@@ -1,6 +1,18 @@
 # Claude Code, per model. The [1m] suffix selects the 1M-token context
 # variant; haiku has no 1m variant, so it's plain.
 if command -v claude >/dev/null 2>&1; then
+  # Every interactive session starts with Remote Control. --rc goes last: it
+  # takes an optional session name, so up front it would swallow a prompt.
+  # Subcommands reject it and -p has no session, so those skip it.
+  # ponytail: hardcoded subcommand list, re-sync from `claude --help` when one is added.
+  claude() {
+    if [[ ${1-} == (agents|attach|auth|auto-mode|doctor|gateway|import|install|logs|mcp|plugin|plugins|purge|respawn|rm|setup-token|stop|kill|ultrareview|update|upgrade) ]] ||
+       (( ${@[(I)(-p|--print)]} )); then
+      command claude "$@"
+    else
+      command claude "$@" --rc
+    fi
+  }
   alias op='claude --model "opus[1m]"'
   alias opus='claude --model "opus[1m]"'
   alias sonnet='claude --model "sonnet[1m]"'
