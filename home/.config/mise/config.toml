@@ -11,11 +11,11 @@ gh = "latest"
 # --- neovim + what the config at ~/.config/nvim needs to function -----------
 # https://github.com/gelleson/nvim — AstroNvim v5+, 20 language packs.
 neovim = "nightly"
-node = "26"            # most Mason-installed LSPs are npm packages
-ripgrep = "latest"     # telescope live_grep
-fd = "latest"          # telescope file finding
-lazygit = "latest"     # git UI, bound in AstroNvim
-tree-sitter = "latest" # parser CLI
+node = "26"                    # most Mason-installed LSPs are npm packages
+ripgrep = "latest"             # telescope live_grep
+fd = "latest"                  # telescope file finding
+lazygit = "latest"             # git UI, bound in AstroNvim
+tree-sitter = "latest"         # parser CLI
 lua-language-server = "latest"
 stylua = "latest"
 
@@ -33,7 +33,7 @@ go = "1.27.0"
 # gopls isn't in mise's registry; the go: backend builds it from source.
 "go:golang.org/x/tools/gopls" = "latest"
 python = "3.13"
-deno = "latest"   # pack.typescript-all-in-one + plugins/deno.lua
+deno = "latest"                          # pack.typescript-all-in-one + plugins/deno.lua
 java = "latest"
 zig = "latest"
 dart = "latest"
@@ -79,6 +79,11 @@ herdr = "latest"
 # which is the real thing, so it comes from PyPI via the pipx backend — which
 # runs on uv below, not the python above.
 "pipx:httpie" = "latest"
+
+# Omnigent: meta-harness over Claude Code / Codex / Pi (omnigent-ai/omnigent).
+# Its install_oss.sh is just `uv tool install "omnigent[databricks]"`; this is
+# that minus the Databricks extra. The npm package of the same name is unrelated.
+"pipx:omnigent" = "latest"
 
 # --- containers -------------------------------------------------------------
 # On macOS this is the CLI only. It still needs a Linux VM:
@@ -178,7 +183,9 @@ portless = "latest"
 # vlogscli — interactive LogsQL client for VictoriaLogs. Not in the registry; it
 # ships as `vlogscli-prod` inside the `vlutils` release archive (alongside
 # vlagent), so pick the non-enterprise archive, rename, and expose only it.
-"github:VictoriaMetrics/VictoriaLogs" = { version = "latest", matching_regex = '^vlutils-.*-v[0-9.]+\.tar\.gz$', rename_exe = { "vlogscli-prod" = "vlogscli" }, filter_bins = ["vlogscli"] }
+"github:VictoriaMetrics/VictoriaLogs" = { version = "latest", matching_regex = '^vlutils-.*-v[0-9.]+\.tar\.gz$', rename_exe = { "vlogscli-prod" = "vlogscli" }, filter_bins = [
+  "vlogscli",
+] }
 agy = "latest"
 k9s = "latest"
 kubectl = "1.36.4"
