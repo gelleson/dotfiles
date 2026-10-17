@@ -82,3 +82,9 @@ cask "betterdisplay"
 # Zed editor. Not in mise's registry. The cask also links the `zed` CLI into
 # /opt/homebrew/bin and generates shell completions. Self-updates in place.
 cask "zed"
+
+# Omnigent desktop app (omnigent-ai/omnigent). arm64 only; unversioned download,
+# so it self-updates. The CLI comes from mise (pipx:omnigent), not this tap's
+# formula, which has no bottles and compiles via rust+llvm.
+tap "omnigent-ai/tap"
+cask "omnigent-ai/tap/omnigent-desktop", trusted: true

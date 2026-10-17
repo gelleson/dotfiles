@@ -83,6 +83,8 @@ herdr = "latest"
 # Omnigent: meta-harness over Claude Code / Codex / Pi (omnigent-ai/omnigent).
 # Its install_oss.sh is just `uv tool install "omnigent[databricks]"`; this is
 # that minus the Databricks extra. The npm package of the same name is unrelated.
+# Not the tap's formula: it has no bottles and builds from source via rust+llvm.
+# The desktop app is a cask in the Brewfile.
 "pipx:omnigent" = "latest"
 
 # --- containers -------------------------------------------------------------
