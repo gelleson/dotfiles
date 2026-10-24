@@ -108,6 +108,26 @@ run = 'move-node-to-workspace 3'
 if.app-id = 'com.aptakube.Aptakube'
 run = 'move-node-to-workspace 4'
 
+[[on-window-detected]]
+if.app-id = 'com.sunsama.native-app'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.valvesoftware.steam'
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'games.mapc.app'
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.blobfishgames' # Brotato
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.cdprojektred.cyberpunk.steam'
+run = 'move-node-to-workspace 5'
+
 [mode.main.binding]
     alt-enter = 'exec-and-forget open -na Ghostty'
 
