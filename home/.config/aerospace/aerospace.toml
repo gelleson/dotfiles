@@ -113,7 +113,7 @@ if.app-id = 'com.sunsama.native-app'
 run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
-if.app-id = 'com.valvesoftware.steam'
+if.app-id = 'com.valvesoftware.steam.helper' # Steam's windows belong to its helper
 run = 'move-node-to-workspace 5'
 
 [[on-window-detected]]
