@@ -21,10 +21,13 @@ after-startup-command = [
 # Keep 1-9 alive when empty so the bar always shows the full number row.
 persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-# Tell the bar which workspace key to press down.
-exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-]
+# Tell the bar which workspace key to press down. AeroSpace has no sticky
+# windows, so Sunsama's Focus Bar timer is carried to each workspace instead.
+exec-on-workspace-change = ['/bin/bash', '-c', '''
+    sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE
+    id=$(aerospace list-windows --all --format '%{window-id}|%{window-title}' | awk -F'|' '$2 == "Sunsama Focus Bar" {print $1}')
+    [ -n "$id" ] && aerospace move-node-to-workspace --window-id "$id" "$AEROSPACE_FOCUSED_WORKSPACE"
+''']
 
 # Moving or closing a window shifts focus without changing workspace; refresh
 # the bar too so empty workspaces drop out of the number row.
@@ -107,6 +110,13 @@ run = 'move-node-to-workspace 3'
 [[on-window-detected]]
 if.app-id = 'com.aptakube.Aptakube'
 run = 'move-node-to-workspace 4'
+
+# Only the first matching rule runs, so this keeps the Focus Bar timer out of
+# the Sunsama rule below; exec-on-workspace-change carries it around instead.
+[[on-window-detected]]
+if.app-id = 'com.sunsama.native-app'
+if.window-title-regex-substring = 'Focus Bar'
+run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.sunsama.native-app'
