@@ -77,10 +77,19 @@ fi
 # SketchyBar replaces the menu bar, so the real one always auto-hides. Takes
 # effect at the next login. The Dock auto-hides too. Font smoothing off keeps
 # text crisp on the 4K Mi Monitor at the non-integer 2560x1440 scale.
+# Two AeroSpace tips: grouping windows by app keeps Mission Control readable
+# despite the windows AeroSpace parks in a screen corner, and ctrl-cmd-drag
+# moves a window by any part of it (apps pick that up when relaunched).
+# Documents always open as tabs (Desktop & Dock → Prefer tabs: Always), which
+# Zed's use_system_window_tabs relies on.
 if [ "$(uname -s)" = "Darwin" ]; then
+  defaults write -g AppleWindowTabbingMode -string always
   defaults write NSGlobalDomain _HIHideMenuBar -bool true
   defaults write com.apple.dock autohide -bool true
   defaults -currentHost write -g AppleFontSmoothing -int 0
+  defaults write com.apple.dock expose-group-apps -bool true
+  defaults write -g NSWindowShouldDragOnGesture -bool true
+  killall Dock 2>/dev/null || true
 fi
 
 # --- tools ------------------------------------------------------------------
