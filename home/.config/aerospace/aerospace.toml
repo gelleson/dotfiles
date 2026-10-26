@@ -23,10 +23,13 @@ persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 # Tell the bar which workspace key to press down. AeroSpace has no sticky
 # windows, so Sunsama's Focus Bar timer is carried to each workspace instead.
+# Workspace 5 is for games, so it drops into game mode (see mode.game).
 exec-on-workspace-change = ['/bin/bash', '-c', '''
     sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE
     id=$(aerospace list-windows --all --format '%{window-id}|%{window-title}' | awk -F'|' '$2 == "Sunsama Focus Bar" {print $1}')
     [ -n "$id" ] && aerospace move-node-to-workspace --window-id "$id" "$AEROSPACE_FOCUSED_WORKSPACE"
+    if [ "$AEROSPACE_FOCUSED_WORKSPACE" = 5 ]; then aerospace mode game; else aerospace mode main; fi
+    sketchybar --trigger aerospace_mode_change
 ''']
 
 # Moving or closing a window shifts focus without changing workspace; refresh
@@ -58,15 +61,16 @@ gaps.outer.bottom =     8
 gaps.outer.top =        [{ monitor.'Built-in' = 8 }, 40]
 gaps.outer.right =      8
 
-# The coding workspace lives on the Studio Display. If that monitor is absent
-# AeroSpace falls back to the main one, so an undocked laptop still works.
+# The coding workspace lives on the big external screen: the first of these
+# that is connected wins. With neither, AeroSpace falls back to the main
+# monitor, so an undocked laptop still works.
 [workspace-to-monitor-force-assignment]
-2 = 'Studio Display'
+2 = ['Studio Display', 'Mi Monitor']
 
-# Fixed homes: 1 browser, 2 coding, 3 chat, 4 Kubernetes. Each app lands there
-# regardless of which workspace is focused. app-id is an exact match, so each
-# app needs its own block — `aerospace list-windows --all --format
-# '%{app-bundle-id}'` prints the id of anything currently open.
+# Fixed homes: 1 browser, 2 coding, 3 media, 4 planning, 5 games.
+# Each app lands there regardless of which workspace is focused. app-id is an
+# exact match, so each app needs its own block — `aerospace list-windows --all
+# --format '%{app-bundle-id}'` prints the id of anything currently open.
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
 run = 'move-node-to-workspace 1'
@@ -88,16 +92,20 @@ if.app-id = 'dev.kdrag0n.MacVirt' # OrbStack
 run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
 if.app-id = 'ai.omnigent.desktop'
 run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace 3'
+if.app-id = 'dev.zed.Zed'
+run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
-if.app-id = 'com.tdesktop.Telegram'
-run = 'move-node-to-workspace 3'
+if.app-id = 'com.openai.codex' # ChatGPT
+run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Music'
@@ -108,7 +116,15 @@ if.app-id = 'com.apple.TV'
 run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
-if.app-id = 'com.aptakube.Aptakube'
+if.app-id = 'com.granola.app'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal' # Calendar
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
 run = 'move-node-to-workspace 4'
 
 # Only the first matching rule runs, so this keeps the Focus Bar timer out of
@@ -138,6 +154,36 @@ run = 'move-node-to-workspace 5'
 if.app-id = 'com.cdprojektred.cyberpunk.steam'
 run = 'move-node-to-workspace 5'
 
+# Settings and utility windows float where they open instead of being tiled.
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'org.keepassxc.keepassxc'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'ch.protonvpn.mac'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'io.tailscale.ipn.macsys'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'pro.betterdisplay.BetterDisplay'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.logi.optionsplus'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+if.window-title-regex-substring = ' Info$' # Get Info
+run = 'layout floating'
+
 [mode.main.binding]
     alt-enter = 'exec-and-forget open -na Ghostty'
 
@@ -157,6 +203,16 @@ run = 'move-node-to-workspace 5'
 
     alt-minus = 'resize smart -50'
     alt-equal = 'resize smart +50'
+    alt-r = 'mode resize'
+
+    # Open the app, or jump to its workspace if it is already running.
+    alt-b = 'exec-and-forget open -a Arc'
+    alt-t = 'exec-and-forget open -a Ghostty'
+    alt-w = 'exec-and-forget open -a Warp'
+    alt-s = 'exec-and-forget open -a Sunsama'
+    alt-e = 'exec-and-forget open -a Zed'
+    alt-o = 'exec-and-forget open -a Obsidian'
+    alt-c = 'exec-and-forget open -a Calendar'
 
     alt-1 = 'workspace 1'
     alt-2 = 'workspace 2'
@@ -178,6 +234,17 @@ run = 'move-node-to-workspace 5'
     alt-shift-8 = 'move-node-to-workspace 8'
     alt-shift-9 = 'move-node-to-workspace 9'
 
+    # Pull a workspace onto the focused monitor instead of jumping to its own.
+    ctrl-alt-1 = 'summon-workspace 1'
+    ctrl-alt-2 = 'summon-workspace 2'
+    ctrl-alt-3 = 'summon-workspace 3'
+    ctrl-alt-4 = 'summon-workspace 4'
+    ctrl-alt-5 = 'summon-workspace 5'
+    ctrl-alt-6 = 'summon-workspace 6'
+    ctrl-alt-7 = 'summon-workspace 7'
+    ctrl-alt-8 = 'summon-workspace 8'
+    ctrl-alt-9 = 'summon-workspace 9'
+
     alt-tab = 'workspace-back-and-forth'
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
@@ -195,3 +262,19 @@ run = 'move-node-to-workspace 5'
     alt-shift-j = ['join-with down', 'mode main']
     alt-shift-k = ['join-with up', 'mode main']
     alt-shift-l = ['join-with right', 'mode main']
+
+# Resize mode: alt-r, then h/l for width and k/j for height; esc or enter
+# returns to main mode.
+[mode.resize.binding]
+    h = 'resize width -50'
+    l = 'resize width +50'
+    k = 'resize height -50'
+    j = 'resize height +50'
+    esc = 'mode main'
+    enter = 'mode main'
+
+# Game mode: entered automatically on workspace 5 (exec-on-workspace-change)
+# so games get every alt chord. alt-shift-; is the only binding, back to main.
+# Entering and leaving both tell the bar, whose esc key shows the mode.
+[mode.game.binding]
+    alt-shift-semicolon = ['mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
