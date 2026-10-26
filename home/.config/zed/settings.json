@@ -1,14 +1,36 @@
 // Zed settings. IntelliJ keymap; same JetBrains Mono Nerd Font as ghostty,
 // installed by `mise run fonts` in ~/.dotfiles.
 {
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    }
+  },
+  // Title-bar menu → Panel Layout → Agentic is just these four dock sides.
+  "agent": {
+    "dock": "left"
+  },
+  "project_panel": {
+    "dock": "right"
+  },
+  "outline_panel": {
+    "dock": "right"
+  },
+  "git_panel": {
+    "dock": "right"
+  },
   "base_keymap": "JetBrains",
   "buffer_font_family": "JetBrainsMono Nerd Font Mono",
   "cli_default_open_behavior": "new_window",
-  "ui_font_size": 16,
+  "use_system_window_tabs": true,
+  "ui_font_size": 21,
   "buffer_font_size": 21,
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "One Dark",
+    "dark": "Ayu Dark",
   },
 }
