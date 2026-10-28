@@ -1,0 +1,17 @@
+// Zed global tasks (task: spawn). keymap.json binds them to keys.
+[
+  {
+    // Every test in the current file: pytest in Zed's selected Python env for
+    // .py, `go test -race` on the file's package for .go, the project's own
+    // `npm test` script for anything else.
+    "label": "test file",
+    "command": "case \"$ZED_FILE\" in *.py) \"${ZED_CUSTOM_PYTHON_ACTIVE_ZED_TOOLCHAIN:python3}\" -m pytest \"$ZED_RELATIVE_FILE\" ;; *.go) cd \"$ZED_DIRNAME\" && go test -race . ;; *) npm test -- \"$ZED_RELATIVE_FILE\" ;; esac"
+  },
+  {
+    // The same file's tests, rerun whenever a .py file in the project (or a
+    // .go file in the package) is saved (watchexec, from mise); vitest/jest
+    // bring their own --watch.
+    "label": "watch tests",
+    "command": "case \"$ZED_FILE\" in *.py) watchexec --clear --restart -e py -- \"${ZED_CUSTOM_PYTHON_ACTIVE_ZED_TOOLCHAIN:python3}\" -m pytest \"$ZED_RELATIVE_FILE\" ;; *.go) cd \"$ZED_DIRNAME\" && watchexec --clear --restart -e go -- go test -race . ;; *) npm test -- --watch \"$ZED_RELATIVE_FILE\" ;; esac"
+  }
+]
