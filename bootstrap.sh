@@ -157,6 +157,19 @@ else
   say "skipping Homebrew (BREW=0)"
 fi
 
+# --- herdr ------------------------------------------------------------------
+# The Herdr app ships only as its own installer: no cask, no mise entry. It
+# verifies the download, installs herdr-core beside it, and from then on keeps
+# both current itself, so this only runs when the app is missing.
+if [ "$(uname -s)" = "Darwin" ]; then
+  if [ -d /Applications/Herdr.app ] || [ -d "$HOME/Applications/Herdr.app" ]; then
+    say "Herdr already installed"
+  else
+    say "installing Herdr"
+    curl -fsSL https://releases.herdr.dev/app/install.sh | sh || warn "Herdr install failed"
+  fi
+fi
+
 # --- ssh --------------------------------------------------------------------
 # sshd (and mosh, which starts over it) only takes logins from the tailnet.
 # The drop-in lives in /etc, so it needs sudo — same terminal problem as

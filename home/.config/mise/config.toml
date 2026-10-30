@@ -58,11 +58,6 @@ helm = "latest"
 # .php LSPs all ride on node above.
 
 # --- agent tooling ----------------------------------------------------------
-# Background terminal server for coding agents: persistent panes that survive
-# disconnects, per-pane working/blocked/idle status, socket API. Single Rust
-# binary. Pairs with the opencode/sidekick plugins in the nvim config.
-herdr = "latest"
-
 # fx (vercel-labs) — a coding agent that is a harness first: single Zig binary,
 # `fx ask --json` for structured output, `fx acp` to drive it from an editor.
 # NOT the registry's `fx`, which is antonmedv's JSON viewer — hence the explicit
