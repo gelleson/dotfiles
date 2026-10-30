@@ -1,0 +1,70 @@
+#!/usr/bin/env zsh
+# Open a repo as a Rex session whose `grid` tab has one pane per worktree,
+# each running claude (a shell stays behind when it exits). With no argument,
+# fuzzy-pick a repo under ~/codes/namespaces; `rex-grid .` uses the current
+# one. If the repo's session is already open, just show it.
+
+setopt null_glob
+# Scripts get /etc/zshenv's PATH, not .zprofile's, so the shims go on by hand.
+path=($HOME/.local/share/mise/shims $path)
+
+if [[ -n $1 ]]; then
+  dir=${1:A}
+else
+  root=~/codes/namespaces
+  # Repos sit at <namespace>/<repo> or <namespace>/<group>/<repo>.
+  repos=(${root}/*/*/.git(N:h) ${root}/*/*/*/.git(N:h))
+  sel=$(print -l ${repos#$root/} | sort | fzf --prompt='project ▸ ' --height=100% --border) || exit
+  dir=$root/$sel
+fi
+
+# One "path<TAB>branch" per worktree, main first. Claude's own agent
+# worktrees and prunable ones are left out.
+wts=("${(@f)$(git -C $dir worktree list --porcelain | awk '
+  /^worktree /  { p = substr($0, 10); b = "detached"; skip = (p ~ /\/\.claude\/worktrees\//) }
+  /^branch /    { b = substr($0, 19) }
+  /^prunable/   { skip = 1 }
+  /^$/          { if (p != "" && !skip) print p "\t" b; p = "" }
+  END           { if (p != "" && !skip) print p "\t" b }')}")
+[[ -n $wts[1] ]] || { print -u2 "rex-grid: $dir is not a git repo"; exit 1 }
+name=${${wts[1]%%$'\t'*}:t}
+
+sid=$(rex ls --json | jq -r --arg n $name 'first(.sessions[] | select(.label == $n) | .session_id) // empty')
+if [[ -n $sid ]]; then
+  rex do session.select session_id=$sid
+  exit
+fi
+
+cmd=(zsh -c 'claude; exec zsh')
+
+# cell INDEX ANCHOR DIRECTION RATIO — open worktree INDEX beside ANCHOR, print its block ID.
+cell() {
+  rex split -s $sid -b $2 --split=$3 --ratio $4 --focus=false --json \
+    --label ${wts[$1]#*$'\t'} -c ${wts[$1]%%$'\t'*} -- $cmd | jq -r '.block_ids[0]'
+}
+
+n=$#wts
+cols=1; while (( cols * cols < n )); do (( cols++ )); done
+rows=$(( (n + cols - 1) / cols ))
+
+created=$(rex new $name --window grid -c ${wts[1]%%$'\t'*} --json -- $cmd) || exit
+sid=$(jq -r '.session_id' <<<$created)
+first=$(jq -r '.initial_windows[0].block_ids[0]' <<<$created)
+rex block rename -s $sid $first ${wts[1]#*$'\t'}
+
+# Stack the rows first, then fill each row left to right. The ratios give every
+# row, and every cell within a row, an equal share; a short last row stretches.
+row_first=($first)
+for (( i = 2; i <= rows; i++ )); do
+  row_first[i]=$(cell $(( (i - 1) * cols + 1 )) $row_first[i-1] below $(( 100 * (rows - i + 1) / (rows - i + 2) )))
+done
+for (( i = 1; i <= rows; i++ )); do
+  k=$(( (i - 1) * cols + 1 ))
+  cnt=$(( n - k + 1 < cols ? n - k + 1 : cols ))
+  prev=$row_first[i]
+  for (( j = 2; j <= cnt; j++ )); do
+    prev=$(cell $(( k + j - 1 )) $prev right $(( 100 * (cnt - j + 1) / (cnt - j + 2) )))
+  done
+done
+
+rex do session.select session_id=$sid
