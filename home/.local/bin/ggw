@@ -1,0 +1,45 @@
+#!/usr/bin/env zsh
+# ggw <name>   Go to the worktree for branch <name>, creating it if needed: from
+#              the local branch, else origin/<name>, else new off HEAD. New ones
+#              go in .<repo>-worktrees/ beside the main checkout.
+# ggw --sync   Rebase the current branch onto its same-named branch on origin.
+#
+# Prints the directory to go to on stdout, and everything else on stderr. The
+# ggw function in aliases/git.zsh does the cd, which a script can't do for its
+# caller.
+
+case $1 in
+  --sync)
+    branch=$(git branch --show-current) || exit
+    [[ -n $branch ]] || { print -u2 "ggw: not on a branch"; exit 1 }
+    exec git pull --rebase --autostash origin $branch >&2
+    ;;
+  ""|-*)
+    print -u2 "usage: ggw <name> | ggw --sync"
+    exit 2
+    ;;
+esac
+
+name=$1
+wts=$(git worktree list --porcelain) || exit
+
+existing=$(awk -v want="branch refs/heads/$name" '
+  /^worktree / { p = substr($0, 10) }
+  $0 == want   { print p; exit }' <<<$wts)
+if [[ -n $existing ]]; then
+  print -r -- $existing
+  exit
+fi
+
+main=${${(f)wts}[1]#worktree }
+dir=${main:h}/.${main:t}-worktrees/${name//\//-}
+
+git fetch -q origin $name 2>/dev/null
+if git show-ref -q --verify refs/heads/$name; then
+  git worktree add $dir $name >&2
+elif git show-ref -q --verify refs/remotes/origin/$name; then
+  git worktree add --track -b $name $dir origin/$name >&2
+else
+  git worktree add -b $name $dir >&2
+fi || exit
+print -r -- $dir

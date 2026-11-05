@@ -12,6 +12,13 @@ alias gco='git checkout'
 alias gb='git branch'
 command -v lazygit >/dev/null 2>&1 && alias lg=lazygit
 
+# ggw — add or go to a worktree, or sync it. See ~/.local/bin/ggw.
+ggw() {
+  local dir
+  dir=$(command ggw "$@") || return
+  [[ -z $dir ]] || cd "$dir"
+}
+
 # gh — more aliases live in .config/gh/config.yml (gh's own alias system,
 # which works everywhere, not just interactive zsh).
 if command -v gh >/dev/null 2>&1; then
