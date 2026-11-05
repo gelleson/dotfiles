@@ -110,6 +110,10 @@ than discovered halfway through.
 Adding a dotfile: move it under `home/` at its `$HOME`-relative path, then
 `mise run link`.
 
+Herdr mod folders are linked as whole directories so their local JavaScript
+imports resolve correctly. The Office layout and its bundled pixel font live
+under `home/.config/herdr-app/`.
+
 Note that `link` only ever adds symlinks — it never removes one whose source has
 been deleted from `home/`. If you drop a file from the repo, delete its symlink
 in `$HOME` by hand.
