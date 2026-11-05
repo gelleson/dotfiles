@@ -89,6 +89,8 @@ if [ "$(uname -s)" = "Darwin" ]; then
   defaults -currentHost write -g AppleFontSmoothing -int 0
   defaults write com.apple.dock expose-group-apps -bool true
   defaults write -g NSWindowShouldDragOnGesture -bool true
+  defaults write com.superlogical.rex Workspace.terminalFontName -string "JetBrainsMono Nerd Font Mono"
+  defaults write com.superlogical.rex Workspace.terminalFontPointSize -float 21
   killall Dock 2>/dev/null || true
 fi
 
