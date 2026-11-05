@@ -1,6 +1,12 @@
 // Zed settings. IntelliJ keymap; same JetBrains Mono Nerd Font as ghostty,
 // installed by `mise run fonts` in ~/.dotfiles.
 {
+  "vim_mode": true,
+  // Save on leaving a buffer (another tab, pane, terminal or app), so no :w.
+  "autosave": "on_focus_change",
+  "vim": {
+    "toggle_relative_line_numbers": true
+  },
   "agent_servers": {
     "codex-acp": {
       "type": "registry"
@@ -31,6 +37,6 @@
   "theme": {
     "mode": "dark",
     "light": "One Light",
-    "dark": "Ayu Dark",
+    "dark": "JetBrains Islands Dark",
   },
 }

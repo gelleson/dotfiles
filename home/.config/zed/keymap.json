@@ -1,0 +1,45 @@
+// Zed keybindings, layered on the JetBrains base keymap and vim mode.
+[
+  {
+    // Tests from vim normal mode: nearest under the cursor, the whole file
+    // once or on every save (tasks.json), rerun, pick any.
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      "space t t": "editor::SpawnNearestTask",
+      "space t f": ["task::Spawn", { "task_name": "test file" }],
+      "space t w": ["task::Spawn", { "task_name": "watch tests" }],
+      "space t r": "task::Rerun",
+      "space t a": "task::Spawn",
+      "space t h": "workspace::ToggleBottomDock",
+      // Down into the terminal panel (opening it if hidden); cmd-escape back.
+      "space j": "terminal_panel::ToggleFocus",
+      // Open a file, switch between open buffers (helix's leader keys).
+      "space f": "file_finder::Toggle",
+      "space b": "tab_switcher::Toggle",
+      // Project files panel: open it with focus, or jump back if it has focus.
+      "space e": "project_panel::ToggleFocus",
+      // Vim-style moves between panes, as Zed gives its helix mode.
+      "space w h": "workspace::ActivatePaneLeft",
+      "space w j": "workspace::ActivatePaneDown",
+      "space w k": "workspace::ActivatePaneUp",
+      "space w l": "workspace::ActivatePaneRight"
+    }
+  },
+  {
+    // From the test terminal: cmd-escape back to the editor, shift-escape
+    // hides the bottom dock (JetBrains' "hide tool window"), cmd-shift-enter
+    // zooms it to the whole window and back.
+    "context": "Terminal",
+    "bindings": {
+      "cmd-escape": "workspace::FocusCenterPane",
+      "shift-escape": "workspace::ToggleBottomDock",
+      "cmd-shift-enter": "workspace::ToggleZoom",
+      // Tab switching, bound in the terminal itself: the generic Pane
+      // binding for cmd-{ / cmd-} did not fire here.
+      "cmd-{": "pane::ActivatePreviousItem",
+      "cmd-}": "pane::ActivateNextItem",
+      "alt-cmd-left": "pane::ActivatePreviousItem",
+      "alt-cmd-right": "pane::ActivateNextItem"
+    }
+  }
+]
