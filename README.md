@@ -282,8 +282,10 @@ no shell config.
 `brew bundle` taps before it installs). It starts at login and auto-reloads
 `home/.config/aerospace/aerospace.toml` on save; `aerospace reload-config
 --dry-run` validates without applying. Bindings are alt-based and i3-shaped:
-`alt-h/j/k/l` to focus, add shift to move, `alt-1`..`alt-9` for workspaces,
-`alt-enter` for a new Ghostty window, and `alt-shift-;` for a one-shot service
+`alt-left/j/k/l` to focus, `alt-shift-h/j/k/l` to move, and
+`alt-1`..`alt-9` for workspaces. `alt-g` opens Ghostty, `alt-h` opens Herdr,
+`alt-r` opens Rex Beta, `alt-shift-r` enters resize mode,
+`alt-enter` opens a new Ghostty window, and `alt-shift-;` opens a one-shot service
 mode (`esc` reloads, `r` resets the layout, `f` toggles floating).
 
 Apps have fixed homes, set by `on-window-detected` rules that fire whatever

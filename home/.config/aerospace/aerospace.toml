@@ -195,7 +195,7 @@ run = 'layout floating'
     alt-comma = 'layout v_accordion h_accordion'
     alt-f = 'fullscreen'
 
-    alt-h = 'focus left'
+    alt-left = 'focus left'
     alt-j = 'focus down'
     alt-k = 'focus up'
     alt-l = 'focus right'
@@ -207,10 +207,13 @@ run = 'layout floating'
 
     alt-minus = 'resize smart -50'
     alt-equal = 'resize smart +50'
-    alt-r = 'mode resize'
+    alt-shift-r = 'mode resize'
 
     # Open the app, or jump to its workspace if it is already running.
     alt-b = 'exec-and-forget open -a Arc'
+    alt-g = 'exec-and-forget open -a Ghostty'
+    alt-h = 'exec-and-forget open -a Herdr'
+    alt-r = 'exec-and-forget open -a "Rex Beta"'
     alt-t = 'exec-and-forget open -a Ghostty'
     alt-w = 'exec-and-forget open -a Warp'
     alt-s = 'exec-and-forget open -a Sunsama'
@@ -267,7 +270,7 @@ run = 'layout floating'
     alt-shift-k = ['join-with up', 'mode main']
     alt-shift-l = ['join-with right', 'mode main']
 
-# Resize mode: alt-r, then h/l for width and k/j for height; esc or enter
+# Resize mode: alt-shift-r, then h/l for width and k/j for height; esc or enter
 # returns to main mode.
 [mode.resize.binding]
     h = 'resize width -50'
