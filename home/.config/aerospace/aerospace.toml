@@ -14,7 +14,7 @@ auto-reload-config = true
 after-startup-command = [
     'exec-and-forget sketchybar',
     # No per-workspace layout option exists; set the root container at startup.
-    'layout --workspace 2 --root v_accordion',
+    'layout --workspace 2 --root tiles',
     'layout --workspace 3 --root v_accordion',
 ]
 
@@ -109,6 +109,10 @@ run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
 if.app-id = 'com.openai.codex' # ChatGPT
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.t3tools.t3code' # T3 Code (Nightly)
 run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
