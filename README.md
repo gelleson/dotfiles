@@ -297,6 +297,9 @@ exact match, so one block per app; `aerospace list-windows --all --format
 '%{app-bundle-id}'` prints the id of anything already open. The rules only fire
 on newly detected windows, so windows open before a reload stay put.
 
+ChatGPT's Settings and windows already recognized as floating stay on the
+workspace where they open; its main tiled windows still go to workspace 2.
+
 A fresh
 machine needs one **Accessibility** grant in System Settings > Privacy &
 Security before it can move any windows.

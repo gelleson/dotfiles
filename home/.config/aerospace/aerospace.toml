@@ -108,6 +108,10 @@ if.app-id = 'dev.zed.Zed'
 run = 'move-node-to-workspace 2'
 
 [[on-window-detected]]
+if = 'test %{app-bundle-id} = com.openai.codex && (test %{window-layout} = floating || test %{window-title} = Settings)'
+run = 'layout floating'
+
+[[on-window-detected]]
 if.app-id = 'com.openai.codex' # ChatGPT
 run = 'move-node-to-workspace 2'
 
