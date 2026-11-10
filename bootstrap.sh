@@ -91,6 +91,8 @@ if [ "$(uname -s)" = "Darwin" ]; then
   defaults write -g NSWindowShouldDragOnGesture -bool true
   defaults write com.superlogical.rex Workspace.terminalFontName -string "JetBrainsMono Nerd Font Mono"
   defaults write com.superlogical.rex Workspace.terminalFontPointSize -float 25
+  # NeoRex needs sidebars to retain the widths Neovim requests.
+  defaults write com.superlogical.rex Workspace.balancesSplitsOnCreation -bool false
   killall Dock 2>/dev/null || true
 fi
 

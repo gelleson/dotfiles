@@ -118,6 +118,18 @@ Note that `link` only ever adds symlinks — it never removes one whose source h
 been deleted from `home/`. If you drop a file from the repo, delete its symlink
 in `$HOME` by hand.
 
+## Neovim and NeoRex
+
+Neovim nightly runs the AstroNvim config from `gelleson/nvim`.
+[NeoRex](https://github.com/alexrlocke/neorex) uses that same config inside
+Rex: run `neorex` or `neorex path/to/file` in a Rex terminal.
+
+NeoRex has no published releases yet, so mise builds a pinned,
+checksum-verified source snapshot using Zig. Install it with
+`mise install http:neorex`. Bootstrap disables Rex's **Autobalance splits**
+setting so sidebars keep their requested widths. NeoRex is experimental:
+window placement and Neovim window resize/move commands have limitations.
+
 ## gh
 
 `gh` is declared in the mise config, and `.config/gh/config.yml` is tracked —

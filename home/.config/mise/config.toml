@@ -11,6 +11,9 @@ gh = "latest"
 # --- neovim + what the config at ~/.config/nvim needs to function -----------
 # https://github.com/gelleson/nvim — AstroNvim v5+, 20 language packs.
 neovim = "nightly"
+# NeoRex uses the existing AstroNvim config inside Rex. No releases yet, so
+# build a checksum-verified source snapshot; switch to github: when published.
+"http:neorex" = { version = "7a0789f68ea5592daf9c8961c8b32d6e5bd0299f", url = "https://codeload.github.com/alexrlocke/neorex/tar.gz/{{ version }}", checksum = "sha256:cbc569665568a21fbe9b29c9eb222a70674d018eb0018abce4fd2b47dbae201b", format = "tar.gz", strip_components = 1, bin_path = "bin", depends = ["zig"], postinstall = 'cd "$MISE_TOOL_INSTALL_PATH" && zig build -Doptimize=ReleaseSafe -Dstrip --prefix .' }
 node = "26"                    # most Mason-installed LSPs are npm packages
 ripgrep = "latest"             # telescope live_grep
 fd = "latest"                  # telescope file finding
