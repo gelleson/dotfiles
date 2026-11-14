@@ -26,13 +26,19 @@ func line(_ ctx: CGContext, _ x1: CGFloat, _ y1: CGFloat, _ x2: CGFloat, _ y2: C
 func dot(_ ctx: CGContext, _ x: CGFloat, _ y: CGFloat, _ r: CGFloat, _ color: CGColor) {
   ctx.setFillColor(color); ctx.fillEllipse(in: CGRect(x: x - r, y: y - r, width: 2 * r, height: 2 * r))
 }
-func label(_ text: String, _ x: CGFloat, _ y: CGFloat, _ color: UInt32) {
+func label(_ text: String, _ x: CGFloat, _ y: CGFloat, _ color: UInt32, rotation: CGFloat = 0) {
   let attributes: [NSAttributedString.Key: Any] = [
     .font: NSFont.monospacedSystemFont(ofSize: 20, weight: .regular),
     .foregroundColor: NSColor(cgColor: rgb(color, 0.65))!,
   ]
   let size = (text as NSString).size(withAttributes: attributes)
-  (text as NSString).draw(at: CGPoint(x: x - size.width / 2, y: y - size.height / 2), withAttributes: attributes)
+  let ctx = NSGraphicsContext.current!.cgContext
+  ctx.saveGState()
+  ctx.translateBy(x: x, y: y); ctx.rotate(by: rotation)
+  let frame = CGRect(x: -size.width / 2, y: -size.height / 2, width: size.width, height: size.height)
+  assert(CGRect(x: 0, y: 0, width: W, height: H).contains(ctx.convertToDeviceSpace(frame)))
+  (text as NSString).draw(at: CGPoint(x: -size.width / 2, y: -size.height / 2), withAttributes: attributes)
+  ctx.restoreGState()
 }
 
 let glyphs: [Character: [String]] = [
@@ -61,23 +67,31 @@ let palettes: [(String, String, UInt32, UInt32, [UInt32])] = [
 for (name, title, base, ink, accents) in palettes {
   render(name) { ctx in
     ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
+    ctx.setLineCap(name == "node" ? .round : .butt)
+    ctx.setLineDash(phase: 0, lengths: name == "node" ? [0, 12] : name == "kick" ? [18, 6] : [])
 
     // Half-unit subdivisions, with a heavier line every five units.
     for vertical in [true, false] {
       let count = Int((vertical ? mat.width : mat.height) / (unit / 2))
       for i in 0...count {
         let major = i % 10 == 0, whole = i % 2 == 0
-        ctx.setStrokeColor(rgb(ink, major ? 0.32 : whole ? 0.16 : 0.07))
-        ctx.setLineWidth(major ? 1.5 : 1)
+        let color = major && name != "builtin" ? accents[(i / 10) % accents.count] : ink
+        ctx.setStrokeColor(rgb(color, major ? 0.38 : whole ? 0.16 : 0.07))
+        ctx.setLineWidth(name == "builtin" ? (major ? 1.5 : 1) : (major ? 6 : whole ? 2.5 : 1.5))
         let offset = CGFloat(i) * unit / 2
         if vertical {
           line(ctx, mat.minX + offset, mat.minY, mat.minX + offset, mat.maxY)
         } else {
           line(ctx, mat.minX, mat.minY + offset, mat.maxX, mat.minY + offset)
         }
+        if name == "kick" && major {
+          for along in stride(from: CGFloat(9), to: vertical ? mat.height : mat.width, by: 24) {
+            dot(ctx, mat.minX + (vertical ? offset : along), mat.minY + (vertical ? along : offset), 1.5, rgb(0xffffff, 0.16))
+          }
+        }
       }
     }
-    ctx.setStrokeColor(rgb(ink, 0.45)); ctx.setLineWidth(2); ctx.stroke(mat)
+    ctx.setStrokeColor(rgb(ink, 0.45)); ctx.setLineWidth(name == "builtin" ? 2 : 4); ctx.stroke(mat)
 
     // Rulers remain inside the 16:9 crop, including their labels.
     for i in 0...50 {
@@ -95,9 +109,9 @@ for (name, title, base, ink, accents) in palettes {
       if i % 5 == 0 { label(String(i), mat.minX - 44, y, ink) }
     }
 
-    // A quarter protractor and the usual cutting angles, away from the title.
-    let cx = mat.minX + 5 * unit, cy = mat.maxY - 4 * unit
-    ctx.setStrokeColor(rgb(ink, 0.26)); ctx.setLineWidth(1.5)
+    // Measure from the mat's bottom-left corner, with text aligned to each ray.
+    let cx = mat.minX, cy = mat.maxY
+    ctx.setStrokeColor(rgb(ink, 0.26)); ctx.setLineWidth(name == "builtin" ? 1.5 : 3)
     for radius in [2 * unit, 3 * unit, 4 * unit] {
       ctx.addArc(center: CGPoint(x: cx, y: cy), radius: radius, startAngle: -.pi / 2, endAngle: 0, clockwise: false)
       ctx.strokePath()
@@ -107,10 +121,12 @@ for (name, title, base, ink, accents) in palettes {
       let inner = 4 * unit - (degrees % 15 == 0 ? 18 : 8)
       line(ctx, cx + inner * cos(angle), cy - inner * sin(angle), cx + 4 * unit * cos(angle), cy - 4 * unit * sin(angle))
     }
-    for degrees in [30, 45, 60] {
-      let angle = CGFloat(degrees) * .pi / 180, length = 8 * unit
+    for (i, degrees) in [30, 45, 60].enumerated() {
+      let angle = CGFloat(degrees) * .pi / 180, length = 12 * unit
+      let color = name == "builtin" ? ink : accents[i % accents.count]
+      ctx.setStrokeColor(rgb(color, 0.65))
       line(ctx, cx, cy, cx + length * cos(angle), cy - length * sin(angle))
-      label("\(degrees)°", cx + (length + 36) * cos(angle), cy - (length + 36) * sin(angle), ink)
+      label("\(degrees)°", cx + (length + 40) * cos(angle), cy - (length + 40) * sin(angle), color, rotation: -angle)
     }
     dot(ctx, cx, cy, 5, rgb(accents[0], 0.8))
 

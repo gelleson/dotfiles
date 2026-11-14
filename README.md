@@ -338,6 +338,10 @@ macOS system blue on the pressed workspace. Each palette is one `case` branch in
 The wallpaper follows too, set by `sketchybarrc` on every load from
 `wallpapers/{kick,node,builtin}-mat.png`: deterministic cutting mats with fine grids,
 numbered rulers and 30°/45°/60° guides in each keyboard's case and legend colors.
+The guides start at the mat's bottom-left corner, with degree labels rotated
+along their rays. Kick's lines use brick segments and LEGO accent colors;
+Node's use round dots and mint/yellow/red accents; MacBook's stay continuous
+and monochrome.
 The model name sits at the top right: KICK75 in LEGO accent bricks, NODE75 in
 mint/yellow/red dot-matrix lettering, or MACBOOK in monochrome with system-blue
 markers. Kick and Node retain the four Kazakh sky-blue cells and four Australian
