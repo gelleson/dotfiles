@@ -9,8 +9,8 @@ PLUGINS="$CONFIG_DIR/plugins"
 FONT="BigBlueTerm437 Nerd Font"   # 8-bit pixel face, from `mise run fonts`
 KB=$("$PLUGINS/keyboard.sh")
 
-# Wallpaper to match; the built-in keyboard alone gets a plain one.
-osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$CONFIG_DIR/wallpapers/$KB.png\""
+# Cutting-mat wallpaper in the matching keyboard palette.
+osascript -e "tell application \"System Events\" to tell every desktop to set picture to \"$CONFIG_DIR/wallpapers/$KB-mat.png\""
 
 # Each key role is a cap color, its skirt, and its legend.
 case $KB in

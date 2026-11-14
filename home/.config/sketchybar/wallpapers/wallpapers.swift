@@ -1,100 +1,161 @@
 import AppKit
-// Wallpapers matching the bar's palettes, one per keyboard state.
-// Regenerate: swift wallpapers.swift   (writes kick.png, node.png, builtin.png)
-// The built-in's own size. The 16:9 Studio Display crops ~150px off the top
-// and bottom instead, so nothing important sits near those edges.
+// Deterministic cutting mats matching the bar's three keyboard palettes.
+// Regenerate here: swift wallpapers.swift   (kick-mat.png, node-mat.png, builtin-mat.png)
 let W = 3456, H = 2234
+let mat = CGRect(x: 128, y: 288, width: 3200, height: 1664)
+let unit: CGFloat = 64
 
-func rgb(_ hex: UInt32) -> CGColor {
+func rgb(_ hex: UInt32, _ alpha: CGFloat = 1) -> CGColor {
   CGColor(red: CGFloat(hex >> 16 & 0xff) / 255, green: CGFloat(hex >> 8 & 0xff) / 255,
-          blue: CGFloat(hex & 0xff) / 255, alpha: 1)
+          blue: CGFloat(hex & 0xff) / 255, alpha: alpha)
 }
 func render(_ name: String, _ draw: (CGContext) -> Void) {
   let ctx = CGContext(data: nil, width: W, height: H, bitsPerComponent: 8, bytesPerRow: 0,
                       space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
-  ctx.translateBy(x: 0, y: CGFloat(H)); ctx.scaleBy(x: 1, y: -1)   // top-left origin
+  ctx.translateBy(x: 0, y: CGFloat(H)); ctx.scaleBy(x: 1, y: -1)
+  let previous = NSGraphicsContext.current
+  NSGraphicsContext.current = NSGraphicsContext(cgContext: ctx, flipped: true)
+  defer { NSGraphicsContext.current = previous }
   draw(ctx)
   let png = NSBitmapImageRep(cgImage: ctx.makeImage()!).representation(using: .png, properties: [:])!
-  try! png.write(to: URL(fileURLWithPath: "\(name).png"))
+  try! png.write(to: URL(fileURLWithPath: "\(name)-mat.png"))
 }
-func dot(_ ctx: CGContext, _ x: Int, _ y: Int, _ r: Int, _ c: CGColor) {
-  ctx.setFillColor(c); ctx.fillEllipse(in: CGRect(x: x - r, y: y - r, width: 2 * r, height: 2 * r))
+func line(_ ctx: CGContext, _ x1: CGFloat, _ y1: CGFloat, _ x2: CGFloat, _ y2: CGFloat) {
+  ctx.move(to: CGPoint(x: x1, y: y1)); ctx.addLine(to: CGPoint(x: x2, y: y2)); ctx.strokePath()
+}
+func dot(_ ctx: CGContext, _ x: CGFloat, _ y: CGFloat, _ r: CGFloat, _ color: CGColor) {
+  ctx.setFillColor(color); ctx.fillEllipse(in: CGRect(x: x - r, y: y - r, width: 2 * r, height: 2 * r))
+}
+func label(_ text: String, _ x: CGFloat, _ y: CGFloat, _ color: UInt32) {
+  let attributes: [NSAttributedString.Key: Any] = [
+    .font: NSFont.monospacedSystemFont(ofSize: 20, weight: .regular),
+    .foregroundColor: NSColor(cgColor: rgb(color, 0.65))!,
+  ]
+  let size = (text as NSString).size(withAttributes: attributes)
+  (text as NSString).draw(at: CGPoint(x: x - size.width / 2, y: y - size.height / 2), withAttributes: attributes)
 }
 
-// Top right on each: four Kazakh sky-blue cells, a gap, four Australian navy.
-// Below the bar and inside the Studio Display's crop. Returns the grid column
-// for each cell, counted from the right edge, with its (base, highlight).
-let flagCells: [(Int, UInt32, UInt32)] =
-  (0..<4).map { (12 - $0, 0x00afca, 0x3cc6db) } + (0..<4).map { (6 - $0, 0x012169, 0x2a4f9e) }
-
-// The keyboard's name in the center, in a 3x5 pixel font laid on the grid.
 let glyphs: [Character: [String]] = [
   "K": ["101", "101", "110", "101", "101"], "I": ["111", "010", "010", "010", "111"],
   "C": ["111", "100", "100", "100", "111"], "N": ["110", "101", "101", "101", "101"],
   "O": ["111", "101", "101", "101", "111"], "D": ["110", "101", "101", "101", "110"],
   "E": ["111", "100", "110", "100", "111"], "7": ["111", "001", "010", "010", "010"],
-  "5": ["111", "100", "111", "001", "111"],
+  "5": ["111", "100", "111", "001", "111"], "M": ["101", "111", "111", "101", "101"],
+  "A": ["010", "101", "111", "101", "101"], "B": ["110", "101", "110", "101", "110"],
 ]
-// Grid cells (column, row, letter index) lit by `text`, centered on a grid of
-// `cols` x `rows`. The index lets each letter take the next accent color.
-func pixels(_ text: String, _ cols: Int, _ rows: Int) -> [(Int, Int, Int)] {
-  let x0 = (cols - (4 * text.count - 1)) / 2, y0 = (rows - 5) / 2
+func pixels(_ text: String) -> [(Int, Int, Int)] {
   var out: [(Int, Int, Int)] = []
   for (i, ch) in text.enumerated() {
-    for (r, line) in glyphs[ch]!.enumerated() {
-      for (c, bit) in line.enumerated() where bit == "1" { out.append((x0 + 4 * i + c, y0 + r, i)) }
+    for (r, row) in glyphs[ch]!.enumerated() {
+      for (c, bit) in row.enumerated() where bit == "1" { out.append((4 * i + c, r, i)) }
     }
   }
   return out
 }
 
-// Kick75: LEGO studs on the Obsidian Black case, KICK75 in bricks of its accents, four 2x2 bricks bottom left
-// in the keyboard's accents, and the flag cells as 1x2
-// bricks, the same height as those.
-render("kick") { ctx in
-  ctx.setFillColor(rgb(0x1c1c1e)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
-  let s = 80
-  for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 24, rgb(0x232326)) } }
-  let bricks: [(UInt32, UInt32)] = [(0x4b9f4a, 0x5cb35b), (0xf2cd37, 0xf7dc6a), (0x0055bf, 0x1f6fd6), (0xc91a09, 0xdd3522)]
-  for (i, (base, stud)) in bricks.enumerated() {
-    let bx = (2 + 3 * i) * s, by = (H / s - 5) * s
-    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: bx + 2, y: by + 2, width: 2 * s - 4, height: 2 * s - 4))
-    for j in 0..<4 { dot(ctx, bx + s / 2 + (j % 2) * s, by + s / 2 + (j / 2) * s, 24, rgb(stud)) }
-  }
-  for (gx, gy, i) in pixels("KICK75", W / s, H / s) {
-    let (base, stud) = bricks[i % bricks.count]
-    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: gx * s + 2, y: gy * s + 2, width: s - 4, height: s - 4))
-    dot(ctx, gx * s + s / 2, gy * s + s / 2, 24, rgb(stud))
-  }
-  for (col, base, stud) in flagCells {
-    let x = (W / s - col) * s, y = 3 * s
-    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: x + 2, y: y + 2, width: s - 4, height: 2 * s - 4))
-    for j in 0..<2 { dot(ctx, x + s / 2, y + s / 2 + j * s, 24, rgb(stud)) }
-  }
-}
+let palettes: [(String, String, UInt32, UInt32, [UInt32])] = [
+  ("kick", "KICK75", 0x1c1c1e, 0xa0a5a9, [0x4b9f4a, 0xf2cd37, 0x0055bf, 0xc91a09]),
+  ("node", "NODE75", 0x161617, 0xa8a9ab, [0x3fbf8a, 0xe8b423, 0xe24a3b]),
+  ("builtin", "MACBOOK", 0x111214, 0xe8e8e6, [0x0a84ff]),
+]
+for (name, title, base, ink, accents) in palettes {
+  render(name) { ctx in
+    ctx.setFillColor(rgb(base)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
 
-// Node75 Ink Gray: the perforated texture over the near-black case, NODE75 in
-// dot-matrix dots of its accents, the flag
-// cells as larger dots, and a 5x2 LED matrix lit in the mint Esc green.
-render("node") { ctx in
-  ctx.setFillColor(rgb(0x161617)); ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
-  let s = 40
-  for gy in 0..<(H / s) { for gx in 0..<(W / s) { dot(ctx, gx * s + s / 2, gy * s + s / 2, 4, rgb(0x242527)) } }
-  let accents: [UInt32] = [0x3fbf8a, 0xe8b423, 0xe24a3b]   // mint, yellow, red
-  for (px, py, i) in pixels("NODE75", W / s / 2, H / s / 2) {   // each font pixel is 2x2 dots
-    for j in 0..<4 { dot(ctx, (2 * px + j % 2) * s + s / 2, (2 * py + j / 2) * s + s / 2, 12, rgb(accents[i % accents.count])) }
-  }
-  for (col, base, _) in flagCells { dot(ctx, (W / s - col) * s + s / 2, 6 * s + s / 2, 12, rgb(base)) }
-  let lit: Set<Int> = [0, 1, 2, 5, 6]
-  for i in 0..<10 {
-    let x = 7 * s + (i % 5) * 2 * s, y = H - 9 * s + (i / 5) * 2 * s
-    dot(ctx, x, y, 14, lit.contains(i) ? rgb(0x3fbf8a) : rgb(0x2e2f32))
-  }
-}
+    // Half-unit subdivisions, with a heavier line every five units.
+    for vertical in [true, false] {
+      let count = Int((vertical ? mat.width : mat.height) / (unit / 2))
+      for i in 0...count {
+        let major = i % 10 == 0, whole = i % 2 == 0
+        ctx.setStrokeColor(rgb(ink, major ? 0.32 : whole ? 0.16 : 0.07))
+        ctx.setLineWidth(major ? 1.5 : 1)
+        let offset = CGFloat(i) * unit / 2
+        if vertical {
+          line(ctx, mat.minX + offset, mat.minY, mat.minX + offset, mat.maxY)
+        } else {
+          line(ctx, mat.minX, mat.minY + offset, mat.maxX, mat.minY + offset)
+        }
+      }
+    }
+    ctx.setStrokeColor(rgb(ink, 0.45)); ctx.setLineWidth(2); ctx.stroke(mat)
 
-// Built-in keyboard only: a plain dark gradient, out of the way.
-render("builtin") { ctx in
-  let g = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
-                     colors: [rgb(0x1d1e22), rgb(0x0f1012)] as CFArray, locations: [0, 1])!
-  ctx.drawLinearGradient(g, start: .zero, end: CGPoint(x: 0, y: H), options: [])
+    // Rulers remain inside the 16:9 crop, including their labels.
+    for i in 0...50 {
+      let x = mat.minX + CGFloat(i) * unit, tick: CGFloat = i % 5 == 0 ? 20 : 10
+      line(ctx, x, mat.minY, x, mat.minY - tick)
+      line(ctx, x, mat.maxY, x, mat.maxY + tick)
+      if i % 5 == 0 {
+        label(String(i), x, mat.minY - 40, ink); label(String(i), x, mat.maxY + 40, ink)
+      }
+    }
+    for i in 0...26 {
+      let y = mat.minY + CGFloat(i) * unit, tick: CGFloat = i % 5 == 0 ? 20 : 10
+      line(ctx, mat.minX, y, mat.minX - tick, y)
+      line(ctx, mat.maxX, y, mat.maxX + tick, y)
+      if i % 5 == 0 { label(String(i), mat.minX - 44, y, ink) }
+    }
+
+    // A quarter protractor and the usual cutting angles, away from the title.
+    let cx = mat.minX + 5 * unit, cy = mat.maxY - 4 * unit
+    ctx.setStrokeColor(rgb(ink, 0.26)); ctx.setLineWidth(1.5)
+    for radius in [2 * unit, 3 * unit, 4 * unit] {
+      ctx.addArc(center: CGPoint(x: cx, y: cy), radius: radius, startAngle: -.pi / 2, endAngle: 0, clockwise: false)
+      ctx.strokePath()
+    }
+    for degrees in stride(from: 0, through: 90, by: 5) {
+      let angle = CGFloat(degrees) * .pi / 180
+      let inner = 4 * unit - (degrees % 15 == 0 ? 18 : 8)
+      line(ctx, cx + inner * cos(angle), cy - inner * sin(angle), cx + 4 * unit * cos(angle), cy - 4 * unit * sin(angle))
+    }
+    for degrees in [30, 45, 60] {
+      let angle = CGFloat(degrees) * .pi / 180, length = 8 * unit
+      line(ctx, cx, cy, cx + length * cos(angle), cy - length * sin(angle))
+      label("\(degrees)°", cx + (length + 36) * cos(angle), cy - (length + 36) * sin(angle), ink)
+    }
+    dot(ctx, cx, cy, 5, rgb(accents[0], 0.8))
+
+    let corners = [(mat.minX, mat.minY, 1.0, 1.0), (mat.maxX, mat.minY, -1.0, 1.0),
+                   (mat.maxX, mat.maxY, -1.0, -1.0), (mat.minX, mat.maxY, 1.0, -1.0)]
+    for (i, (x, y, dx, dy)) in corners.enumerated() {
+      ctx.setStrokeColor(rgb(accents[i % accents.count], 0.8)); ctx.setLineWidth(4)
+      ctx.move(to: CGPoint(x: x + dx * 32, y: y)); ctx.addLine(to: CGPoint(x: x, y: y))
+      ctx.addLine(to: CGPoint(x: x, y: y + dy * 32)); ctx.strokePath()
+    }
+
+    let plate = CGRect(x: mat.maxX - 640, y: mat.minY, width: 640, height: 224)
+    let titleFrame = CGRect(x: plate.maxX - 32 - CGFloat(4 * title.count - 1) * 20,
+                            y: plate.minY + 40, width: CGFloat(4 * title.count - 1) * 20, height: 100)
+    // Protect the name from the Studio Display crop and the 32pt status bar.
+    let crop = (CGFloat(H) - CGFloat(W) * 9 / 16) / 2
+    assert(CGRect(x: 0, y: crop + 64, width: CGFloat(W), height: CGFloat(H) - 2 * crop - 64).contains(plate))
+    assert(plate.insetBy(dx: 24, dy: 24).contains(titleFrame))
+    ctx.setFillColor(rgb(base)); ctx.fill(plate)
+    ctx.setStrokeColor(rgb(ink, 0.32)); ctx.setLineWidth(1.5); ctx.stroke(plate)
+    for (gx, gy, i) in pixels(title) {
+      let x = titleFrame.minX + CGFloat(gx) * 20, y = titleFrame.minY + CGFloat(gy) * 20
+      let color = name == "builtin" ? ink : accents[i % accents.count]
+      if name == "node" {
+        for j in 0..<4 { dot(ctx, x + 5 + CGFloat(j % 2) * 10, y + 5 + CGFloat(j / 2) * 10, 3.5, rgb(color)) }
+      } else {
+        ctx.setFillColor(rgb(color)); ctx.fill(CGRect(x: x + 1, y: y + 1, width: 18, height: 18))
+        if name == "kick" { dot(ctx, x + 10, y + 10, 5, rgb(0xffffff, 0.18)) }
+      }
+    }
+    for (i, color) in accents.enumerated() {
+      ctx.setFillColor(rgb(color)); ctx.fill(CGRect(x: plate.minX + 32 + CGFloat(i) * 40, y: plate.minY + 176, width: 24, height: 16))
+    }
+    if name != "builtin" {
+      // Four Kazakh sky-blue cells, a gap, four Australian navy cells.
+      for i in 0..<8 {
+        let x = plate.maxX - 32 - CGFloat(8 - i + (i < 4 ? 1 : 0)) * 16
+        let y = plate.minY + 184, color: UInt32 = i < 4 ? 0x00afca : 0x012169
+        if name == "node" {
+          dot(ctx, x + 6, y, 5, rgb(color))
+        } else {
+          ctx.setFillColor(rgb(color)); ctx.fill(CGRect(x: x, y: y - 8, width: 12, height: 16))
+          dot(ctx, x + 6, y, 3, rgb(0xffffff, 0.18))
+        }
+      }
+    }
+  }
 }

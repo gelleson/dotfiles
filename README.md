@@ -336,13 +336,15 @@ grey caps and three accents: mint Esc, yellow Enter (the clock), red knob; the *
 palette; the **built-in** keyboard alone gets black caps, white legends and the
 macOS system blue on the pressed workspace. Each palette is one `case` branch in `sketchybarrc`.
 The wallpaper follows too, set by `sketchybarrc` on every load from
-`wallpapers/{kick,node,builtin}.png`: LEGO studs with four accent bricks, or the Node's perforation
-with a mint 5x2 LED block, each with four Kazakh sky-blue cells, a gap and
-four Australian navy ones at the top right (1x2 bricks on the Kick, bigger dots
-on the Node), and the keyboard's name in the center in the same style: KICK75
-in its accent-colored bricks, NODE75 in its accent-colored dots. The built-in keyboard alone gets a plain gradient. They are drawn at the
-built-in display's 3456x2234; `swift wallpapers.swift` in that directory
-redraws them. macOS caches wallpapers by path, so after a redraw clear
+`wallpapers/{kick,node,builtin}-mat.png`: deterministic cutting mats with fine grids,
+numbered rulers and 30°/45°/60° guides in each keyboard's case and legend colors.
+The model name sits at the top right: KICK75 in LEGO accent bricks, NODE75 in
+mint/yellow/red dot-matrix lettering, or MACBOOK in monochrome with system-blue
+markers. Kick and Node retain the four Kazakh sky-blue cells and four Australian
+navy cells beneath the name. They are drawn at the built-in display's 3456x2234,
+with the labels and rulers kept inside the Studio Display's 16:9 crop;
+`swift wallpapers.swift` in that directory redraws all three without randomness
+or extra dependencies. macOS caches wallpapers by path, so after a redraw clear
 `~/Library/Containers/com.apple.wallpaper.agent/Data/Library/Caches/com.apple.wallpaper.caches/extension-com.apple.wallpaper.extension.image/`
 and `killall WallpaperAgent Dock`. The first switch from an AeroSpace-launched
 bar may ask to let SketchyBar control System Events.
