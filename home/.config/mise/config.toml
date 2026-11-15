@@ -87,6 +87,7 @@ helm = "latest"
 
 # --- local databases --------------------------------------------------------
 "npm:pgxdb" = "0.1.3"
+"github:kackerx/sqlmux" = "0.10.0"
 "pipx:harlequin" = { version = "latest", extras = "postgres" }
 
 # --- containers -------------------------------------------------------------

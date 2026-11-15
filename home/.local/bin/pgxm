@@ -5,7 +5,7 @@ import subprocess
 import sys
 from urllib.parse import unquote, urlsplit
 
-client = "hsql" if os.path.basename(sys.argv[0]) == "pgxhs" else "harlequin"
+client = "hsql" if os.path.basename(sys.argv[0]) == "pgxhs" else "sqlmux"
 parser = argparse.ArgumentParser(description=f"Open {client} on a PGX database.")
 parser.add_argument("database")
 parser.add_argument("options", nargs=argparse.REMAINDER, help="Options for the client")
@@ -25,6 +25,5 @@ env.pop("HSQL_SESSION", None)
 env["PGPASSWORD"] = unquote(url.password or "")
 address = url.netloc.rsplit("@", 1)[-1]
 connection = url._replace(netloc=f"{url.username}@{address}").geturl()
-os.execvpe(
-    client, [client, "--profile", "None", "-a", "postgres", connection, *args.options], env
-)
+options = ["--profile", "None", "-a", "postgres"] if client == "hsql" else []
+os.execvpe(client, [client, *options, *args.options, connection], env)

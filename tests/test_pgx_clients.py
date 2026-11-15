@@ -9,13 +9,13 @@ from unittest.mock import patch
 
 
 BIN = Path(__file__).resolve().parents[1] / "home/.local/bin"
-SCRIPT = BIN / "pgxh"
+SCRIPT = BIN / "pgxm"
 
 
 class PgxClientTests(unittest.TestCase):
     def test_password_stays_out_of_arguments_and_output(self):
         for command, client, options, address in (
-            ("pgxh", "harlequin", [], "127.0.0.1:5432"),
+            ("pgxm", "sqlmux", ["--table", "cities"], "127.0.0.1:5432"),
             ("pgxhs", "hsql", ["-c", "select 1;", "--json"], "[::1]:5433"),
         ):
             with self.subTest(command=command):
@@ -36,10 +36,10 @@ class PgxClientTests(unittest.TestCase):
                 )
                 executable, argv, env = launch.call_args.args
                 self.assertEqual(executable, client)
+                client_options = ["--profile", "None", "-a", "postgres"] if client == "hsql" else []
                 self.assertEqual(argv, [
-                    client, "--profile", "None", "-a", "postgres",
+                    client, *client_options, *options,
                     f"postgres://postgres@{address}/join-101?sslmode=disable",
-                    *options,
                 ])
                 self.assertEqual(env["PGPASSWORD"], "mock@:/")
                 self.assertNotIn("HSQL_SESSION", env)
@@ -47,7 +47,7 @@ class PgxClientTests(unittest.TestCase):
 
     def test_pgx_failure_does_not_launch_client(self):
         with (
-            patch("sys.argv", ["pgxh", "missing"]),
+            patch("sys.argv", ["pgxm", "missing"]),
             patch("subprocess.run", return_value=subprocess.CompletedProcess([], 5, "")),
             patch("os.execvpe") as launch,
             self.assertRaises(SystemExit) as error,
@@ -58,7 +58,7 @@ class PgxClientTests(unittest.TestCase):
 
     def test_database_is_required(self):
         with (
-            patch("sys.argv", ["pgxh"]),
+            patch("sys.argv", ["pgxm"]),
             patch("subprocess.run") as pgx,
             contextlib.redirect_stderr(io.StringIO()),
             self.assertRaises(SystemExit) as error,

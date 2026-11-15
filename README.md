@@ -118,10 +118,10 @@ Note that `link` only ever adds symlinks — it never removes one whose source h
 been deleted from `home/`. If you drop a file from the repo, delete its symlink
 in `$HOME` by hand.
 
-## PGX and Harlequin
+## PGX and sqlmux
 
-`pgxh join-101` opens Harlequin on an existing PGX database.
-`pgxhs join-101 -c 'select current_database();'` runs SQL with hsql. Both accept
+`pgxm join-102` opens sqlmux on an existing PGX database.
+`pgxhs join-102 -c 'select current_database();'` runs SQL with hsql. Both accept
 additional client options after the database name. PGX must be running
 (`pgx start`). The launcher gets the connection details from `pgx url`
 and passes the password through the environment without saving it to a file
