@@ -28,6 +28,10 @@ brew "mosh"
 # PlanetScale database CLI. Not in mise's registry; homebrew-core has it.
 brew "pscale"
 
+# Two-way file sync: interview prep repo <-> Obsidian vault in iCloud.
+# mise's `unison` is the unisonweb language, not this tool.
+brew "unison"
+
 # Local LLM runtime. In mise's registry too, but only as a bare binary —
 # Homebrew ships the launchd plist, so the server can run as a background
 # service: `brew services start ollama`. Models live in ~/.ollama (untracked).
