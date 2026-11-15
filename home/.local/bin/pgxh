@@ -2,10 +2,13 @@
 import argparse
 import os
 import subprocess
+import sys
 from urllib.parse import unquote, urlsplit
 
-parser = argparse.ArgumentParser(description="Open Harlequin on a PGX database.")
+client = "hsql" if os.path.basename(sys.argv[0]) == "pgxhs" else "harlequin"
+parser = argparse.ArgumentParser(description=f"Open {client} on a PGX database.")
 parser.add_argument("database")
+parser.add_argument("options", nargs=argparse.REMAINDER, help="Options for the client")
 args = parser.parse_args()
 
 result = subprocess.run(
@@ -16,10 +19,12 @@ if result.returncode:
 
 url = urlsplit(result.stdout.strip())
 env = os.environ.copy()
-# Keep the password out of Harlequin's process arguments.
+# Connect to this database instead of an inherited hsql session.
+env.pop("HSQL_SESSION", None)
+# Keep the password out of the client's process arguments.
 env["PGPASSWORD"] = unquote(url.password or "")
 address = url.netloc.rsplit("@", 1)[-1]
 connection = url._replace(netloc=f"{url.username}@{address}").geturl()
 os.execvpe(
-    "harlequin", ["harlequin", "--profile", "None", "-a", "postgres", connection], env
+    client, [client, "--profile", "None", "-a", "postgres", connection, *args.options], env
 )

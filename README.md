@@ -120,8 +120,10 @@ in `$HOME` by hand.
 
 ## PGX and Harlequin
 
-`pgx-harlequin join-101` opens Harlequin on an existing PGX database. PGX must
-be running (`pgx start`). The script gets the connection details from `pgx url`
+`pgxh join-101` opens Harlequin on an existing PGX database.
+`pgxhs join-101 -c 'select current_database();'` runs SQL with hsql. Both accept
+additional client options after the database name. PGX must be running
+(`pgx start`). The launcher gets the connection details from `pgx url`
 and passes the password through the environment without saving it to a file
 or putting it in process arguments.
 
