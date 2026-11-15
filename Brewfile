@@ -83,6 +83,8 @@ cask "betterdisplay"
 # /opt/homebrew/bin and generates shell completions. Self-updates in place.
 cask "zed"
 
+cask "obsidian"
+
 # Omnigent desktop app (omnigent-ai/omnigent). arm64 only; unversioned download,
 # so it self-updates. The CLI comes from mise (pipx:omnigent), not this tap's
 # formula, which has no bottles and compiles via rust+llvm.
