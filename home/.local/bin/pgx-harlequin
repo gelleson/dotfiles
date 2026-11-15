@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import argparse
+import os
+import subprocess
+from urllib.parse import unquote, urlsplit
+
+parser = argparse.ArgumentParser(description="Open Harlequin on a PGX database.")
+parser.add_argument("database")
+args = parser.parse_args()
+
+result = subprocess.run(
+    ["pgx", "url", args.database], stdout=subprocess.PIPE, text=True
+)
+if result.returncode:
+    raise SystemExit(result.returncode)
+
+url = urlsplit(result.stdout.strip())
+env = os.environ.copy()
+# Keep the password out of Harlequin's process arguments.
+env["PGPASSWORD"] = unquote(url.password or "")
+address = url.netloc.rsplit("@", 1)[-1]
+connection = url._replace(netloc=f"{url.username}@{address}").geturl()
+os.execvpe(
+    "harlequin", ["harlequin", "--profile", "None", "-a", "postgres", connection], env
+)

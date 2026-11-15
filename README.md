@@ -118,6 +118,13 @@ Note that `link` only ever adds symlinks — it never removes one whose source h
 been deleted from `home/`. If you drop a file from the repo, delete its symlink
 in `$HOME` by hand.
 
+## PGX and Harlequin
+
+`pgx-harlequin join-101` opens Harlequin on an existing PGX database. PGX must
+be running (`pgx start`). The script gets the connection details from `pgx url`
+and passes the password through the environment without saving it to a file
+or putting it in process arguments.
+
 ## Neovim and NeoRex
 
 Neovim nightly runs the AstroNvim config from `gelleson/nvim`.
