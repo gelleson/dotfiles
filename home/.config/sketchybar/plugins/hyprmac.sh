@@ -2,10 +2,10 @@
 # $1 workspace, $2 key color, $3 pressed color (from sketchybarrc's palette).
 # Focused: pressed down, no skirt. Occupied: a normal key. Empty: hidden, so
 # the row only shows where windows are. The legend is the workspace number
-# then a Nerd Font glyph per app on it; Sunsama's Focus Bar follows every
-# workspace, so it is left out.
-icons=$(aerospace list-windows --workspace "$1" --format '%{app-bundle-id}|%{window-title}' \
-  | grep -v '|Sunsama Focus Bar$' | cut -d'|' -f1 | sort -u | while read -r app; do
+# then a Nerd Font glyph per app on it, read from HyprMac's state.json.
+STATE="$HOME/Library/Application Support/HyprMac/state.json"
+icons=$(jq -r --argjson ws "$1" '.workspaces[] | select(.id == $ws) | .windows[].bundleID' "$STATE" 2>/dev/null \
+  | sort -u | while read -r app; do
     case $app in
       (com.apple.Safari) echo '󰀹' ;;
       (company.thebrowser.Browser) echo '󰖟' ;;
@@ -27,7 +27,7 @@ icons=$(aerospace list-windows --workspace "$1" --format '%{app-bundle-id}|%{win
     esac
   done | awk '!seen[$0]++' | paste -sd' ' -)
 
-if [ "$1" = "${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused)}" ]; then
+if [ "$1" = "$(jq -r .focusedWorkspace "$STATE" 2>/dev/null)" ]; then
   sketchybar --set "$NAME" drawing=on label="$1${icons:+ $icons}" y_offset=-2 background.shadow.drawing=off background.color=$3
 elif [ -n "$icons" ]; then
   sketchybar --set "$NAME" drawing=on label="$1${icons:+ $icons}" y_offset=0 background.shadow.drawing=on background.color=$2

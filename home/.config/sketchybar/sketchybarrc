@@ -2,7 +2,8 @@
 # SketchyBar styled after whichever NuPhy is connected. Every item is a
 # keycap; a hard shadow below it is the skirt. plugins/keyboard.sh picks the
 # palette and reloads the bar when the keyboard changes.
-# Launched by AeroSpace (after-startup-command). Reference:
+# Started by ~/Library/LaunchAgents/local.sketchybar.plist; HyprMac's status
+# hook (monitor-config.json) fires hyprmac_change on every change. Reference:
 # https://felixkratz.github.io/SketchyBar/config/bar
 
 PLUGINS="$CONFIG_DIR/plugins"
@@ -69,25 +70,24 @@ sketchybar --default \
   background.shadow.drawing=on background.shadow.angle=90 \
   background.shadow.distance=3 background.shadow.color=$KEY_SKIRT
 
-# Esc doubles as the AeroSpace mode light: held down and reading "game" while
-# game mode has the alt chords (plugins/mode.sh).
-sketchybar --add event aerospace_mode_change
+# Esc doubles as the HyprMac pause light: held down and reading "pause" while
+# tiling is paused (plugins/mode.sh).
+sketchybar --add event hyprmac_change
 sketchybar --add item esc left \
-  --subscribe esc aerospace_mode_change \
+  --subscribe esc hyprmac_change \
   --set esc icon= label=esc icon.color=$ESC_LEGEND label.color=$ESC_LEGEND \
     background.color=$ESC background.shadow.color=$ESC_SKIRT \
     script="$PLUGINS/mode.sh $ESC $ESC_SKIRT $ESC_LEGEND $KNOB $KNOB_LEGEND"
 
-# Number row: a key per occupied AeroSpace workspace, the focused one pressed,
+# Number row: a key per occupied HyprMac workspace, the focused one pressed,
 # wide enough for the number and its app glyphs.
-sketchybar --add event aerospace_workspace_change
-for sid in $(aerospace list-workspaces --all); do
+for sid in 1 2 3 4 5 6 7 8 9 10; do
   sketchybar --add item space.$sid left \
-    --subscribe space.$sid aerospace_workspace_change front_app_switched \
+    --subscribe space.$sid hyprmac_change front_app_switched \
     --set space.$sid icon.drawing=off label=$sid \
       label.align=center label.padding_left=7 label.padding_right=7 \
-      click_script="aerospace workspace $sid" \
-      script="$PLUGINS/aerospace.sh $sid $KEY $PRESSED"
+      click_script="open -g 'hyprmac://focus?workspace=$sid'" \
+      script="$PLUGINS/hyprmac.sh $sid $KEY $PRESSED"
 done
 
 # Spacebar. Left rather than center: the notch would swallow a centered item.
@@ -96,7 +96,7 @@ sketchybar --add item front_app left \
   --set front_app icon.drawing=off label.width=200 label.align=center \
     label.max_chars=20 label.padding_left=0 label.padding_right=0 \
     label.color=$SPACE_LEGEND background.color=$SPACE background.shadow.color=$SPACE_SKIRT \
-    script='sketchybar --set $NAME label="${INFO:-$(aerospace list-windows --focused --format %{app-name})}"'
+    script='sketchybar --set $NAME label="${INFO:-$(osascript -e "name of application (path to frontmost application as text)")}"'
 
 # Right side, added right to left.
 # Melbourne, on a key cut from the Australian flag minus the Union Jack

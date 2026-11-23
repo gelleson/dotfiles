@@ -61,8 +61,8 @@ cask "nikitabobko/tap/aerospace", trusted: true
 cask "hyprmac"
 
 # Status bar that replaces the macOS menu bar, styled after the NuPhy Kick75.
-# Config: home/.config/sketchybar/. AeroSpace launches it at startup, so no
-# brew service. Needs "Automatically hide and show the menu bar" set to Always.
+# Config: home/.config/sketchybar/. Started by a repo LaunchAgent
+# (local.sketchybar.plist), not a brew service. Needs "Automatically hide and show the menu bar" set to Always.
 tap "felixkratz/formulae"
 brew "felixkratz/formulae/sketchybar", trusted: true
 

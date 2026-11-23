@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Starts SketchyBar at login (home/.config/sketchybar). HyprMac has no startup
+  command, so the bar starts itself and HyprMac only triggers hyprmac_change.
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>local.sketchybar</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/homebrew/bin/sketchybar</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>ProcessType</key>
+	<string>Interactive</string>
+</dict>
+</plist>

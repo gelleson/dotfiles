@@ -8,5 +8,7 @@
     "Mi Monitor": [
       2
     ]
-  }
+  },
+  "statusExportEnabled": true,
+  "statusHookCommand": "sketchybar --trigger hyprmac_change"
 }

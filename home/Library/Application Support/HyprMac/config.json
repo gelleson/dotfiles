@@ -1,7 +1,7 @@
 {
   "version": 2,
   "enabled": true,
-  "hyprKey": "leftOption",
+  "hyprKey": "capsLock",
   "focusFollowsMouse": false,
   "gapSize": 8,
   "outerPadding": 8,
@@ -28,69 +28,6 @@
       "modifiers": 3,
       "action": {
         "toggleFloating": {}
-      }
-    },
-    {
-      "keyCode": 38,
-      "modifiers": 1,
-      "action": {
-        "focusDirection": {
-          "_0": "down"
-        }
-      }
-    },
-    {
-      "keyCode": 40,
-      "modifiers": 1,
-      "action": {
-        "focusDirection": {
-          "_0": "up"
-        }
-      }
-    },
-    {
-      "keyCode": 37,
-      "modifiers": 1,
-      "action": {
-        "focusDirection": {
-          "_0": "right"
-        }
-      }
-    },
-    {
-      "keyCode": 4,
-      "modifiers": 3,
-      "action": {
-        "swapDirection": {
-          "_0": "left"
-        }
-      }
-    },
-    {
-      "keyCode": 38,
-      "modifiers": 3,
-      "action": {
-        "swapDirection": {
-          "_0": "down"
-        }
-      }
-    },
-    {
-      "keyCode": 40,
-      "modifiers": 3,
-      "action": {
-        "swapDirection": {
-          "_0": "up"
-        }
-      }
-    },
-    {
-      "keyCode": 37,
-      "modifiers": 3,
-      "action": {
-        "swapDirection": {
-          "_0": "right"
-        }
       }
     },
     {
