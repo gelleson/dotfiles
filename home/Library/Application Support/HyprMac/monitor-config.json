@@ -10,5 +10,13 @@
     ]
   },
   "statusExportEnabled": true,
-  "statusHookCommand": "sketchybar --trigger hyprmac_change"
+  "statusHookCommand": "sketchybar --trigger hyprmac_change",
+  "outerPaddingPerMonitor": {
+    "Mi Monitor": {
+      "top": 40
+    },
+    "Studio Display": {
+      "top": 40
+    }
+  }
 }
