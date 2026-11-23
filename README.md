@@ -300,7 +300,7 @@ no shell config.
 **HyprMac** is the tiling window manager. Its config lives in
 `home/Library/Application Support/HyprMac/`: Caps Lock is the Hypr key, arrows focus (Shift moves the window), the same app homes
 (workspace 2 on the external screen), floats and Caps-letter app launchers.
-Hypr+P pauses tiling. Hypr+Shift+/ shows every binding. Its status hook
+Hypr+P pauses tiling. Hypr+K shows every binding. Its status hook
 (`monitor-config.json`) triggers SketchyBar's `hyprmac_change`, and the bar
 reads `state.json`; SketchyBar itself starts from
 `home/Library/LaunchAgents/local.sketchybar.plist`.

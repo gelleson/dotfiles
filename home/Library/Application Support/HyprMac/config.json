@@ -121,8 +121,8 @@
       }
     },
     {
-      "keyCode": 44,
-      "modifiers": 3,
+      "keyCode": 40,
+      "modifiers": 1,
       "action": {
         "showKeybinds": {}
       }
