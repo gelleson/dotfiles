@@ -1,0 +1,338 @@
+{
+  "version": 2,
+  "enabled": true,
+  "hyprKey": "leftOption",
+  "focusFollowsMouse": false,
+  "gapSize": 8,
+  "outerPadding": 8,
+  "keybinds": [
+    {
+      "keyCode": 36,
+      "modifiers": 1,
+      "action": {
+        "runCommand": {
+          "label": "New Ghostty window",
+          "command": "/usr/bin/open -na Ghostty"
+        }
+      }
+    },
+    {
+      "keyCode": 44,
+      "modifiers": 1,
+      "action": {
+        "toggleSplit": {}
+      }
+    },
+    {
+      "keyCode": 3,
+      "modifiers": 3,
+      "action": {
+        "toggleFloating": {}
+      }
+    },
+    {
+      "keyCode": 38,
+      "modifiers": 1,
+      "action": {
+        "focusDirection": {
+          "_0": "down"
+        }
+      }
+    },
+    {
+      "keyCode": 40,
+      "modifiers": 1,
+      "action": {
+        "focusDirection": {
+          "_0": "up"
+        }
+      }
+    },
+    {
+      "keyCode": 37,
+      "modifiers": 1,
+      "action": {
+        "focusDirection": {
+          "_0": "right"
+        }
+      }
+    },
+    {
+      "keyCode": 4,
+      "modifiers": 3,
+      "action": {
+        "swapDirection": {
+          "_0": "left"
+        }
+      }
+    },
+    {
+      "keyCode": 38,
+      "modifiers": 3,
+      "action": {
+        "swapDirection": {
+          "_0": "down"
+        }
+      }
+    },
+    {
+      "keyCode": 40,
+      "modifiers": 3,
+      "action": {
+        "swapDirection": {
+          "_0": "up"
+        }
+      }
+    },
+    {
+      "keyCode": 37,
+      "modifiers": 3,
+      "action": {
+        "swapDirection": {
+          "_0": "right"
+        }
+      }
+    },
+    {
+      "keyCode": 11,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "company.thebrowser.Browser"
+        }
+      }
+    },
+    {
+      "keyCode": 5,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "com.mitchellh.ghostty"
+        }
+      }
+    },
+    {
+      "keyCode": 4,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "dev.herdr.app"
+        }
+      }
+    },
+    {
+      "keyCode": 15,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "com.superlogical.rex"
+        }
+      }
+    },
+    {
+      "keyCode": 17,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "com.t3tools.t3code"
+        }
+      }
+    },
+    {
+      "keyCode": 13,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "dev.warp.Warp-Stable"
+        }
+      }
+    },
+    {
+      "keyCode": 1,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "com.sunsama.native-app"
+        }
+      }
+    },
+    {
+      "keyCode": 14,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "dev.zed.Zed"
+        }
+      }
+    },
+    {
+      "keyCode": 31,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "md.obsidian"
+        }
+      }
+    },
+    {
+      "keyCode": 8,
+      "modifiers": 1,
+      "action": {
+        "launchApp": {
+          "bundleID": "com.apple.iCal"
+        }
+      }
+    },
+    {
+      "keyCode": 44,
+      "modifiers": 3,
+      "action": {
+        "showKeybinds": {}
+      }
+    }
+  ],
+  "windowRules": [
+    {
+      "bundleID": "com.apple.Safari",
+      "workspace": 1
+    },
+    {
+      "bundleID": "company.thebrowser.Browser",
+      "workspace": 1
+    },
+    {
+      "bundleID": "company.thebrowser.dia",
+      "workspace": 1
+    },
+    {
+      "bundleID": "com.google.Chrome",
+      "workspace": 1
+    },
+    {
+      "bundleID": "com.mitchellh.ghostty",
+      "workspace": 2
+    },
+    {
+      "bundleID": "dev.warp.Warp-Stable",
+      "workspace": 2
+    },
+    {
+      "bundleID": "dev.herdr.app",
+      "workspace": 2
+    },
+    {
+      "bundleID": "dev.kdrag0n.MacVirt",
+      "workspace": 2
+    },
+    {
+      "bundleID": "ai.omnigent.desktop",
+      "workspace": 2
+    },
+    {
+      "bundleID": "dev.zed.Zed",
+      "workspace": 2
+    },
+    {
+      "bundleID": "com.openai.codex",
+      "workspace": 2
+    },
+    {
+      "bundleID": "com.t3tools.t3code",
+      "workspace": 2
+    },
+    {
+      "bundleID": "com.apple.Music",
+      "workspace": 3
+    },
+    {
+      "bundleID": "com.apple.TV",
+      "workspace": 3
+    },
+    {
+      "bundleID": "com.granola.app",
+      "workspace": 4
+    },
+    {
+      "bundleID": "com.apple.iCal",
+      "workspace": 4
+    },
+    {
+      "bundleID": "md.obsidian",
+      "workspace": 4
+    },
+    {
+      "bundleID": "com.sunsama.native-app",
+      "workspace": 4
+    },
+    {
+      "bundleID": "com.valvesoftware.steam.helper",
+      "workspace": 5
+    },
+    {
+      "bundleID": "games.mapc.app",
+      "workspace": 5
+    },
+    {
+      "bundleID": "com.blobfishgames",
+      "workspace": 5
+    },
+    {
+      "bundleID": "com.cdprojektred.cyberpunk.steam",
+      "workspace": 5
+    }
+  ],
+  "floatingRules": [
+    {
+      "bundleID": "com.openai.codex",
+      "action": "float",
+      "match": {
+        "titleIs": "Settings"
+      }
+    },
+    {
+      "bundleID": "com.sunsama.native-app",
+      "action": "float",
+      "match": {
+        "titleContains": "Focus Bar"
+      }
+    },
+    {
+      "bundleID": "com.apple.finder",
+      "action": "float",
+      "match": {
+        "titleContains": " Info"
+      }
+    },
+    {
+      "bundleID": "com.apple.systempreferences",
+      "action": "float"
+    },
+    {
+      "bundleID": "org.keepassxc.keepassxc",
+      "action": "float"
+    },
+    {
+      "bundleID": "ch.protonvpn.mac",
+      "action": "float"
+    },
+    {
+      "bundleID": "io.tailscale.ipn.macsys",
+      "action": "float"
+    },
+    {
+      "bundleID": "pro.betterdisplay.BetterDisplay",
+      "action": "float"
+    },
+    {
+      "bundleID": "com.logi.optionsplus",
+      "action": "float"
+    }
+  ],
+  "workspaceNames": {
+    "1": "web",
+    "2": "code",
+    "3": "media",
+    "4": "plan",
+    "5": "games"
+  }
+}

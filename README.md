@@ -298,6 +298,14 @@ one `open -a OrbStack` after a rebuild to install its privileged helper.
 `orbstack` docker context on launch, so they find it with no `DOCKER_HOST` and
 no shell config.
 
+**HyprMac** is the tiling window manager in use right now; AeroSpace is
+installed but parked (`start-at-login = false`), along with SketchyBar, which
+only AeroSpace starts. The HyprMac config in
+`home/Library/Application Support/HyprMac/` ports AeroSpace's: left Option is
+the Hypr key, the same app homes (workspace 2 on the external screen), floats
+and alt-letter app launchers. HyprMac has no modes, so the service, resize and
+game modes are gone; Hypr+P pauses tiling instead. Hypr+Shift+/ shows every binding.
+
 **AeroSpace** is an i3-like tiling window manager, from the third-party
 `nikitabobko/tap` (declared in the Brewfile right above the cask, so
 `brew bundle` taps before it installs). It starts at login and auto-reloads

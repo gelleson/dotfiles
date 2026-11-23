@@ -54,6 +54,12 @@ cask "orbstack"
 tap "nikitabobko/tap"
 cask "nikitabobko/tap/aerospace", trusted: true
 
+# HyprMac: dwindle tiling WM, currently used instead of AeroSpace (whose
+# start-at-login is off). Config is JSON under home/Library/Application
+# Support/HyprMac/; HyprMac writes through the symlinks. Needs an Accessibility
+# grant and Settings > General > Launch at login on a fresh install.
+cask "hyprmac"
+
 # Status bar that replaces the macOS menu bar, styled after the NuPhy Kick75.
 # Config: home/.config/sketchybar/. AeroSpace launches it at startup, so no
 # brew service. Needs "Automatically hide and show the menu bar" set to Always.

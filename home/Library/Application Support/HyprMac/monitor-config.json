@@ -1,0 +1,12 @@
+{
+  "maxSplitsPerMonitor": {},
+  "disabledMonitors": [],
+  "workspaceMonitors": {
+    "Studio Display": [
+      2
+    ],
+    "Mi Monitor": [
+      2
+    ]
+  }
+}
