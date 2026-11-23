@@ -11,7 +11,6 @@ home/            mirrors $HOME; every file here gets symlinked into place
   .zprofile      login-only PATH setup
   .config/zsh/   options, history, completion, keybindings, aliases, prompt
   .config/mise/  global tool versions
-  .config/aerospace/ AeroSpace tiling window manager
   .config/sketchybar/ status bar, styled after the NuPhy Kick75
   .local/bin/    small wrapper scripts
   .claude/       CLAUDE.md — global agent instructions
@@ -298,53 +297,26 @@ one `open -a OrbStack` after a rebuild to install its privileged helper.
 `orbstack` docker context on launch, so they find it with no `DOCKER_HOST` and
 no shell config.
 
-**HyprMac** is the tiling window manager in use right now; AeroSpace is
-installed but parked (`start-at-login = false`). The HyprMac config in
-`home/Library/Application Support/HyprMac/` ports AeroSpace's: Caps Lock is
-the Hypr key, arrows focus (Shift moves the window), the same app homes
+**HyprMac** is the tiling window manager. Its config lives in
+`home/Library/Application Support/HyprMac/`: Caps Lock is the Hypr key, arrows focus (Shift moves the window), the same app homes
 (workspace 2 on the external screen), floats and Caps-letter app launchers.
-HyprMac has no modes, so the service, resize and game modes are gone; Hypr+P
-pauses tiling instead. Hypr+Shift+/ shows every binding. Its status hook
+Hypr+P pauses tiling. Hypr+Shift+/ shows every binding. Its status hook
 (`monitor-config.json`) triggers SketchyBar's `hyprmac_change`, and the bar
 reads `state.json`; SketchyBar itself starts from
 `home/Library/LaunchAgents/local.sketchybar.plist`.
 
-**AeroSpace** is an i3-like tiling window manager, from the third-party
-`nikitabobko/tap` (declared in the Brewfile right above the cask, so
-`brew bundle` taps before it installs). It starts at login and auto-reloads
-`home/.config/aerospace/aerospace.toml` on save; `aerospace reload-config
---dry-run` validates without applying. Bindings are alt-based and i3-shaped:
-`alt-left/j/k/l` to focus, `alt-shift-h/j/k/l` to move, and
-`alt-1`..`alt-9` for workspaces. `alt-g` opens Ghostty, `alt-h` opens Herdr,
-`alt-r` opens Rex Beta, `alt-shift-r` enters resize mode,
-`alt-enter` opens a new Ghostty window, and `alt-shift-;` opens a one-shot service
-mode (`esc` reloads, `r` resets the layout, `f` toggles floating).
-
-Apps have fixed homes, set by `on-window-detected` rules that fire whatever
-workspace is focused: **1** browser (Safari), **2** coding (Ghostty, OrbStack),
-**3** chat (Slack), and workspace 2 is force-assigned to the Studio Display so
-code always lands on the big screen — undocked, it falls back to the built-in
-display on its own. `if.app-id` is an
-exact match, so one block per app; `aerospace list-windows --all --format
-'%{app-bundle-id}'` prints the id of anything already open. The rules only fire
-on newly detected windows, so windows open before a reload stay put.
-
-ChatGPT's Settings and windows already recognized as floating stay on the
-workspace where they open; its main tiled windows still go to workspace 2.
-
-A fresh
-machine needs one **Accessibility** grant in System Settings > Privacy &
-Security before it can move any windows.
+App homes are `windowRules` (bundle id → workspace) in `config.json`, and
+`floatingRules` float settings and utility windows. A fresh machine needs one
+**Accessibility** grant and Settings → General → Launch at login.
 
 **SketchyBar** (from `felixkratz/formulae`) replaces the menu bar, styled after
 the NuPhy Kick75: a black case, white keycaps with a hard-shadow skirt, a pixel
 font, and LEGO accents: green `esc`, a number-row key per occupied workspace
 (the focused one pressed down, click to switch), a yellow spacebar with the
 front app, a red volume knob, battery, a grey CPU/memory key, a blue Enter
-key for the clock, and Melbourne time on a navy key with the Southern Cross. AeroSpace launches
-it (`after-startup-command`) and triggers `aerospace_workspace_change`, and
-keeps 1-9 persistent; `on-focus-changed` refreshes the row when a window
-moves or closes, so empty workspaces drop out. The macOS menu bar has to
+key for the clock, and Melbourne time on a navy key with the Southern Cross.
+HyprMac's status hook fires `hyprmac_change` on every workspace, window or
+focus change, so empty workspaces drop out of the row. The macOS menu bar has to
 auto-hide; `bootstrap.sh` sets that. The notch display reserves the bar's 32pt
 strip itself, so only other monitors get the extra top gap. Nothing sits in the
 center, where the notch would hide it. `sketchybar --reload` applies edits.
@@ -370,11 +342,10 @@ with the labels and rulers kept inside the Studio Display's 16:9 crop;
 `swift wallpapers.swift` in that directory redraws all three without randomness
 or extra dependencies. macOS caches wallpapers by path, so after a redraw clear
 `~/Library/Containers/com.apple.wallpaper.agent/Data/Library/Caches/com.apple.wallpaper.caches/extension-com.apple.wallpaper.extension.image/`
-and `killall WallpaperAgent Dock`. The first switch from an AeroSpace-launched
-bar may ask to let SketchyBar control System Events.
+and `killall WallpaperAgent Dock`. The first switch may ask to let SketchyBar control System Events.
 
-Homebrew 7 refuses third-party taps until they're trusted, so both tapped
-entries in the Brewfile carry `trusted: true`.
+Homebrew 7 refuses third-party taps until they're trusted, so the tapped
+sketchybar entry in the Brewfile carries `trusted: true`.
 
 **cliproxyapi** ([CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI))
 wraps Claude Code, Codex, Gemini CLI and Qwen as one OpenAI-shaped API on

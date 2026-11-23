@@ -46,16 +46,7 @@ brew "ollama"
 # still needs one `open -a OrbStack` after bundling. Paid for commercial use.
 cask "orbstack"
 
-# i3-like tiling window manager. Lives in a third-party tap, so the tap has to
-# be declared too. Config: home/.config/aerospace/aerospace.toml. Needs one
-# Accessibility permission grant in System Settings after a fresh install.
-# Homebrew 7 refuses third-party taps until trusted; `trusted: true` records
-# that in ~/.homebrew/trust.json, which needs the fully-qualified name.
-tap "nikitabobko/tap"
-cask "nikitabobko/tap/aerospace", trusted: true
-
-# HyprMac: dwindle tiling WM, currently used instead of AeroSpace (whose
-# start-at-login is off). Config is JSON under home/Library/Application
+# HyprMac: dwindle tiling window manager. Config is JSON under home/Library/Application
 # Support/HyprMac/; HyprMac writes through the symlinks. Needs an Accessibility
 # grant and Settings > General > Launch at login on a fresh install.
 cask "hyprmac"

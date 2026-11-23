@@ -77,8 +77,8 @@ fi
 # SketchyBar replaces the menu bar, so the real one always auto-hides. Takes
 # effect at the next login. The Dock auto-hides too. Font smoothing off keeps
 # text crisp on the 4K Mi Monitor at the non-integer 2560x1440 scale.
-# Two AeroSpace tips: grouping windows by app keeps Mission Control readable
-# despite the windows AeroSpace parks in a screen corner, and ctrl-cmd-drag
+# Two tiling tips: grouping windows by app keeps Mission Control readable
+# despite the windows the tiler parks off screen, and ctrl-cmd-drag
 # moves a window by any part of it (apps pick that up when relaunched).
 # Documents always open as tabs (Desktop & Dock → Prefer tabs: Always), which
 # Zed's use_system_window_tabs relies on.
