@@ -86,6 +86,11 @@ cask "zed"
 
 cask "obsidian"
 
+# Godot Engine (standard GDScript build). In mise's registry too (aqua), but
+# that only unpacks a CLI binary inside mise's data dir — the cask installs
+# /Applications/Godot.app and links the `godot` CLI into /opt/homebrew/bin.
+cask "godot"
+
 # Omnigent desktop app (omnigent-ai/omnigent). arm64 only; unversioned download,
 # so it self-updates. The CLI comes from mise (pipx:omnigent), not this tap's
 # formula, which has no bottles and compiles via rust+llvm.
