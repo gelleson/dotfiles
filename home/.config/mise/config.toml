@@ -204,6 +204,7 @@ terraform = "latest"
 delta = "latest"
 watchexec = "latest"
 "pipx:yubikey-manager" = "latest"
+"npm:@coding-solo/godot-mcp" = "latest"
 
 [settings]
 # Auto-install missing tools when a project's config requests them.
