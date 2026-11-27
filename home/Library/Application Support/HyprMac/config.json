@@ -202,6 +202,22 @@
       "workspace": 4
     },
     {
+      "bundleID": "com.linear",
+      "workspace": 4
+    },
+    {
+      "bundleID": "com.apple.Notes",
+      "workspace": 4
+    },
+    {
+      "bundleID": "com.apple.reminders",
+      "workspace": 4
+    },
+    {
+      "bundleID": "kim.yihwan.skills-timer",
+      "workspace": 4
+    },
+    {
       "bundleID": "com.valvesoftware.steam.helper",
       "workspace": 5
     },
