@@ -179,43 +179,43 @@
     },
     {
       "bundleID": "com.apple.Music",
-      "workspace": 3
+      "workspace": 4
     },
     {
       "bundleID": "com.apple.TV",
-      "workspace": 3
+      "workspace": 4
     },
     {
       "bundleID": "com.granola.app",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "com.apple.iCal",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "md.obsidian",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "com.sunsama.native-app",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "com.linear",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "com.apple.Notes",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "com.apple.reminders",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "kim.yihwan.skills-timer",
-      "workspace": 4
+      "workspace": 3
     },
     {
       "bundleID": "com.valvesoftware.steam.helper",
@@ -284,8 +284,8 @@
   "workspaceNames": {
     "1": "web",
     "2": "code",
-    "3": "media",
-    "4": "plan",
+    "3": "plan",
+    "4": "media",
     "5": "games"
   }
 }
